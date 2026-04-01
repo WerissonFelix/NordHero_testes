@@ -9,9 +9,9 @@ surface = pygame.display.set_mode((600, 400))
 def initial_screen(login_screen,create_account_menu):
     initial_menu = pygame_menu.Menu(
         'Bem-vindo',
+        600,
         400,
-        300,
-        theme=pygame_menu.themes.THEME_BLUE)
+        theme=pygame_menu.themes.THEME_SOLARIZED)
 
     initial_menu.add.button('Login', login_screen,home_screen,initial_screen)
     initial_menu.add.button('Criar Conta', create_account_menu,home_screen,initial_screen, login_screen)

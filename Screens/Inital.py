@@ -13,8 +13,8 @@ def initial_screen(login_screen,create_account_menu):
         400,
         theme=pygame_menu.themes.THEME_SOLARIZED)
 
-    initial_menu.add.button('Login', login_screen,home_screen,initial_screen)
-    initial_menu.add.button('Criar Conta', create_account_menu,home_screen,initial_screen, login_screen)
+    initial_menu.add.button('Login', login_screen,initial_screen)
+    initial_menu.add.button('Criar Conta', create_account_menu,initial_screen, login_screen)
     initial_menu.add.button('Sair', pygame_menu.events.EXIT)
 
     initial_menu.mainloop(surface)

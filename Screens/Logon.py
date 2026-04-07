@@ -7,7 +7,7 @@ from Features.Dados_Verificacao import verificar_dados
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
-def login_screen(home_screen,initial_screen):
+def login_screen(initial_screen):
     login_menu = pygame_menu.Menu(
         'Login',
         600,
@@ -18,7 +18,7 @@ def login_screen(home_screen,initial_screen):
     email_input = login_menu.add.text_input('Email: ')
     senha_input = login_menu.add.text_input('Senha: ', password=True)
 
-    screen = "Logon"
+    screen = "logon"
     login_menu.add.button("Logar", verificar_dados,  nome_input,email_input,senha_input,screen)
     login_menu.add.button('Sair',  initial_screen, login_screen, create_account_menu)
     login_menu.mainloop(surface)

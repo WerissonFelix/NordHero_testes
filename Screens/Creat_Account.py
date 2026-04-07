@@ -7,7 +7,7 @@ from Features.Dados_Verificacao import verificar_dados
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
-def create_account_menu(home_screen,initial_screen,login_screen):
+def create_account_menu(initial_screen,login_screen):
     creat_menu = pygame_menu.Menu(
         'Criar Conta',
         600,

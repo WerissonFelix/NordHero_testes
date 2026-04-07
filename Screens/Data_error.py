@@ -15,12 +15,13 @@ def data_error_screen(erro_mensage,screen_error_name):
 
     error_menu.add.label(erro_mensage)
 
-    screens_names = ["Logon","Creat_Account"]
+    screens_names = ["logon","creat_account"]
+
     if screen_error_name in screens_names:
-        if screen_error_name == 'Logon':
-            error_menu.add.button("voltar", Logon.login_screen, Home.home_screen, Inital.initial_screen)
+        if screen_error_name.lower() == 'logon':
+            error_menu.add.button("voltar", Logon.login_screen, Inital.initial_screen)
         else:
-            error_menu.add.button("voltar", Home.home_screen, Inital.initial_screen, Logon.login_screen)
+            error_menu.add.button("voltar", Creat_Account.create_account_menu, Inital.initial_screen, Logon.login_screen)
     else:
         error_menu.add.label("Erro não esperado, por favor, reinicie o jogo")
         error_menu.add.button("Fechar jogo", pygame_menu.events.EXIT)

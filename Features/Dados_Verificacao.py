@@ -2,40 +2,67 @@
 # Imports from installed libraies
 from email_validator import validate_email, EmailNotValidError
 from password_validator import PasswordValidator
-from password_validator.lib import uppercase
 
 # Imports from App's Screens
 from Screens.Home import home_screen
 from Screens.Data_error import data_error_screen
 
+# Data Base imports
+from DataBase.inserts import insert_user
+from DataBase.selects import select_user
+
 def verificar_dados(nome,email,senha,screen_name):
-    email_verificado, validade_email = verificar_email(email.get_value())
+    email_verificado, validade_email = verificar_email(email.get_value(),screen_name)
     senha_verificada, validade_senha = verifcar_senha(senha.get_value())
 
     if validade_senha and validade_email:
-        dados = {"nome": nome.get_value(), "email": email_verificado, "senha" : senha_verificada}
-        return home_screen(dados)
+        if screen_name == "creat_account":
+            user = insert_user(nome.get_value(),email_verificado,senha_verificada)
+        else:
+            user = select_user(email_verificado)
+
+            if not (user[2] == email_verificado and user[3] == senha_verificada):
+                mensagem_error = "Email ou senha incorreto"
+                return data_error_screen(mensagem_error, screen_name)
+
+        return home_screen(user)
     elif validade_email == False:
+
         return data_error_screen(email_verificado, screen_name)
     else:
         return data_error_screen(senha_verificada, screen_name)
 
-def verificar_email(email):
+def verificar_email(email, screen_name):
     try:
-      # Check that the email address is valid. Turn on check_deliverability
-      # for first-time validations like on account creation pages (but not
-      # login pages).
-      emailinfo = validate_email(email, check_deliverability=True)
-      # After this point, use only the normalized form of the email address,
-      # especially before going to a database query.
-      email = emailinfo.normalized
-      return email, True
 
+      if screen_name == "creat_account":
+        emailinfo = validate_email(email, check_deliverability=True)
+        user_account = select_user(email)
 
+        if user_account is None:
+
+            email_verified = emailinfo.normalized
+
+            return email_verified, True
+        else:
+
+            mensagem_error = "email already registered"
+
+            return mensagem_error, False
+      elif screen_name == "logon":
+          emailinfo = validate_email(email, check_deliverability=False)
+          user_account = select_user(email)
+
+          if user_account is not None:
+              email_verified = emailinfo.normalized
+
+              return email_verified, True
+          else:
+              message_error = "email doesn't exist"
+
+              return message_error, False
     except EmailNotValidError as e:
 
-      # The exception message is human-readable explanation of why it's
-      # not a valid (or deliverable) email address.
       error = str(e)
       return error, False
 
@@ -68,9 +95,4 @@ def verifcar_senha(senha):
        dados_errados = {mensagens_error[k]:v for k,v in verificacao.items() if v == False}
 
        return dados_errados, False
-
-
-
-
-
 

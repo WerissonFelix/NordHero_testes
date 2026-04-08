@@ -6,26 +6,30 @@ from password_validator import PasswordValidator
 # Imports from App's Screens
 from Screens.Home import home_screen
 from Screens.Data_error import data_error_screen
+from Screens.profile_options import profile_options_menu
 
 # Data Base imports
 from DataBase.inserts import insert_user
 from DataBase.selects import select_user
+from DataBase.updates import update_user
 
-def verificar_dados(nome,email,senha,screen_name):
+def verificar_dados(screen_name,email,senha,nome=None, id=None):
     email_verificado, validade_email = verificar_email(email.get_value(),screen_name)
     senha_verificada, validade_senha = verifcar_senha(senha.get_value())
 
     if validade_senha and validade_email:
         if screen_name == "creat_account":
             user = insert_user(nome.get_value(),email_verificado,senha_verificada)
-        else:
+        elif screen_name == "logon":
             user = select_user(email_verificado)
 
             if not (user[2] == email_verificado and user[3] == senha_verificada):
                 mensagem_error = "Email ou senha incorreto"
                 return data_error_screen(mensagem_error, screen_name)
+        else:
 
-        return home_screen(user)
+            user = update_user(id,nome.get_value(),email_verificado,senha_verificada)
+        return home_screen(user, profile_options_menu)
     elif validade_email == False:
 
         return data_error_screen(email_verificado, screen_name)
@@ -40,7 +44,6 @@ def verificar_email(email, screen_name):
         user_account = select_user(email)
 
         if user_account is None:
-
             email_verified = emailinfo.normalized
 
             return email_verified, True
@@ -61,9 +64,14 @@ def verificar_email(email, screen_name):
               message_error = "email doesn't exist"
 
               return message_error, False
-    except EmailNotValidError as e:
+      else:
+          emailinfo = validate_email(email, check_deliverability=True)
+          email_verified = emailinfo.normalized
 
+          return emailinfo.normalized, True
+    except EmailNotValidError as e:
       error = str(e)
+
       return error, False
 
 def verifcar_senha(senha):
@@ -95,4 +103,3 @@ def verifcar_senha(senha):
        dados_errados = {mensagens_error[k]:v for k,v in verificacao.items() if v == False}
 
        return dados_errados, False
-

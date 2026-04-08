@@ -1,8 +1,6 @@
 import pygame
 import pygame_menu
 
-from Screens.Home import home_screen
-
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 

@@ -12,13 +12,14 @@ def login_screen(initial_screen):
         'Login',
         600,
         400,
+
         theme=pygame_menu.themes.THEME_SOLARIZED)
 
-    nome_input = login_menu.add.text_input('Nome: ')
     email_input = login_menu.add.text_input('Email: ')
     senha_input = login_menu.add.text_input('Senha: ', password=True)
-
     screen = "logon"
-    login_menu.add.button("Logar", verificar_dados,  nome_input,email_input,senha_input,screen)
+
+    login_menu.add.button("Logar", verificar_dados, screen,email_input,senha_input,None)
     login_menu.add.button('Sair',  initial_screen, login_screen, create_account_menu)
+
     login_menu.mainloop(surface)

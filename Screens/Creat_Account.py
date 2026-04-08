@@ -20,7 +20,7 @@ def create_account_menu(initial_screen,login_screen):
     senha_input = creat_menu.add.text_input('Senha: ', password=True)
 
     screen = "creat_account"
-    creat_menu.add.button('Criar Conta', verificar_dados,nome_input,email_input,senha_input,screen)
+    creat_menu.add.button('Criar Conta', verificar_dados,screen,email_input,senha_input,nome_input, None)
 
     creat_menu.add.button('voltar', initial_screen, login_screen,create_account_menu)
     creat_menu.mainloop(surface)

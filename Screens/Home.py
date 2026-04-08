@@ -1,11 +1,10 @@
 import pygame
 import pygame_menu
 
-
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
-def home_screen(user):
+def home_screen(user,profile_menu):
     home_menu = pygame_menu.Menu(
         f'Bem-vindo, {user[1]}',
         600,
@@ -19,6 +18,6 @@ def home_screen(user):
             """, font_size=30)
 
     home_menu.add.button("iniciar")
-    home_menu.add.button("Configurações")
+    home_menu.add.button("Configurações", profile_menu, user)
     home_menu.add.button("Sair do Jogo", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

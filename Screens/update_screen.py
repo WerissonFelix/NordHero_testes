@@ -1,0 +1,30 @@
+import pygame
+import pygame_menu
+
+from Screens.Home import home_screen
+
+
+pygame.init()
+surface = pygame.display.set_mode((600, 400))
+
+def update_menu(user):
+    from Features.Dados_Verificacao import verificar_dados
+    update = pygame_menu.Menu(
+        'Atualizar dados',
+        600,
+        400,
+
+        theme=pygame_menu.themes.THEME_SOLARIZED)
+
+    update.add.label(f"Nome: {user[1]}   email: {user[2]}")
+
+    nome_input = update.add.text_input('Nome: ')
+    email_input = update.add.text_input('Email: ')
+    senha_input = update.add.text_input('Senha: ', password=True)
+
+    screen = "update_screen"
+
+    update.add.button("Atualizar", verificar_dados, screen, email_input, senha_input, nome_input, user[0] )
+    update.add.button('Sair', home_screen, )
+
+    update.mainloop(surface)

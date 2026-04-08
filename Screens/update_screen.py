@@ -7,7 +7,7 @@ from Screens.Home import home_screen
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
-def update_menu(user):
+def update_menu(user, profile_options):
     from Features.Dados_Verificacao import verificar_dados
     update = pygame_menu.Menu(
         'Atualizar dados',
@@ -25,6 +25,6 @@ def update_menu(user):
     screen = "update_screen"
 
     update.add.button("Atualizar", verificar_dados, screen, email_input, senha_input, nome_input, user[0] )
-    update.add.button('Sair', home_screen, )
+    update.add.button('Voltar', profile_options, user)
 
     update.mainloop(surface)

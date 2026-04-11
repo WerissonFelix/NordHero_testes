@@ -2,7 +2,7 @@ import pygame
 import pygame_menu
 from pygame_menu.examples.other.widget_positioning import label
 
-from Features.Dados_Verificacao import verificar_dados
+from Features.Dados_Verificacao import DataVerifier
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
@@ -14,13 +14,19 @@ def create_account_menu(initial_screen,login_screen):
         400,
         theme=pygame_menu.themes.THEME_SOLARIZED)
 
+    validator = DataVerifier("creat_account")
 
     nome_input = creat_menu.add.text_input('Nome: ')
     email_input = creat_menu.add.text_input('Email: ')
     senha_input = creat_menu.add.text_input('Senha: ', password=True)
 
-    screen = "creat_account"
-    creat_menu.add.button('Criar Conta', verificar_dados,screen,email_input,senha_input,nome_input, None)
+    creat_menu.add.button('Criar Conta',
+                          validator.verify_data,
+                          email_input,
+                          senha_input,
+                          nome_input,
+                          None
+    )
 
     creat_menu.add.button('voltar', initial_screen, login_screen,create_account_menu)
     creat_menu.mainloop(surface)

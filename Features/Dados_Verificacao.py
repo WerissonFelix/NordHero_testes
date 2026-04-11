@@ -1,4 +1,5 @@
 # Imports from App's Screens
+
 from Screens.Home import home_screen
 from Screens.Data_error import data_error_screen
 from Screens.profile_options import profile_options_menu
@@ -9,28 +10,52 @@ from DataBase.selects import select_user
 from DataBase.updates import update_user
 
 # Outhers Features imports
-from Features.verificar_email import verificar_email
-from Features.verificar_senha import verifcar_senha
+from Features.EmailValidator import EmailValidator
+from Features.PasswordValidate import PasswordValidate
 
-def verificar_dados(screen_name,email,senha,nome=None, id=None):
-    email_verificado, validade_email = verificar_email(email.get_value(),screen_name)
-    senha_verificada, validade_senha = verifcar_senha(senha.get_value())
 
-    if validade_senha and validade_email:
-        if screen_name == "creat_account":
-            user = insert_user(nome.get_value(),email_verificado,senha_verificada)
-        elif screen_name == "logon":
-            user = select_user(email_verificado)
+class DataVerifier:
+    """
+    Classe para verificar o resultado final de email e senha, e então,efetuar operaçõe no banco de dados.
+    """
+    def __init__(self, screen_name: str):
+        self.screen_name = screen_name
+        self.email_verified = None
+        self.password_verified = None
 
-            if not (user[2] == email_verificado and user[3] == senha_verificada):
-                mensagem_error = "Email ou senha incorreto"
-                return data_error_screen(mensagem_error, screen_name)
+    def verify_data(self, email, password, name: None, user_id: int = None):
+        self.email_verified = EmailValidator(email.get_value())
+
+        if self.screen_name == "creat_account":
+            email_result, email_valid = self.email_verified.validate_for_create_screen()
+        elif self.screen_name == "logon":
+            email_result, email_valid = self.email_verified.validate_for_login_screen()
         else:
+            email_result, email_valid = self.email_verified.validate_for_update_screen()
 
-            user = update_user(id, nome.get_value(), email_verificado, senha_verificada)
+        if email_valid == False:
+            print(email_result, email_valid)
+            return data_error_screen(email_result, self.screen_name)
+
+        self.password_verified = PasswordValidate(password.get_value())
+        password_result, password_valid = self.password_verified.validate()
+
+        if password_valid == False:
+            print(password_result, password_valid)
+            return data_error_screen(password_result, self.screen_name)
+
+        return self.call_database_for_process(email,password, name,user_id)
+
+    def call_database_for_process(self, email, password , name: None, user_id: int = None):
+        if self.screen_name == "creat_account":
+            user = insert_user(name.get_value(),email.get_value(),password.get_value())
+
+        elif self.screen_name == "logon":
+            user = select_user(email.get_value())
+
+            if (user[2] == email.get_value() and user[3] == password.get_value()) == False:
+                return data_error_screen("incorrect email or password", self.screen_name)
+        else:
+            user = update_user(user_id, name, email)
+
         return home_screen(user, profile_options_menu)
-    elif validade_email == False:
-
-        return data_error_screen(email_verificado, screen_name)
-    else:
-        return data_error_screen(senha_verificada, screen_name)

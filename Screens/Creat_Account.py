@@ -19,14 +19,14 @@ def create_account_menu(initial_screen,login_screen):
     nome_input = creat_menu.add.text_input('Nome: ')
     email_input = creat_menu.add.text_input('Email: ')
     senha_input = creat_menu.add.text_input('Senha: ', password=True)
-
+    print(type(nome_input))
     creat_menu.add.button('Criar Conta',
-                          validator.verify_data,
+                          validator.verify_data_for_create_login,
                           email_input,
                           senha_input,
                           nome_input,
                           None
-    )
+                          )
 
     creat_menu.add.button('voltar', initial_screen, login_screen,create_account_menu)
     creat_menu.mainloop(surface)

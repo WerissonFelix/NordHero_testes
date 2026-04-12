@@ -1,4 +1,5 @@
 # Imports from App's Screens
+from envs.dsaec1.Lib.wsgiref.validate import validator
 
 from Screens.Home import home_screen
 from Screens.Data_error import data_error_screen
@@ -23,15 +24,13 @@ class DataVerifier:
         self.email_verified = None
         self.password_verified = None
 
-    def verify_data(self, email, password, name: None, user_id: int = None):
+    def verify_data_for_create_login(self, email, password, name: None, user_id: int = None):
         self.email_verified = EmailValidator(email.get_value())
 
         if self.screen_name == "creat_account":
             email_result, email_valid = self.email_verified.validate_for_create_screen()
         elif self.screen_name == "logon":
             email_result, email_valid = self.email_verified.validate_for_login_screen()
-        else:
-            email_result, email_valid = self.email_verified.validate_for_update_screen()
 
         if email_valid == False:
             print(email_result, email_valid)
@@ -46,7 +45,23 @@ class DataVerifier:
 
         return self.call_database_for_process(email,password, name,user_id)
 
-    def call_database_for_process(self, email, password , name: None, user_id: int = None):
+    def verify_just_for_update(self, email , name, user_id: int = None):
+        user = select_user(None, user_id)
+        self.email_verified = EmailValidator(email.get_value())
+        if user[2] != email.get_value():
+            email_result, email_valid = self.email_verified.validate_for_update_screen()
+        else:
+            email_result, email_valid =  user[2], True
+        if user[1] != name.get_value():
+            name_result = name.get_value()
+        else:
+            name_result = user[1]
+
+        if email_valid == False:
+            return data_error_screen(email_result, self.screen_name)
+
+        return self.call_database_for_process(email_result,None,name_result,user_id)
+    def call_database_for_process(self, email, password: None , name: None, user_id: int = None):
         if self.screen_name == "creat_account":
             user = insert_user(name.get_value(),email.get_value(),password.get_value())
 

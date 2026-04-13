@@ -37,12 +37,17 @@ def login_screen(initial_screen):
 
     theme=theme)
 
-
     validator = DataVerifier("logon")
-    email_input = login_menu.add.text_input('Email: ')
-    senha_input = login_menu.add.text_input('Password: ', password=True)
 
-    login_menu.add.button("Login", validator.verify_data_for_create_login, email_input, senha_input, None, None)
-    login_menu.add.button('Exit',  initial_screen, login_screen, create_account_menu)
+    email_input = login_menu.add.text_input('Email: ')
+    email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    email_input.translate(180, 0)
+
+    senha_input = login_menu.add.text_input('Password: ', password=True)
+    senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    senha_input.translate(180, 0)
+
+    login_menu.add.button("LOGIN", validator.verify_data_for_create_login, email_input, senha_input, None, None)
+    login_menu.add.button('EXIT',  initial_screen, login_screen, create_account_menu)
 
     login_menu.mainloop(surface)

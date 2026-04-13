@@ -12,15 +12,12 @@ def initial_screen(login_screen,create_account_menu):
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()
-    #Fonte e Tamanho do nome "Nord Hero"
-    theme.title_font = pygame_menu.font.FONT_FRANCHISE
-    theme.title_font_size = 70
     
     #Fonte dos Botões
     theme.widget_font = pygame_menu.font.FONT_MUNRO
 
-    #Cor e Estilo da Barra Superior 
-    theme.background_color = fundo 
+    #Cor e Estilo da Barra Superior
+    theme.background_color = fundo
     theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     theme.title_offset = (290, 0)
 
@@ -33,8 +30,8 @@ def initial_screen(login_screen,create_account_menu):
         500,
         theme=theme )
 
-    initial_menu.add.button('Login', login_screen,initial_screen)
-    initial_menu.add.button('Create Account', create_account_menu,initial_screen, login_screen)
-    initial_menu.add.button('Exit', pygame_menu.events.EXIT)
+    initial_menu.add.button('LOGIN', login_screen,initial_screen)
+    initial_menu.add.button('CREATE ACCOUNT', create_account_menu,initial_screen, login_screen) 
+    initial_menu.add.button('EXIT', pygame_menu.events.EXIT) 
 
     initial_menu.mainloop(surface)

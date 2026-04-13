@@ -37,12 +37,16 @@ def data_error_screen(erro_message,screen_error_name):
         theme = theme
     )
     
-    error_menu.add.label(erro_message)
-
+    if isinstance(erro_message, list):
+        for erro in erro_message:
+            error_menu.add.label(erro, font_size=25, font_color=(255, 50, 50))
+    else:
+        error_menu.add.label(erro_message, font_size=25, font_color=(255, 50, 50))
+    error_menu.add.vertical_margin(25)
 
     if screen_error_name.lower() == 'logon':
-        error_menu.add.button("Back", Logon.login_screen, Inital.initial_screen)
+        error_menu.add.button("BACK", Logon.login_screen, Inital.initial_screen)
     else:
-        error_menu.add.button("Back", Creat_Account.create_account_menu, Inital.initial_screen, Logon.login_screen)
+        error_menu.add.button("BACK", Creat_Account.create_account_menu, Inital.initial_screen, Logon.login_screen)
 
     error_menu.mainloop(surface)

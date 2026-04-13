@@ -38,10 +38,19 @@ def create_account_menu(initial_screen,login_screen):
     validator = DataVerifier("creat_account")
 
     nome_input = creat_menu.add.text_input('Name: ')
+    nome_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    nome_input.translate(180, 0)
+
     email_input = creat_menu.add.text_input('Email: ')
+    email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    email_input.translate(180, 0)
+
     senha_input = creat_menu.add.text_input('Password: ', password=True)
+    senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    senha_input.translate(180, 0)
+
     print(type(nome_input))
-    creat_menu.add.button('Create Account',
+    creat_menu.add.button('CREATE ACCOUNT',
                           validator.verify_data_for_create_login,
                           email_input,
                           senha_input,
@@ -49,5 +58,5 @@ def create_account_menu(initial_screen,login_screen):
                           None
                           )
 
-    creat_menu.add.button('Back', initial_screen, login_screen,create_account_menu)
+    creat_menu.add.button('BACK', initial_screen, login_screen,create_account_menu)
     creat_menu.mainloop(surface)

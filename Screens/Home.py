@@ -5,7 +5,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
-fundo = pygame.image.load('./images/telainicial.png')
+fundo = pygame.image.load('./telainicial.png')
 
 def home_screen(user,profile_menu):
     fundo = BaseImage(
@@ -68,7 +68,7 @@ def home_screen(user,profile_menu):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
 
-    home_menu.add.button("Play")
-    home_menu.add.button("Settings", profile_menu, user)
-    home_menu.add.button("Exit", pygame_menu.events.EXIT)
+    home_menu.add.button("START GAME")
+    home_menu.add.button("SETTINGS", profile_menu, user)
+    home_menu.add.button("EXIT", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

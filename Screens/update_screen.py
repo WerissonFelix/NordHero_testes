@@ -36,15 +36,19 @@ def update_menu(user, profile_options):
 
         theme=theme)
 
-    update.add.label(f"Name: {user[1]}   Email: {user[2]}")
-
+    update.add.label(f"Name: {user[1]}   Email: {user[2]}", font_color=(255, 255, 0))
+    
     validator = DataVerifier("update_screen")
 
     nome_input = update.add.text_input('Name: ', default=user[1])
+    nome_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    nome_input.translate(180, 0)
 
     email_input = update.add.text_input('Email: ', default=user[2])
+    email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    email_input.translate(180, 0)
 
-    update.add.button("Update", validator.verify_just_for_update, email_input, nome_input, user[0])
-    update.add.button('Back', profile_options, user)
+    update.add.button("UPDATE", validator.verify_just_for_update, email_input, nome_input, user[0])
+    update.add.button('BACK', profile_options, user)
 
     update.mainloop(surface)

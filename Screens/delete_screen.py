@@ -38,8 +38,11 @@ def delete_menu(user, profile_options):
 
         theme=theme)
 
-    delete.add.button("Delete", delete_user, user[0], user[2])
-    delete.add.button('Back', profile_options, user)
+    delete.add.label(f"DO YOU WANT TO DELETE YOUR ACCOUNT?", font_color=(255, 255, 0))
+
+
+    delete.add.button("DELETE", delete_user, user[0], user[2])
+    delete.add.button('BACK', profile_options, user)
 
     delete.mainloop(surface)
 

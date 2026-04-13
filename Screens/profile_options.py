@@ -38,8 +38,8 @@ def profile_options_menu(user):
 
         theme=theme)
 
-    options.add.button("Update data", update_menu , user,profile_options_menu)
-    options.add.button("Delete Account", delete_menu, user, profile_options_menu)
-    options.add.button('Back', home_screen, user,profile_options_menu)
+    options.add.button("UPDATE DATA", update_menu , user,profile_options_menu)
+    options.add.button("DELETE ACCOUNT", delete_menu, user, profile_options_menu)
+    options.add.button('BACK', home_screen, user,profile_options_menu)
 
     options.mainloop(surface)

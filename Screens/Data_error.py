@@ -7,12 +7,24 @@ pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
 def data_error_screen(erro_message,screen_error_name):
+    
+    theme = pygame_menu.themes.THEME_DARK.copy()
+    theme.title_background_color = (75, 0, 130)
+    theme.title_font = pygame_menu.font.FONT_OPEN_SANS
+    
+    #Fonte dos Botões
+    theme.widget_font = pygame_menu.font.FONT_MUNRO
+
+    #Estilo de Seleção de Item
+    theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
+
     error_menu = pygame_menu.Menu(
         'Dados inválidos',
-        600,
-        400,
-        theme=pygame_menu.themes.THEME_SOLARIZED)
-
+        800,
+        500,
+        theme = theme
+    )
+    
     error_menu.add.label(erro_message)
 
 

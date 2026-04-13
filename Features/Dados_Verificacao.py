@@ -1,5 +1,4 @@
 # Imports from App's Screens
-from envs.dsaec1.Lib.wsgiref.validate import validator
 
 from Screens.Home import home_screen
 from Screens.Data_error import data_error_screen

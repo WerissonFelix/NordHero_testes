@@ -14,7 +14,7 @@ def profile_options_menu(user):
         600,
         400,
 
-        theme=pygame_menu.themes.THEME_SOLARIZED)
+        theme=pygame_menu.themes.THEME_DARK)
 
     options.add.button("Atualizar dados", update_menu , user,profile_options_menu)
     options.add.button("Deletar Conta", delete_menu, user, profile_options_menu)

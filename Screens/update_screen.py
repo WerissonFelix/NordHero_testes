@@ -8,10 +8,10 @@ def update_menu(user, profile_options):
     from Features.Dados_Verificacao import DataVerifier
     update = pygame_menu.Menu(
         'Atualizar dados',
-        600,
-        400,
+        800,
+        500,
 
-        theme=pygame_menu.themes.THEME_SOLARIZED)
+        theme=pygame_menu.themes.THEME_DARK)
 
     update.add.label(f"Nome: {user[1]}   email: {user[2]}")
 

@@ -31,7 +31,7 @@ def data_error_screen(erro_message,screen_error_name):
     theme.title_offset = (260, 0)
 
     error_menu = pygame_menu.Menu(
-        'Dados invalidos',
+        'Data Error',
         800,
         500,
         theme = theme
@@ -41,8 +41,8 @@ def data_error_screen(erro_message,screen_error_name):
 
 
     if screen_error_name.lower() == 'logon':
-        error_menu.add.button("voltar", Logon.login_screen, Inital.initial_screen)
+        error_menu.add.button("Back", Logon.login_screen, Inital.initial_screen)
     else:
-        error_menu.add.button("voltar", Creat_Account.create_account_menu, Inital.initial_screen, Logon.login_screen)
+        error_menu.add.button("Back", Creat_Account.create_account_menu, Inital.initial_screen, Logon.login_screen)
 
     error_menu.mainloop(surface)

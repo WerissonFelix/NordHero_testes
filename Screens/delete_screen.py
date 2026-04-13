@@ -9,14 +9,14 @@ surface = pygame.display.set_mode((600, 400))
 
 def delete_menu(user, profile_options):
     delete  = pygame_menu.Menu(
-        'Atualizar dados',
+        'Update data',
         800,
         500,
 
         theme=pygame_menu.themes.THEME_DARK)
 
-    delete.add.button("Deletar", delete_user, user[0], user[2])
-    delete.add.button('Voltar', profile_options, user)
+    delete.add.button("Delete", delete_user, user[0], user[2])
+    delete.add.button('Back', profile_options, user)
 
     delete.mainloop(surface)
 

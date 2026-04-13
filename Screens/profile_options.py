@@ -16,8 +16,8 @@ def profile_options_menu(user):
 
         theme=pygame_menu.themes.THEME_DARK)
 
-    options.add.button("Atualizar dados", update_menu , user,profile_options_menu)
-    options.add.button("Deletar Conta", delete_menu, user, profile_options_menu)
-    options.add.button('Voltar', home_screen, user,profile_options_menu)
+    options.add.button("Update data", update_menu , user,profile_options_menu)
+    options.add.button("Delete Account", delete_menu, user, profile_options_menu)
+    options.add.button('Back', home_screen, user,profile_options_menu)
 
     options.mainloop(surface)

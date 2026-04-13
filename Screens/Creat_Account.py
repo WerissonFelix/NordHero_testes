@@ -30,18 +30,18 @@ def create_account_menu(initial_screen,login_screen):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     creat_menu = pygame_menu.Menu(
-        'Criar Conta',
+        'Create Account',
         800,
         500,
         theme=theme)
 
     validator = DataVerifier("creat_account")
 
-    nome_input = creat_menu.add.text_input('Nome: ')
+    nome_input = creat_menu.add.text_input('Name: ')
     email_input = creat_menu.add.text_input('Email: ')
-    senha_input = creat_menu.add.text_input('Senha: ', password=True)
+    senha_input = creat_menu.add.text_input('Password: ', password=True)
     print(type(nome_input))
-    creat_menu.add.button('Criar Conta',
+    creat_menu.add.button('Create Account',
                           validator.verify_data_for_create_login,
                           email_input,
                           senha_input,
@@ -49,5 +49,5 @@ def create_account_menu(initial_screen,login_screen):
                           None
                           )
 
-    creat_menu.add.button('voltar', initial_screen, login_screen,create_account_menu)
+    creat_menu.add.button('Back', initial_screen, login_screen,create_account_menu)
     creat_menu.mainloop(surface)

@@ -39,9 +39,9 @@ def login_screen(initial_screen):
 
     validator = DataVerifier("logon")
     email_input = login_menu.add.text_input('Email: ')
-    senha_input = login_menu.add.text_input('Senha: ', password=True)
+    senha_input = login_menu.add.text_input('Password: ', password=True)
 
-    login_menu.add.button("Logar", validator.verify_data_for_create_login, email_input, senha_input, None, None)
-    login_menu.add.button('Sair',  initial_screen, login_screen, create_account_menu)
+    login_menu.add.button("Login", validator.verify_data_for_create_login, email_input, senha_input, None, None)
+    login_menu.add.button('Exit',  initial_screen, login_screen, create_account_menu)
 
     login_menu.mainloop(surface)

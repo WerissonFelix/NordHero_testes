@@ -13,7 +13,7 @@ def login_screen(initial_screen):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_login = BaseImage(
-        image_path="teladefundo.png",
+        image_path="TelaLogin.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 
@@ -31,11 +31,12 @@ def login_screen(initial_screen):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     login_menu = pygame_menu.Menu(
-        'Login',
+        '',
         800,
         500,
 
-        theme=theme)
+    theme=theme)
+
 
     validator = DataVerifier("logon")
     email_input = login_menu.add.text_input('Email: ')

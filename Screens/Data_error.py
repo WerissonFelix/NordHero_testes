@@ -13,7 +13,7 @@ def data_error_screen(erro_message,screen_error_name):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_error = BaseImage(
-        image_path="teladefundo.png",
+        image_path="TelaDataError.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 
@@ -31,7 +31,7 @@ def data_error_screen(erro_message,screen_error_name):
     theme.title_offset = (260, 0)
 
     error_menu = pygame_menu.Menu(
-        'Data Error',
+        '',
         800,
         500,
         theme = theme

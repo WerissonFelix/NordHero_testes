@@ -15,7 +15,7 @@ def home_screen(user,profile_menu):
     theme = pygame_menu.themes.THEME_DARK.copy()
 
     #Fonte e Tamanho do nome "Conectado como: {user[1]}"
-    theme.title_font = pygame_menu.font.FONT_FRANCHISE
+    theme.title_font = pygame_menu.font.FONT_MUNRO
     theme.title_font_size = 20
     
     #Fonte dos Botões
@@ -40,17 +40,17 @@ def home_screen(user,profile_menu):
     lbl_nome = home_menu.add.label(
         f"Name: {user[1]}", 
         font_size=20, 
-        font_name=pygame_menu.font.FONT_FRANCHISE
+        font_name=pygame_menu.font.FONT_MUNRO
     )
     lbl_email = home_menu.add.label(
         f"email: {user[2]}", 
         font_size=20, 
-        font_name=pygame_menu.font.FONT_FRANCHISE
+        font_name=pygame_menu.font.FONT_MUNRO
     )
     lbl_senha = home_menu.add.label(
         f"password: {user[3]}", 
         font_size=20, 
-        font_name=pygame_menu.font.FONT_FRANCHISE
+        font_name=pygame_menu.font.FONT_MUNRO
     )
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)

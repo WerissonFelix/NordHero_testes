@@ -1,5 +1,6 @@
 import pygame
 import pygame_menu
+from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from pygame_menu.examples.other.widget_positioning import label
 
 from Features.Dados_Verificacao import DataVerifier
@@ -9,14 +10,21 @@ surface = pygame.display.set_mode((600, 400))
 
 def create_account_menu(initial_screen,login_screen):
     theme = pygame_menu.themes.THEME_DARK.copy()
-    theme.title_font = pygame_menu.font.FONT_OPEN_SANS
+    theme.title_font = pygame_menu.font.FONT_BEBAS
 
+    fundo_criar_conta = BaseImage(
+        image_path="teladefundo.png",
+        drawing_mode=IMAGE_MODE_FILL
+    )
+
+    theme.background_color = fundo_criar_conta
     #Fonte dos Botões
     theme.widget_font = pygame_menu.font.FONT_MUNRO
 
     #Cor e Estilo da Barra Superior
-    theme.title_background_color = (75, 0, 130)
-    theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
+    theme.title_background_color = (0, 0, 0)
+    theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+    theme.title_offset = (290, 0)
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()

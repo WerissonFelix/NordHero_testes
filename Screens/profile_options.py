@@ -6,13 +6,13 @@ from Screens.update_screen import update_menu
 from Screens.delete_screen import delete_menu
 
 pygame.init()
-surface = pygame.display.set_mode((600, 400))
+surface = pygame.display.set_mode((800, 500))
 
 def profile_options_menu(user):
     options = pygame_menu.Menu(
         'Profile Options',
-        600,
-        400,
+        800,
+        500,
 
         theme=pygame_menu.themes.THEME_DARK)
 

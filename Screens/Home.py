@@ -3,8 +3,13 @@ import pygame_menu
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
+fundo = pygame.image.load('./images/telainicial.png')
 
 def home_screen(user,profile_menu):
+    fundo = BaseImage(
+        image_path="telainicial.png",
+        drawing_mode=IMAGE_MODE_FILL
+    )
     theme = pygame_menu.themes.THEME_DARK.copy()
 
     #Fonte e Tamanho do nome "Nord Hero"
@@ -14,16 +19,16 @@ def home_screen(user,profile_menu):
     #Fonte dos Botões
     theme.widget_font = pygame_menu.font.FONT_MUNRO
 
-    #Cor e Estilo da Barra Superior
-    theme.title_background_color = (75, 0, 130)
-    theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
+    #Cor e Estilo da Barra Superior 
+    theme.background_color = fundo 
+    theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     theme.title_offset = (290, 0)
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     home_menu = pygame_menu.Menu(
-        f'Nord Hero, {user[1]}',
+        f', {user[1]}',
         800,
         500,
         theme=theme

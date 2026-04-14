@@ -1,4 +1,7 @@
 pygame
 pygame_menu
 validate_email
+password-validator
+librosa
+numpy
 dnspython

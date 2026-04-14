@@ -1,11 +1,50 @@
 import pygame
-
 from pygame import mixer
+
+import librosa
+import random
+
+def generate_map(music_name):
+    signal_wave, sample_rate = librosa.load(music_name + ".mp3")
+    # librosa.load retorna: um numpy array e um int, sendo, respectivamente, o nome das variáveis
+
+    time, beats = librosa.beat.beat_track(y=signal_wave, sr=sample_rate)
+    # time sendo BPM (Beats per minutes) em float e beats sendo uma array de posição de batidas
+
+    beats_in_time = librosa.frames_to_time(beats, sr=sample_rate)
+    # beats era frame, agr é time em segundos, mas ainda é um array
+
+    notes = []
+
+    for t in beats_in_time:
+        lane = random.randint(0, 3)
+        notes.append((t, lane))
+
+    return notes
+    """
+        fps = 60
+    duration = librosa.get_duration(y=signal_wave, sr=sample_rate)
+    # duração em segundos, sendo um float!!!
+
+    total_frames = int(duration * fps)
+
+    grid = [[" " for _ in range(4)] for _ in range(total_frames)]
+    # Line : timpe
+    # Column : teclas
+
+    for t, lane in notes:
+        frame = int(t * fps)
+        if frame < total_frames:
+            grid[frame][lane] = "0"
+
+    with open(music_name + ".txt", "w") as f:
+        for row in grid:
+            f.write("".join(row) + "\n")
+    """
 
 pygame.init()
 screen = pygame.display.set_mode((800,600))
 clock = pygame.time.Clock()
-
 mixer.init()
 
 
@@ -26,68 +65,65 @@ keys = [
     Key(500,500,(255,255,0), (220,220,0),pygame.K_f),
 ]
 
-def load(mapp):
-    rects = []
-    mixer.music.load(mapp + ".mp3")
-    mixer.music.play()
-    file = open(mapp + ".txt", 'r')
-    data = file.readlines()
 
-    for y in range(len(data)):
-        for x in range(len(data[y])):
-            if data[y][x] == '0':
-                rect_x = 200 + (x * 100)  # Alinha com as teclas
-                rect_y = y * -100
-                rects.append(pygame.Rect(rect_x, rect_y, 50, 25))
-    return rects
 
-map_rect = load("abolish the IRS")
+music = "abolish the IRS"
+
+notess = generate_map(music)
+
+mixer.music.load(music + ".mp3")
+mixer.music.play()
+
+spawn_offset = 2.0
+speed = 400
+
 score = 0
 font = pygame.font.Font("freesansbold.ttf", 20)
+
 while True:
+    dt = clock.tick(60) / 1000
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
 
-
     screen.fill((0,0,0))
-
     keys_pressed = pygame.key.get_pressed()
-
+    current_time = mixer.music.get_pos() / 1000
     for key in keys:
         # Verifica se a tecla está pressionada
-        if key.active:
-            if keys_pressed[key.key]:
-                pygame.draw.rect(screen, key.color2, key.rect)
-                key.handled = True
-            else:
-                pygame.draw.rect(screen, key.color1, key.rect)
-                key.handled = False
 
-    rects_to_remove = []
+        if keys_pressed[key.key]:
+            pygame.draw.rect(screen, key.color2, key.rect)
+            key.handled = True
+        else:
+            pygame.draw.rect(screen, key.color1, key.rect)
+            key.handled = False
 
+    notes_to_remove = []
 
-    for rect in map_rect:
-        pygame.draw.rect(screen, (200,0,0),rect)
-        rect.y += 5
-        for key in keys:
-            if key.active and key.rect.colliderect(rect):
-                if keys_pressed[key.key]:
-                    rects_to_remove.append(rect)
-                    key.active = True
+    for note in notess:
+        note_time, lane = note
+
+        if note_time - spawn_offset <= current_time:
+            time_diff = note_time - current_time
+            y = 500 - (time_diff * speed)
+
+            x = 200 + lane * 100
+            rect = pygame.Rect(x, y, 50, 25)
+
+            pygame.draw.rect(screen, (200,0,0),rect)
+
+            if rect.colliderect(keys[lane].rect):
+                if keys_pressed[keys[lane].key]:
+                    notes_to_remove.append(note)
                     score += 100
-                    break
+            elif y > 600:
+                notes_to_remove.append(note)
 
-
-        if rect.y > 600:
-            rects_to_remove.append(rect)
-
-    for rect in rects_to_remove:
-        if rect in map_rect:
-            map_rect.remove(rect)
-
-
+    for n in notes_to_remove:
+        if n in notess:
+            notess.remove(n)
 
 
     score_text = font.render(f"Score: {score}", True, (255,255,255))

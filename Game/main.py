@@ -2,45 +2,55 @@ import pygame
 from pygame import mixer
 
 import librosa
-import random
-
+import numpy as np
 def generate_map(music_name):
     signal_wave, sample_rate = librosa.load(music_name + ".mp3")
     # librosa.load retorna: um numpy array e um int, sendo, respectivamente, o nome das variáveis
 
-    time, beats = librosa.beat.beat_track(y=signal_wave, sr=sample_rate)
-    # time sendo BPM (Beats per minutes) em float e beats sendo uma array de posição de batidas
+    onset_frames = librosa.onset.onset_detect(y=signal_wave, sr=sample_rate, backtrack=True)
+    times = librosa.frames_to_time(onset_frames, sr=sample_rate)
 
-    beats_in_time = librosa.frames_to_time(beats, sr=sample_rate)
-    # beats era frame, agr é time em segundos, mas ainda é um array
+    S = np.abs(librosa.stft(y=signal_wave))
+    freqs = librosa.fft_frequencies(sr=sample_rate)
 
+
+    all_freqs = []
+    last_time = -1
+
+    for frame, t in zip(onset_frames, times):
+        if last_time != -1 and (t - last_time) < 0.1:
+            continue
+
+        spectrum = S[:, frame]
+        freq = freqs[np.argmax(spectrum)]
+
+        all_freqs.append(freq)
+
+        last_time = t
+    if all_freqs:
+        percentiles = np.percentile(all_freqs, [25, 50, 75])
+    else:
+        percentiles = [150,600,2000]
     notes = []
+    last_time = -1
+    for frame, t in zip(onset_frames, times):
+        if last_time != -1 and (t - last_time) < 0.1:
+            continue
+        spectrum = S[:, frame]
+        freq = freqs[np.argmax(spectrum)]
 
-    for t in beats_in_time:
-        lane = random.randint(0, 3)
-        notes.append((t, lane))
+        if freq < percentiles[0]:
+            lane = 0
+        elif freq < percentiles[1]:
+            lane = 1
+        elif freq < percentiles[2]:
+            lane = 2
+        else:
+            lane = 3
 
+        notes.append([t, lane])
+        last_time = t
     return notes
-    """
-        fps = 60
-    duration = librosa.get_duration(y=signal_wave, sr=sample_rate)
-    # duração em segundos, sendo um float!!!
-
-    total_frames = int(duration * fps)
-
-    grid = [[" " for _ in range(4)] for _ in range(total_frames)]
-    # Line : timpe
-    # Column : teclas
-
-    for t, lane in notes:
-        frame = int(t * fps)
-        if frame < total_frames:
-            grid[frame][lane] = "0"
-
-    with open(music_name + ".txt", "w") as f:
-        for row in grid:
-            f.write("".join(row) + "\n")
-    """
 
 pygame.init()
 screen = pygame.display.set_mode((800,600))
@@ -66,16 +76,17 @@ keys = [
 ]
 
 
+#I Thought I Saw Your Face Today
+music2 = "I Thought I Saw Your Face Today"
+music = "I Thought I Saw Your Face Today - She & Him (Instrumental)"
 
-music = "abolish the IRS"
+notess = generate_map(music2)
 
-notess = generate_map(music)
-
-mixer.music.load(music + ".mp3")
+mixer.music.load("I Thought I Saw Your Face Today - She & Him (Instrumental).mp3")
 mixer.music.play()
 
-spawn_offset = 2.0
-speed = 400
+spawn_offset = 1.5
+speed = 450
 
 score = 0
 font = pygame.font.Font("freesansbold.ttf", 20)

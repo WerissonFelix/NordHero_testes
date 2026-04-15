@@ -87,7 +87,7 @@ mixer.music.load("I Thought I Saw Your Face Today - She & Him (Instrumental).mp3
 mixer.music.play()
 
 spawn_offset = 1.5
-speed = 450
+speed = 300
 
 score = 0
 font = pygame.font.Font("freesansbold.ttf", 20)

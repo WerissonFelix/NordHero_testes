@@ -3,54 +3,60 @@ from pygame import mixer
 
 import librosa
 import numpy as np
+
 def generate_map(music_name):
     signal_wave, sample_rate = librosa.load(music_name + ".mp3")
     # librosa.load retorna: um numpy array e um int, sendo, respectivamente, o nome das variáveis
 
-    onset_frames = librosa.onset.onset_detect(y=signal_wave, sr=sample_rate, backtrack=True)
-    times = librosa.frames_to_time(onset_frames, sr=sample_rate)
+    tempo, beat_frames = librosa.beat.beat_track(y=signal_wave, sr=sample_rate)
+    beat_times = librosa.frames_to_time(beat_frames, sr=sample_rate)
+    tempo = float(np.squeeze(tempo))
+
+    print(f"Tempo detectado: {tempo} BPM")
+    print(f"Total de beats: {len(beat_times)}")
 
     S = np.abs(librosa.stft(y=signal_wave))
     freqs = librosa.fft_frequencies(sr=sample_rate)
 
-
     all_freqs = []
-    last_time = -1
 
-    for frame, t in zip(onset_frames, times):
-        if last_time != -1 and (t - last_time) < 0.1:
-            continue
+    # Analisa APENAS nos beats detectados
+    for beat_time in beat_times:
+        # Converte tempo para frame
+        frame = int(librosa.time_to_frames(beat_time, sr=sample_rate))
 
-        spectrum = S[:, frame]
-        freq = freqs[np.argmax(spectrum)]
+        if frame < S.shape[1]:
 
-        all_freqs.append(freq)
+            spectrum = S[:, frame]
+            freq = freqs[np.argmax(spectrum)]
 
-        last_time = t
+            all_freqs.append(freq)
+
     if all_freqs:
         percentiles = np.percentile(all_freqs, [25, 50, 75])
     else:
         percentiles = [150,600,2000]
     notes = []
-    last_time = -1
-    for frame, t in zip(onset_frames, times):
-        if last_time != -1 and (t - last_time) < 0.1:
-            continue
-        spectrum = S[:, frame]
-        freq = freqs[np.argmax(spectrum)]
 
-        if freq < percentiles[0]:
-            lane = 0
-        elif freq < percentiles[1]:
-            lane = 1
-        elif freq < percentiles[2]:
-            lane = 2
-        else:
-            lane = 3
+    for beat_time in beat_times:
+        frame = int(librosa.time_to_frames(beat_time, sr=sample_rate))
 
-        notes.append([t, lane])
-        last_time = t
-    return notes
+        if frame < S.shape[1]:
+            spectrum = S[:, frame]
+            freq = freqs[np.argmax(spectrum)]
+
+            if freq < percentiles[0]:
+                lane = 0
+            elif freq < percentiles[1]:
+                lane = 1
+            elif freq < percentiles[2]:
+                lane = 2
+            else:
+                lane = 3
+
+            notes.append([beat_time, lane])
+
+    return notes, tempo
 
 pygame.init()
 screen = pygame.display.set_mode((800,600))
@@ -80,16 +86,22 @@ keys = [
 music2 = "I Thought I Saw Your Face Today"
 music = "I Thought I Saw Your Face Today - She & Him (Instrumental)"
 
-notess = generate_map(music2)
+notess, tempo = generate_map(music)
+
+print(f"Música analisada com {tempo} BPM")
+print(f"Total de notas geradas: {len(notess)}")
+
 
 mixer.music.load("I Thought I Saw Your Face Today - She & Him (Instrumental).mp3")
 mixer.music.play()
 
 spawn_offset = 1.5
-speed = 450
+
+base_speed = 300
+speed = base_speed * (tempo / 120)
 
 score = 0
-font = pygame.font.Font("freesansbold.ttf", 20)
+font = pygame.font.Font("freesansbold.ttf", 30)
 
 while True:
     dt = clock.tick(60) / 1000
@@ -119,8 +131,8 @@ while True:
         if note_time - spawn_offset <= current_time:
             time_diff = note_time - current_time
             y = 500 - (time_diff * speed)
-
             x = 200 + lane * 100
+
             rect = pygame.Rect(x, y, 50, 25)
 
             pygame.draw.rect(screen, (200,0,0),rect)

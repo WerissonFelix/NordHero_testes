@@ -60,3 +60,6 @@ class AudioAnalyzer:
                 self.notes.append([beat_time, lane])
 
         return self.notes, self.time
+    
+teste = AudioAnalyzer("Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")
+print(teste.Generate_map())

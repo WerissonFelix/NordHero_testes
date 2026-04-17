@@ -1,6 +1,6 @@
 import librosa
 import numpy as np
-
+from pygame import mixer
 
 class AudioAnalyzer:
     def __init__(self,music_path):
@@ -61,5 +61,15 @@ class AudioAnalyzer:
 
         return self.notes, self.time
     
-teste = AudioAnalyzer("Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")
-print(teste.Generate_map())
+    def load_music(self): 
+        """
+        Toca a música
+
+        Returns:
+            mixer_
+        """
+        mixer.init()
+        mixer.music.load(self.music_path + ".mp3")
+        mixer.music.play()
+        
+        return mixer

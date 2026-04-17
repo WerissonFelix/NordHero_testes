@@ -14,14 +14,9 @@ class LaneManager:
     def update_line(self):
         pygame.draw.rect(self.screen , self.color_pressed, self.rect)
         
-    def draw_all_lines(self):
+    def draw_line(self):
         pygame.draw.rect(self.screen , self.color_default, self.rect)
              
 """    
-keys = [
-    LaneManager(200,500,(255,0,0), (220,0,0),pygame.K_a),
-    LaneManager(300,500,(0,255,0), (0,220,0),pygame.K_s),
-    LaneManager(400,500,(0,0,255), (0,0,220),pygame.K_d),
-    LaneManager(500,500,(255,255,0), (220,220,0),pygame.K_f),
-]
+
 """

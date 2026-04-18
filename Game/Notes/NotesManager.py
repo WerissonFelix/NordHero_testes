@@ -9,7 +9,9 @@ class NoteManager:
         self.color = color
         self.handled = True
         self.speed = speed
+        self.font = pygame.font.Font(None, 36)
         self.notes_to_remove = []
+        #self.rating = ""
         
         self.x = 0
         self.y = 0
@@ -30,9 +32,28 @@ class NoteManager:
 
                 if rect.colliderect(keys[lane].rect):
                     if keys_pressed[keys[lane].key]:
+                        time_accert = abs(note_time - current_time)
+                        
+                        if time_accert < 0.05:
+                            rating = "Perfect"
+                            score += 300
+                        elif time_accert < 0.1:
+                            rating = "Good"
+                            score += 100
+                        else:
+                            rating = "Bad"
+                            score += 50
+                                           
+                        rating_text = self.font.render(rating, True, (255,255,255))
+                                                            
+                        screen.blit(rating_text, (10, 300))
+                                               
                         self.notes_to_remove.append(note)
-                        score += 100
                 elif self.y > 600:
+                    rating = "Miss"
+                    rating_text = self.font.render(rating, True, (255,255,255))
+         
+                    screen.blit(rating_text, (10, 300))
                     self.notes_to_remove.append(note)
 
         for n in self.notes_to_remove:

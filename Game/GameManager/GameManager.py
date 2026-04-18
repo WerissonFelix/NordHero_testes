@@ -39,8 +39,7 @@ class GameManager:
             keys_pressed = pygame.key.get_pressed()
             current_time = mixer.music.get_pos() / 1000
             for key in self.default_lane:
-                # Verifica se a tecla está pressionada
-    
+              
                 if keys_pressed[key.key]:
                     key.update_line()
                     
@@ -50,7 +49,7 @@ class GameManager:
             score = notesManage.while_running(score, current_time,notes,self.config.get_spawn_offset(),self.screen,self.default_lane, keys_pressed)
 
             score_text = self.font.render(f"Score: {score}", True, (255,255,255))
-            print(score)
+                     
             self.screen.blit(score_text, (10, 10))
             pygame.display.update()
 

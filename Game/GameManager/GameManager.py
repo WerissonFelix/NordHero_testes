@@ -4,6 +4,7 @@ from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 
 import pygame
+
 class GameManager:
     
     def __init__(self):
@@ -49,7 +50,7 @@ class GameManager:
             score = notesManage.while_running(score, current_time,notes,self.config.get_spawn_offset(),self.screen,self.default_lane, keys_pressed)
 
             score_text = self.font.render(f"Score: {score}", True, (255,255,255))
-                     
+                    
             self.screen.blit(score_text, (10, 10))
             pygame.display.update()
 

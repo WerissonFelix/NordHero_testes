@@ -11,7 +11,7 @@ class NoteManager:
         self.speed = speed
         self.font = pygame.font.Font(None, 36)
         self.notes_to_remove = []
-        #self.rating = ""
+        self.rating = ""
         
         self.x = 0
         self.y = 0
@@ -32,19 +32,21 @@ class NoteManager:
 
                 if rect.colliderect(keys[lane].rect):
                     if keys_pressed[keys[lane].key]:
-                        time_accert = abs(note_time - current_time)
-                        
-                        if time_accert < 0.05:
-                            rating = "Perfect"
-                            score += 300
-                        elif time_accert < 0.1:
-                            rating = "Good"
-                            score += 100
-                        else:
-                            rating = "Bad"
-                            score += 50
                                            
-                        rating_text = self.font.render(rating, True, (255,255,255))
+                        distance = abs(rect.centery - keys[lane].rect.centery)
+                        
+                        if distance <= 12:                          
+                           self.rating = "Perfect" 
+                           score += 300
+                        elif 13 <= distance <= 18:
+                            self.rating = "Good"
+                            score += 150
+                        else:
+                            self.rating = "Bad"
+                            score += 50
+                        
+                        print(distance, self.rating, score)                
+                        rating_text = self.font.render(self.rating, True, (255,255,255))
                                                             
                         screen.blit(rating_text, (10, 300))
                                                
@@ -60,7 +62,9 @@ class NoteManager:
             if n in notes:
                 notes.remove(n)
         return score
+    
     def draw(self, screen):
         rect = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(screen,self.color, rect)
-            
+    
+    

@@ -1,5 +1,6 @@
 import pygame
 import pygame_menu
+from Game.GameManager.GameManager import ManageGame
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
@@ -16,8 +17,10 @@ def home_screen(user,profile_menu):
                 email: {user[2]}
                 password: {user[3]}
             """, font_size=30)
-
-    home_menu.add.button("iniciar")
+    
+    testee = ManageGame()
+    
+    home_menu.add.button("iniciar", testee.run)
     home_menu.add.button("Configurações", profile_menu, user)
     home_menu.add.button("Sair do Jogo", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

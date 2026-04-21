@@ -2,10 +2,10 @@ from Game.Config.Game_Config import GameConfig
 from Game.Lanes.LaneManager import LaneManager
 from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
-
+from Game.Text.TextManager import TextManager
 import pygame
 
-class GameManager:
+class ManageGame:
     
     def __init__(self):
         pygame.font.init()
@@ -29,8 +29,7 @@ class GameManager:
         clock = pygame.time.Clock()
         score = 0
         notesManage = NoteManager(self.config.get_note_width(), self.config.get_note_height(),(200,0,0),self.config.get_base_speed())
-        alpha = 0
-        current_rating = ""
+        textManage  = TextManager()
         while self.running:
             dt = clock.tick(60) / 1000
             for event in pygame.event.get():
@@ -50,33 +49,10 @@ class GameManager:
                     key.draw_line()
                    
             score, rating = notesManage.while_running(score, current_time,notes,self.config.get_spawn_offset(),self.screen,self.default_lane, keys_pressed)
-            #orig_surf = self.font.render(rating, True, (255, 255, 255))
-            #text_surf = orig_surf.copy()   
-                        
-            #alpha_surf = pygame.Surface(text_surf.get_size(), pygame.SRCALPHA)
-            #text_surf = orig_surf.copy() 
             
-            notesManage.draw_text(rating,self.screen)
-            notesManage.effect_text_rating()
-            """
-            if rating != "":
-                current_rating = rating
-                alpha = 255
-            
-            if alpha > 0 and current_rating != "":
-                orig_surf = self.font.render(current_rating, True, (255, 255, 255))
-                temp_surf = pygame.Surface(orig_surf.get_size(), pygame.SRCALPHA)
-                
-                temp_surf.set_alpha(alpha)   
-                temp_surf.blit(orig_surf, (10,300))
-                                                               
-                self.screen.blit(temp_surf, (10,300))  
-                alpha = max(alpha-4, 0)
-            """
-                     
-            score_text = self.font.render(f"Score: {score}", True, (255,255,255))     
+            textManage.draw_rating(rating,self.screen)
+            textManage.effect_text_rating()
+                             
+            score_text = self.font.render(f"Score: {score}", True, (255,255,0))     
             self.screen.blit(score_text, (10, 10))
             pygame.display.update()
-        
-testee = GameManager()
-testee.run()

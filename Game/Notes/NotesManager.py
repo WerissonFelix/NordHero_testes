@@ -17,7 +17,7 @@ class NoteManager:
         self.alpha = 0
         self.col_spd = 5
         self.col_dir = [-1,-1,-1]
-        self.def_col = [255,255,255]
+        self.def_col = [255,255,0]
         
         self.x = 0
         self.y = 0    
@@ -57,29 +57,5 @@ class NoteManager:
             if n in notes:
                 notes.remove(n)
         return score, self.rating
-    
-    def draw_text(self,rating, screen):
-        if rating != "":
-            self.current_rating = rating
-            self.alpha = 255
-        if self.alpha > 0 and self.current_rating != "":
-            orig_surf = self.font.render(self.current_rating, True, self.def_col)
-            temp_surf = pygame.Surface(orig_surf.get_size(), pygame.SRCALPHA)
-            
-            temp_surf.set_alpha(self.alpha)
-            temp_surf.blit(orig_surf, (0,0))
-            
-            screen.blit(temp_surf, (10,300))
-            self.alpha = max(self.alpha - 4, 0)  
-    def effect_text_rating(self):
-        mininum = 100
-        maximum = 200
-        
-        for i in range(3):
-            self.def_col[i] += self.col_spd * self.col_dir[i]
-            
-            if self.def_col[i] >= 255:
-                col_dir = 0
-            elif self.def_col[i] <= 0:
-                self.def_col[i] = 255
-        
+
+   

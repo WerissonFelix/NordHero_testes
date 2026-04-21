@@ -20,7 +20,7 @@ def home_screen(user,profile_menu):
     
     testee = ManageGame()
     
-    home_menu.add.button("iniciar", testee.run)
+    home_menu.add.button("iniciar", testee.load_to_run)
     home_menu.add.button("Configurações", profile_menu, user)
     home_menu.add.button("Sair do Jogo", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

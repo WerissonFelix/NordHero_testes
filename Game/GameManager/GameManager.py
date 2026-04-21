@@ -10,10 +10,20 @@ class ManageGame:
     def __init__(self):
         pygame.font.init()
         self.config = GameConfig()
-        self.screen = pygame.display.set_mode((self.config.get_screen_width(), self.config.get_screen_height()))
+        self.textManage  = TextManager()
         self.clock = pygame.time.Clock()
+        self.audio = AudioAnalyzer("Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")
+        
+        self.screen = pygame.display.set_mode(
+            (
+            self.config.get_screen_width(),
+            self.config.get_screen_height()
+            )
+        )      
         self.font = pygame.font.Font(None, 36)
-        self.running = True
+        self.running = False
+        
+        self.notes = []
         self.default_lane = [
             
             LaneManager(200,500,(255,0,0), (220,0,0),pygame.K_a),
@@ -21,17 +31,23 @@ class ManageGame:
             LaneManager(400,500,(0,0,255), (0,0,220),pygame.K_d),
             LaneManager(500,500,(255,255,0), (220,220,0),pygame.K_f),
         ]
-        
+        self.mixer = None    
+    def load_to_run(self):  
+        self.notes, time = self.audio.Generate_map()
+        self.running = True
+        self.run()
     def run(self):
-        audio = AudioAnalyzer("Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")
-        notes, time = audio.Generate_map()
-        mixer = audio.load_music()
-        clock = pygame.time.Clock()
         score = 0
-        notesManage = NoteManager(self.config.get_note_width(), self.config.get_note_height(),(200,0,0),self.config.get_base_speed())
-        textManage  = TextManager()
+        self.mixer = self.audio.load_music()
+        notesManage = NoteManager(
+            self.config.get_note_width(), 
+            self.config.get_note_height(),
+            (200,0,0),
+            self.config.get_base_speed()
+        )
+        
         while self.running:
-            dt = clock.tick(60) / 1000
+            dt = self.clock.tick(60) / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -39,7 +55,7 @@ class ManageGame:
                     
             self.screen.fill((0,0,0))
             keys_pressed = pygame.key.get_pressed()
-            current_time = mixer.music.get_pos() / 1000
+            current_time = self.mixer.music.get_pos() / 1000
             for key in self.default_lane:
               
                 if keys_pressed[key.key]:
@@ -48,10 +64,15 @@ class ManageGame:
                 else:
                     key.draw_line()
                    
-            score, rating = notesManage.while_running(score, current_time,notes,self.config.get_spawn_offset(),self.screen,self.default_lane, keys_pressed)
+            score, rating = notesManage.while_running(
+                score,
+                current_time,self.notes,self.config.get_spawn_offset(),
+                self.screen,self.default_lane,
+                keys_pressed
+            )
             
-            color = textManage.draw_rating(rating,self.screen)
-            textManage.effect_text_rating()     
+            color = self.textManage.draw_rating(rating,self.screen)
+            self.textManage.effect_text_rating()     
             
             score_text = self.font.render(f"Score: {score}", True, color)    
             self.screen.blit(score_text, (10, 10))

@@ -4,11 +4,11 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
-fundo = pygame.image.load("telainicial.png")
+fundo = pygame.image.load("./Images/telainicial.png")
 
 def initial_screen(login_screen,create_account_menu):
     fundo = BaseImage(
-        image_path="telainicial.png",
+        image_path="./Images/telainicial.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

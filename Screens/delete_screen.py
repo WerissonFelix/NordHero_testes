@@ -14,7 +14,7 @@ def delete_menu(user, profile_options):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_delete_menu = BaseImage(
-        image_path="TelaDeleteAccount.png",
+        image_path="./Images/TelaDeleteAccount.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

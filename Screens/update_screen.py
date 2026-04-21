@@ -12,7 +12,7 @@ def update_menu(user, profile_options):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_update_menu = BaseImage(
-        image_path="TelaUpdateScreen.png",
+        image_path="./Images/TelaUpdateScreen.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

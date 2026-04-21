@@ -13,7 +13,7 @@ def create_account_menu(initial_screen,login_screen):
     theme.title_font = pygame_menu.font.FONT_BEBAS
 
     fundo_criar_conta = BaseImage(
-        image_path="TelaCreateAccount.png",
+        image_path="./Images/TelaCreateAccount.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

@@ -13,7 +13,7 @@ def login_screen(initial_screen):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_login = BaseImage(
-        image_path="TelaLogin.png",
+        image_path="./Images/TelaLogin.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

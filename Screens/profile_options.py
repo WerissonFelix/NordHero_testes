@@ -15,7 +15,7 @@ def profile_options_menu(user):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_profile_options = BaseImage(
-        image_path="TelaProfileMenu.png",
+        image_path="./Images/TelaProfileMenu.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

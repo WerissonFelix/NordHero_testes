@@ -69,7 +69,8 @@ def home_screen(user,profile_menu):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
 
-    home_menu.add.button("START GAME")
+    gameManager = ManageGame()
+    home_menu.add.button("START GAME", gameManager.load_to_run)
     home_menu.add.button("SETTINGS", profile_menu, user)
     home_menu.add.button("EXIT", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

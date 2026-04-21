@@ -6,7 +6,6 @@ from Game.Text.TextManager import TextManager
 import pygame, time
 
 class ManageGame:
-    
     def __init__(self):
         pygame.font.init()
         self.config = GameConfig()
@@ -31,11 +30,15 @@ class ManageGame:
             LaneManager(400,500,(0,0,255), (0,0,220),pygame.K_d),
             LaneManager(500,500,(255,255,0), (220,220,0),pygame.K_f),
         ]
+        
         self.mixer = None    
         self.count = 4
         self.start_time = time.time()
+        
+        self.is_paused = False
     def load_to_run(self):  
         """
+        
         Carrega todas as notes antes do jogo começar, está
         separado da def run porque este carregamento é pesado 
         e demora alguns segundos para calcular todas as notas
@@ -81,6 +84,15 @@ class ManageGame:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.is_paused = not(self.is_paused)
+                        if self.is_paused:
+                            self.mixer.music.pause()
+                        else:
+                            self.mixer.music.unpause()
+            if self.is_paused:
+                continue
                     
             self.screen.fill((0,0,0))
             keys_pressed = pygame.key.get_pressed()

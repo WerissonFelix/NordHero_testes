@@ -5,11 +5,13 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 
 pygame.init()
-surface = pygame.display.set_mode((600, 400))
+surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
-
-def home_screen(user,profile_menu):
-    from Screens.choice_music import choice_music
+music = ""
+def choice_music(user):
+    from Screens.Home import home_screen
+    from Screens.profile_options import profile_options_menu
+    
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
         drawing_mode=IMAGE_MODE_FILL
@@ -31,7 +33,7 @@ def home_screen(user,profile_menu):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
-    home_menu = pygame_menu.Menu(
+    choice = pygame_menu.Menu(
         f'Connected as: {user[1]}',
         800,
         500,
@@ -39,17 +41,17 @@ def home_screen(user,profile_menu):
         )
     
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
-    lbl_nome = home_menu.add.label(
+    lbl_nome = choice.add.label(
         f"Name: {user[1]}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    lbl_email = home_menu.add.label(
+    lbl_email = choice.add.label(
         f"email: {user[2]}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    lbl_senha = home_menu.add.label(
+    lbl_senha = choice.add.label(
         f"password: {user[3]}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
@@ -69,9 +71,26 @@ def home_screen(user,profile_menu):
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
-
     
-    home_menu.add.button("START GAME", choice_music, user)
-    home_menu.add.button("SETTINGS", profile_menu, user)
-    home_menu.add.button("EXIT", pygame_menu.events.EXIT)
-    home_menu.mainloop(surface)
+    selected_music = [None]
+    
+    def set_music_path(selected_item, value):
+        selected_music[0] = value
+        print(f"Música selecionada: {value}") 
+    
+    music_selector = choice.add.selector(
+        'MUSIC :', 
+        [('abolish the IRS', "Game\music\Abolish the IRS"), 
+        ('I Thought I Saw Your Face Today', "Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")],
+        onchange=music)
+    
+    def start_game():
+        if selected_music[0] is None:
+            selected_music[0] = music_selector.get_value()[0][1]
+        
+        gameManager = ManageGame(user,selected_music[0])
+        gameManager.load_to_run()
+        
+    choice.add.button("START GAME", start_game)
+    choice.add.button("BACK", home_screen, user, profile_options_menu)
+    choice.mainloop(surface)

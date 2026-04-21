@@ -7,12 +7,14 @@ from Screens.Pause import pause_menu
 import pygame, time
 
 class ManageGame:
-    def __init__(self):
+    def __init__(self, user,music_path):
         pygame.font.init()
+        self.user = user
         self.config = GameConfig()
+        self.music_path = music_path
         self.textManage  = TextManager()
         self.clock = pygame.time.Clock()
-        self.audio = AudioAnalyzer("Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")
+        self.audio = AudioAnalyzer(self.music_path)
         
         self.screen = pygame.display.set_mode(
             (
@@ -52,7 +54,7 @@ class ManageGame:
     def pause_game(self):
         self.mixer.music.pause()
         
-        pause_menu()
+        pause_menu(self.user, self.music_path)
         
         self.countdown(True)
         

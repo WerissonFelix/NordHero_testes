@@ -24,6 +24,8 @@ def table_user():
 
     print("Table user created successfully")
 
+table_user()
+
 
 
 

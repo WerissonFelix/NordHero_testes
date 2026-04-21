@@ -9,9 +9,9 @@ class PasswordValidate:
         self.validation_results = {}
         self.error_messages = {
             "len_valid": "A senha deve ter 8 a 20 caracteres",
-            "has_num": "A senha deve ter pelo menos 1 número",
-            "has_symbols": "A senha deve ter pelo menos 1 símbolo",
-            "has_spaces": "A senha não pode conter espaços"
+            "has_num": "A senha deve ter pelo menos 1 numero",
+            "has_symbols": "A senha deve ter pelo menos 1 simbolo",
+            "has_spaces": "A senha nao pode conter espacos"
         }
     def validate(self):
         self.verify_exceptions()

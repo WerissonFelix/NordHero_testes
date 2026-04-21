@@ -27,14 +27,21 @@ class TextManager:
         
         self.rainbow_index = 0
         self.rainbow_speed = 0.1
-        self.rainbow_change = 0
-        
+        self.rainbow_change = 0    
     def draw_rating(self, rating, screen):
-        color = self.rainbow_effect()
         if rating != "":
             self.current_message = rating
             self.alpha = 255
         if self.alpha > 0 and self.current_message != "":
+            if self.current_message == "Bad":
+                color = self.rainbow[1]
+            elif self.current_message == "Good":
+                color = self.rainbow[5]
+            elif self.current_message == "Perfect":
+                color = self.rainbow_effect()
+            else: 
+                color = self.rainbow[-1]
+                
             orig_surf = self.font.render(self.current_message, True, color)
             temp_surf = pygame.Surface(orig_surf.get_size(), pygame.SRCALPHA)
             

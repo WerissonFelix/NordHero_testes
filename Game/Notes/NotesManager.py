@@ -20,7 +20,8 @@ class NoteManager:
         self.def_col = [255,255,0]
         
         self.x = 0
-        self.y = 0    
+        self.y = 0  
+          
     def while_running(self,score, current_time, notes, spawn_offset, screen, keys, keys_pressed):            
         for note in notes:
             note_time, lane = note

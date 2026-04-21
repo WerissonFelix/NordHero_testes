@@ -3,6 +3,7 @@ from Game.Lanes.LaneManager import LaneManager
 from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
+from Screens.Pause import pause_menu
 import pygame, time
 
 class ManageGame:
@@ -47,8 +48,18 @@ class ManageGame:
         
         self.notes, time = self.audio.Generate_map()
         self.countdown()
+    
+    def pause_game(self):
+        self.mixer.music.pause()
+        
+        pause_menu()
+        
+        self.countdown(True)
+        
+        self.mixer.music.unpause()
+        
 
-    def countdown(self):  
+    def countdown(self, was_paused = False):  
         time.sleep(2)  
         while self.count >= 0: 
             if self.count >= 0 and time.time() - self.start_time > 1:
@@ -64,9 +75,11 @@ class ManageGame:
             self.screen.blit(img, (400,300))
             
             pygame.display.flip()
-        self.count = 3
-        self.running = True
-        self.run()
+            
+        self.count = 4
+        if was_paused == False:
+            self.running = True
+            self.run()
         
     def run(self):
         score = 0
@@ -86,17 +99,13 @@ class ManageGame:
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.is_paused = not(self.is_paused)
-                        if self.is_paused:
-                            self.mixer.music.pause()
-                        else:
-                            self.mixer.music.unpause()
-            if self.is_paused:
-                continue
-                    
+                        self.pause_game()
+                        
             self.screen.fill((0,0,0))
+            
             keys_pressed = pygame.key.get_pressed()
             current_time = self.mixer.music.get_pos() / 1000
+            
             for key in self.default_lane:
               
                 if keys_pressed[key.key]:

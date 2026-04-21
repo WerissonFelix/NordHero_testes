@@ -50,9 +50,10 @@ class ManageGame:
                    
             score, rating = notesManage.while_running(score, current_time,notes,self.config.get_spawn_offset(),self.screen,self.default_lane, keys_pressed)
             
-            textManage.draw_rating(rating,self.screen)
-            textManage.effect_text_rating()
-                             
-            score_text = self.font.render(f"Score: {score}", True, (255,255,0))     
+            color = textManage.draw_rating(rating,self.screen)
+            textManage.effect_text_rating()     
+            
+            score_text = self.font.render(f"Score: {score}", True, color)    
             self.screen.blit(score_text, (10, 10))
+            
             pygame.display.update()

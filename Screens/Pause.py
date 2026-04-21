@@ -6,7 +6,9 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
-def pause_menu():
+def pause_menu(user,music_path):
+    from Screens.Home import home_screen
+    from Screens.profile_options import profile_options_menu
     from Game.GameManager.GameManager import ManageGame
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
@@ -36,13 +38,13 @@ def pause_menu():
 
         theme=theme)
     
-    manager = ManageGame()
+    manager = ManageGame(user,music_path)
     
     def resume_game():
         menu.disable()
          
     menu.add.button("SETTINGS",)
     menu.add.button('BACK TO GAME', resume_game)
-    menu.add.button("COME TO HOME")
+    menu.add.button("COME TO HOME", home_screen, user, profile_options_menu)
 
     menu.mainloop(surface)

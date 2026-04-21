@@ -2,6 +2,7 @@ import pygame
 import pygame_menu
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+from Game.GameManager.GameManager import ManageGame
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))

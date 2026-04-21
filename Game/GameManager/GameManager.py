@@ -3,7 +3,7 @@ from Game.Lanes.LaneManager import LaneManager
 from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
-import pygame
+import pygame, time
 
 class ManageGame:
     
@@ -32,10 +32,39 @@ class ManageGame:
             LaneManager(500,500,(255,255,0), (220,220,0),pygame.K_f),
         ]
         self.mixer = None    
+        self.count = 4
+        self.start_time = time.time()
     def load_to_run(self):  
+        """
+        Carrega todas as notes antes do jogo começar, está
+        separado da def run porque este carregamento é pesado 
+        e demora alguns segundos para calcular todas as notas
+        
+        """
+        
         self.notes, time = self.audio.Generate_map()
+        self.countdown()
+
+    def countdown(self):  
+        time.sleep(2)  
+        while self.count >= 0: 
+            if self.count >= 0 and time.time() - self.start_time > 1:
+                self.count -= 1
+                self.start_time = time.time()
+            
+            text = "GO!" if self.count <= 0 else str(self.count)
+            
+            self.screen.fill((0, 0, 0))
+            
+            img = self.font.render(text, True, (255, 255, 255))
+            
+            self.screen.blit(img, (400,300))
+            
+            pygame.display.flip()
+        self.count = 3
         self.running = True
         self.run()
+        
     def run(self):
         score = 0
         self.mixer = self.audio.load_music()
@@ -78,3 +107,4 @@ class ManageGame:
             self.screen.blit(score_text, (10, 10))
             
             pygame.display.update()
+    

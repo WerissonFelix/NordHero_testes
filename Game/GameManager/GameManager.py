@@ -38,18 +38,38 @@ class ManageGame:
         self.count = 4
         self.start_time = time.time()
         
+        self.count_to_load = -1
         self.is_paused = False
-    def load_to_run(self):  
-        """
         
+    def load_to_run(self):    
+        """
         Carrega todas as notes antes do jogo começar, está
         separado da def run porque este carregamento é pesado 
         e demora alguns segundos para calcular todas as notas
+        """ 
         
-        """
-        
-        self.notes, time = self.audio.Generate_map()
-        self.countdown()
+        text = "Loading"
+        time.sleep(2)
+        while self.count_to_load < 4:
+            if self.count_to_load < 4 and time.time() - self.start_time > 1:
+                self.count_to_load += 1
+                self.start_time = time.time()
+                
+                text += " ."
+            
+            if self.count_to_load == 4:
+                text = "Please, wait"
+            
+            self.screen.fill((0, 0, 0))  
+                
+            img = self.font.render(text, True, (255, 255, 255))
+            
+            self.screen.blit(img, (350,300))
+            
+            pygame.display.flip()                
+        else:
+            self.notes, time_sound = self.audio.Generate_map()
+            self.countdown()
     
     def pause_game(self):
         self.mixer.music.pause()
@@ -62,6 +82,7 @@ class ManageGame:
         
 
     def countdown(self, was_paused = False):  
+        
         time.sleep(2)  
         while self.count >= 0: 
             if self.count >= 0 and time.time() - self.start_time > 1:
@@ -74,7 +95,7 @@ class ManageGame:
             
             img = self.font.render(text, True, (255, 255, 255))
             
-            self.screen.blit(img, (400,300))
+            self.screen.blit(img, (350,300))
             
             pygame.display.flip()
             
@@ -131,3 +152,10 @@ class ManageGame:
             
             pygame.display.update()
     
+    
+    # fazer uma def resume_party que mostra os resultados da partida, só chama se
+    # o jogador quitar ou for até ao fim
+    # se quitar, volta pra home
+    # até o fim, volta pro choice_music
+    # mostra o Rank do jogador com base na porcentagem de acerto
+    # tentar mostrar quantos miss, goods, perfects (opcional) no final

@@ -40,11 +40,11 @@ def update_menu(user, profile_options):
     
     validator = DataVerifier("update_screen")
 
-    nome_input = update.add.text_input('Name: ', default=user[1])
+    nome_input = update.add.text_input('Name: ', default=user[1], maxchar=20)
     nome_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     nome_input.translate(180, 0)
 
-    email_input = update.add.text_input('Email: ', default=user[2])
+    email_input = update.add.text_input('Email: ', default=user[2], maxchar=20)
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 

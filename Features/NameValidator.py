@@ -9,7 +9,7 @@ class NameValidator:
             self.message_error = "Nome muito curto"
             return self.message_error, False
        
-        if len(self.name) > 35:
+        if len(self.name) > 20:
             self.message_error = "Nome muito"
             return "Nome muito longo", False
 
@@ -17,7 +17,3 @@ class NameValidator:
             return "Nome deve conter apenas letras", False
 
         return self.name, True
-    
-nome = "Werisson felix dos Santos Freitas"
-
-print(len(nome.strip()))

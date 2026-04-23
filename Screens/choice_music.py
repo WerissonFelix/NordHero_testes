@@ -51,11 +51,7 @@ def choice_music(user):
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    lbl_senha = choice.add.label(
-        f"password: {user[3]}", 
-        font_size=20, 
-        font_name=pygame_menu.font.FONT_MUNRO
-    )
+  
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
@@ -64,10 +60,6 @@ def choice_music(user):
     lbl_email.set_alignment(ALIGN_RIGHT)
     lbl_email.translate(-20, -135)
 
-    lbl_senha.set_float(True)
-    lbl_senha.set_alignment(ALIGN_RIGHT)
-    lbl_senha.translate(-20, -110)
-  
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)

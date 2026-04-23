@@ -37,15 +37,15 @@ def create_account_menu(initial_screen,login_screen):
 
     validator = DataVerifier("creat_account")
 
-    nome_input = creat_menu.add.text_input('Name: ')
+    nome_input = creat_menu.add.text_input('Name: ', maxchar=20)
     nome_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     nome_input.translate(180, 0)
 
-    email_input = creat_menu.add.text_input('Email: ')
+    email_input = creat_menu.add.text_input('Email: ', maxchar=20)
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 
-    senha_input = creat_menu.add.text_input('Password: ', password=True)
+    senha_input = creat_menu.add.text_input('Password: ', password=True, maxchar=20)
     senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     senha_input.translate(180, 0)
 

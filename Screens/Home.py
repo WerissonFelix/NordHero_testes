@@ -49,11 +49,7 @@ def home_screen(user,profile_menu):
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    lbl_senha = home_menu.add.label(
-        f"password: {user[3]}", 
-        font_size=20, 
-        font_name=pygame_menu.font.FONT_MUNRO
-    )
+   
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
@@ -62,15 +58,10 @@ def home_screen(user,profile_menu):
     lbl_email.set_alignment(ALIGN_RIGHT)
     lbl_email.translate(-20, -135)
 
-    lbl_senha.set_float(True)
-    lbl_senha.set_alignment(ALIGN_RIGHT)
-    lbl_senha.translate(-20, -110)
-  
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
 
-    
     home_menu.add.button("START GAME", choice_music, user)
     home_menu.add.button("SETTINGS", profile_menu, user)
     home_menu.add.button("EXIT", pygame_menu.events.EXIT)

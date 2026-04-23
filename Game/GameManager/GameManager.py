@@ -4,6 +4,7 @@ from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
 from Screens.Pause import pause_menu
+from Screens.Match_summary import match_summary
 import pygame, time
 
 class ManageGame:
@@ -15,7 +16,7 @@ class ManageGame:
         self.textManage  = TextManager()
         self.clock = pygame.time.Clock()
         self.audio = AudioAnalyzer(self.music_path)
-        
+        self.notesManage = None
         self.screen = pygame.display.set_mode(
             (
             self.config.get_screen_width(),
@@ -71,10 +72,10 @@ class ManageGame:
             self.notes, time_sound = self.audio.Generate_map()
             self.countdown()
     
-    def pause_game(self):
+    def pause_game(self, total_notes, notes_hit):
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit)
         
         self.countdown(True)
         
@@ -107,7 +108,11 @@ class ManageGame:
     def run(self):
         score = 0
         self.mixer = self.audio.load_music()
-        notesManage = NoteManager(
+        
+        MUSIC_END_EVENT = pygame.USEREVENT + 1
+        pygame.mixer.music.set_endevent(MUSIC_END_EVENT)
+        
+        self.notesManage = NoteManager(
             self.config.get_note_width(), 
             self.config.get_note_height(),
             (200,0,0),
@@ -122,7 +127,9 @@ class ManageGame:
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.pause_game()
+                        self.pause_game(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
+                elif event.type == MUSIC_END_EVENT:
+                    self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
             self.screen.fill((0,0,0))
             
@@ -137,7 +144,7 @@ class ManageGame:
                 else:
                     key.draw_line()
                    
-            score, rating = notesManage.while_running(
+            score, rating = self.notesManage.while_running(
                 score,
                 current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
@@ -152,7 +159,9 @@ class ManageGame:
             
             pygame.display.update()
     
-    
+    def end_match(self, total_notes, notes_hit):        
+        time.sleep(2)
+        match_summary(self.user, total_notes, notes_hit)
     # fazer uma def resume_party que mostra os resultados da partida, só chama se
     # o jogador quitar ou for até ao fim
     # se quitar, volta pra home

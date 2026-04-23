@@ -5,7 +5,7 @@ from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
 from Screens.Pause import pause_menu
 from Screens.Match_summary import match_summary
-import pygame, time
+import pygame, time, os
 
 class ManageGame:
     def __init__(self, user,music_path):
@@ -15,6 +15,15 @@ class ManageGame:
         self.music_path = music_path
         self.textManage  = TextManager()
         self.clock = pygame.time.Clock()
+        current_dir = os.path.dirname(__file__)
+        bg_path = os.path.join(current_dir, "..", "..", "Images", "telainicial.png")
+        self.background = pygame.image.load(bg_path)
+
+        self.background = pygame.transform.scale(
+            self.background,
+            (self.config.get_screen_width(), self.config.get_screen_height())
+        )
+        
         self.audio = AudioAnalyzer(self.music_path)
         self.notesManage = None
         self.screen = pygame.display.set_mode(
@@ -131,7 +140,7 @@ class ManageGame:
                 elif event.type == MUSIC_END_EVENT:
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
-            self.screen.fill((0,0,0))
+            self.screen.blit(self.background, (0, 0))
             
             keys_pressed = pygame.key.get_pressed()
             current_time = self.mixer.music.get_pos() / 1000

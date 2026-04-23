@@ -18,10 +18,10 @@ class NoteManager:
         self.col_spd = 5
         self.col_dir = [-1,-1,-1]
         self.def_col = [255,255,0]
-        
+
         self.x = 0
         self.y = 0  
-          
+        self.notes_hit = 0
     def while_running(self,score, current_time, notes, spawn_offset, screen, keys, keys_pressed):            
         for note in notes:
             note_time, lane = note
@@ -43,13 +43,14 @@ class NoteManager:
                         
                         if distance <= 12:                          
                            self.rating = "Perfect" 
-                           score += 300
+                           score += 100
                         elif 13 <= distance <= 18:
                             self.rating = "Good"
-                            score += 150
+                            score += 50
                         elif distance >= 19:
                             self.rating = "Bad"
-                            score += 50                          
+                            score += 25     
+                        self.notes_hit +=1                     
                         self.notes_to_remove.append(note)
                 elif self.y > 600:
                     self.rating = "Miss" 
@@ -59,4 +60,6 @@ class NoteManager:
                 notes.remove(n)
         return score, self.rating
 
+    def get_notes_hit(self):
+        return self.notes_hit
    

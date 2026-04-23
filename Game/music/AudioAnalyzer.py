@@ -6,6 +6,7 @@ class AudioAnalyzer:
     def __init__(self,music_path):
         self.music_path = music_path
         self.notes = []
+        self.qtd_notes = 0
         self.time =  120 # Fallback
     
     def Generate_map(self):
@@ -16,8 +17,9 @@ class AudioAnalyzer:
         beat_times = librosa.frames_to_time(beat_frames, sr=sample_rate)
         time = float(np.squeeze(time))
 
+        self.qtd_notes = len(beat_times)
         print(f"Tempo detectado: {time} BPM")
-        print(f"Total de beats: {len(beat_times)}")
+        print(f"Total de beats: {self.qtd_notes}")
 
         S = np.abs(librosa.stft(y=signal_wave))
         freqs = librosa.fft_frequencies(sr=sample_rate)
@@ -73,3 +75,6 @@ class AudioAnalyzer:
         mixer.music.play()
         
         return mixer
+    
+    def get_qtd_notes(self):
+        return self.qtd_notes

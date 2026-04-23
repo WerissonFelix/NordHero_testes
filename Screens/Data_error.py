@@ -2,12 +2,12 @@ import pygame
 import pygame_menu
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
-from Screens import Home, Logon, Creat_Account, Inital
+from Screens import Home, Logon, Creat_Account, Inital, update_screen, profile_options
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
-def data_error_screen(erro_message,screen_error_name):
+def data_error_screen(erro_message,screen_error_name, user = None):
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_background_color = (0, 0, 0)
     theme.title_font = pygame_menu.font.FONT_BEBAS
@@ -46,7 +46,8 @@ def data_error_screen(erro_message,screen_error_name):
 
     if screen_error_name.lower() == 'logon':
         error_menu.add.button("BACK", Logon.login_screen, Inital.initial_screen)
-    else:
+    elif screen_error_name.lower() == "creat_account":
         error_menu.add.button("BACK", Creat_Account.create_account_menu, Inital.initial_screen, Logon.login_screen)
-
+    else:
+        error_menu.add.button("BACK", update_screen.update_menu, user, profile_options.profile_options_menu)
     error_menu.mainloop(surface)

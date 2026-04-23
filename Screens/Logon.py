@@ -39,11 +39,11 @@ def login_screen(initial_screen):
 
     validator = DataVerifier("logon")
 
-    email_input = login_menu.add.text_input('Email: ')
+    email_input = login_menu.add.text_input('Email: ', maxchar=20)
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 
-    senha_input = login_menu.add.text_input('Password: ', password=True)
+    senha_input = login_menu.add.text_input('Password: ', password=True, maxchar=20)
     senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     senha_input.translate(180, 0)
 

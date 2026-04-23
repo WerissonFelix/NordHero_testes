@@ -29,10 +29,10 @@ class ManageGame:
         self.notes = []
         self.default_lane = [
             
-            LaneManager(200,500,(255,0,0), (220,0,0),pygame.K_a),
-            LaneManager(300,500,(0,255,0), (0,220,0),pygame.K_s),
-            LaneManager(400,500,(0,0,255), (0,0,220),pygame.K_d),
-            LaneManager(500,500,(255,255,0), (220,220,0),pygame.K_f),
+            LaneManager(180,500,(255,0,0), (220,0,0),pygame.K_a),
+            LaneManager(280,500,(0,255,0), (0,220,0),pygame.K_s),
+            LaneManager(380,500,(0,0,255), (0,0,220),pygame.K_d),
+            LaneManager(480,500,(255,255,0), (220,220,0),pygame.K_f),
         ]
         
         self.mixer = None    
@@ -115,7 +115,7 @@ class ManageGame:
         self.notesManage = NoteManager(
             self.config.get_note_width(), 
             self.config.get_note_height(),
-            (200,0,0),
+            (255, 255, 255),
             self.config.get_base_speed()
         )
         

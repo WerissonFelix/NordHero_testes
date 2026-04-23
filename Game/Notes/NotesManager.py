@@ -28,13 +28,13 @@ class NoteManager:
 
             if note_time - spawn_offset <= current_time:
                 time_diff = note_time - current_time
-                self.y = 500 - (time_diff * self.speed)
+                self.y = 400 - (time_diff * self.speed)
 
                 self.x = 200 + lane * 100
 
                 rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
-                pygame.draw.rect(screen, (200,0,0),rect)
+                pygame.draw.rect(screen, (255, 255, 255),rect)
 
                 if rect.colliderect(keys[lane].rect):
                     if keys_pressed[keys[lane].key]: 

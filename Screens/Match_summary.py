@@ -10,7 +10,7 @@ music = ""
 def match_summary(user, total_notes, notes_hit):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
-    from Screens.choice_music import choice_music    
+    from Screens.choice_difficulty import choice_difficulty
     
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
@@ -74,6 +74,6 @@ def match_summary(user, total_notes, notes_hit):
         font_name=pygame_menu.font.FONT_MUNRO
     )
     
-    choice.add.button("CHOOCE ANOTHER SONG", choice_music, user)
+    choice.add.button("CHOOCE ANOTHER SONG", choice_difficulty, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
     choice.mainloop(surface)

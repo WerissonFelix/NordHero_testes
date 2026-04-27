@@ -129,6 +129,8 @@ class ManageGame:
         min_speed = 0.5  
         max_speed = 2.0  
         
+        
+        
         speed_multiplier = max(min_speed, min(speed_multiplier, max_speed))
         
         adjusted_speed = self.config.get_base_speed() / speed_multiplier
@@ -164,7 +166,17 @@ class ManageGame:
                     
                 else:
                     key.draw_line()
-                   
+            
+            key_a = self.font.render("a", True, ((255, 255, 255)))    
+            key_s = self.font.render("s", True, ((255, 255, 255)))
+            key_d = self.font.render("d", True, ((255, 255, 255)))    
+            key_f = self.font.render("f", True, ((255, 255, 255)))    
+            
+            self.screen.blit(key_a, (220, 520))
+            self.screen.blit(key_s, (320, 520))
+            self.screen.blit(key_d, (420, 520))
+            self.screen.blit(key_f, (520, 520))
+        
             score, rating = self.notesManage.while_running(
                 score,
                 current_time,self.notes,self.config.get_spawn_offset(),

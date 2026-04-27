@@ -187,7 +187,7 @@ class ManageGame:
             color = self.textManage.draw_rating(rating,self.screen)
             self.textManage.effect_text_rating()     
             
-            score_text = self.font.render(f"Score: {score}", True, color)    
+            score_text = self.font.render(f"Score: {score}", True, ((255, 255, 0)))    
             self.screen.blit(score_text, (10, 10))
             
             pygame.display.update()

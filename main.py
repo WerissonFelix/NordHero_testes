@@ -7,5 +7,5 @@ from Screens.Creat_Account import create_account_menu
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
-
+pygame.display.set_caption("NORD HERO")
 initial_screen(login_screen,create_account_menu)

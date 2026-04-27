@@ -9,7 +9,7 @@ surface = pygame.display.set_mode((600, 400))
 fundo = pygame.image.load('./Images/telainicial.png')
 
 def home_screen(user,profile_menu):
-    from Screens.choice_music import choice_music
+    from Screens.choice_difficulty import choice_difficulty
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
         drawing_mode=IMAGE_MODE_FILL
@@ -62,7 +62,7 @@ def home_screen(user,profile_menu):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
 
-    home_menu.add.button("START GAME", choice_music, user)
+    home_menu.add.button("START", choice_difficulty, user)
     home_menu.add.button("SETTINGS", profile_menu, user)
     home_menu.add.button("EXIT", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

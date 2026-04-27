@@ -2,15 +2,15 @@ import pygame
 import pygame_menu
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+from Game.GameManager.GameManager import ManageGame
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
-music = ""
-def match_summary(user, total_notes, notes_hit):
+def choice_difficulty(user):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
-    from Screens.choice_difficulty import choice_difficulty
+    from Screens.choice_music import choice_music
     
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
@@ -40,40 +40,51 @@ def match_summary(user, total_notes, notes_hit):
         theme=theme
         )
     
-    def calculete_raking(user_accuracy):
-        if user_accuracy >= 95 :
-            return "S"  
-        elif user_accuracy >= 85:
-            return "A"
-        elif user_accuracy >= 70:
-            return "B"
-        elif user_accuracy == 0:
-            return "N/A"
-        else:
-            return "D"
-    
-    accuracy = round((notes_hit / total_notes) * 100) if total_notes > 0 else 0    
-    
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
-    lbl_total_notes = choice.add.label(
-        f"Total notes: {total_notes}", 
+    lbl_nome = choice.add.label(
+        f"Name: {user[1]}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    
-    lbl_notes_hit = choice.add.label(
-        f"Hit notes: {notes_hit}", 
+    lbl_email = choice.add.label(
+        f"email: {user[2]}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    raking = calculete_raking(accuracy)
+  
+    lbl_nome.set_float(True)
+    lbl_nome.set_alignment(ALIGN_RIGHT)
+    lbl_nome.translate(-20, -160)
+
+    lbl_email.set_float(True)
+    lbl_email.set_alignment(ALIGN_RIGHT)
+    lbl_email.translate(-20, -135)
+
+    lbl_nome.set_float(True)
+    lbl_nome.set_alignment(ALIGN_RIGHT)
+    lbl_nome.translate(-20, -160)
     
-    lbl_raking = choice.add.label(
-        f"Raking: {raking},  {accuracy}% accuracy", 
+    difficulty = 'Easy'
+    def set_difficulty(value, selected_value):
+        nonlocal  difficulty
+        difficulty = selected_value
+        
+    choice.add.selector(
+    "Select difficulty :", 
+    [
+        ('Easy', 'Easy'),
+        ('Normal', 'Normal'),
+        ('Hard', 'Hard')
+    ],
+    onchange=set_difficulty
+    )
+    
+    choice.add.label(
+        "Each level has different sounds. The difficulty is based on the speed of the sound.", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    
-    choice.add.button("CHOOCE ANOTHER SONG", choice_difficulty, user)
-    choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
+
+    choice.add.button("Continue", lambda: choice_music(user, difficulty))
+    choice.add.button("BACK", home_screen, user, profile_options_menu)        
     choice.mainloop(surface)

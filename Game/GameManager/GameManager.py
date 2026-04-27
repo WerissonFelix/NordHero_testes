@@ -36,6 +36,9 @@ class ManageGame:
         self.running = False
         
         self.notes = []
+        self.base_bpm = 120
+        self.bpm = 0
+        
         self.default_lane = [
             
             LaneManager(180,500,(255,0,0), (220,0,0),pygame.K_a),
@@ -78,7 +81,7 @@ class ManageGame:
             
             pygame.display.flip()                
         else:
-            self.notes, time_sound = self.audio.Generate_map()
+            self.notes, self.bpm = self.audio.Generate_map()
             self.countdown()
     
     def pause_game(self, total_notes, notes_hit):
@@ -121,11 +124,20 @@ class ManageGame:
         MUSIC_END_EVENT = pygame.USEREVENT + 1
         pygame.mixer.music.set_endevent(MUSIC_END_EVENT)
         
+        speed_multiplier = self.bpm / self.base_bpm if self.bpm > 0 else 1.0
+        
+        min_speed = 0.5  
+        max_speed = 2.0  
+        
+        speed_multiplier = max(min_speed, min(speed_multiplier, max_speed))
+        
+        adjusted_speed = self.config.get_base_speed() / speed_multiplier
+        
         self.notesManage = NoteManager(
             self.config.get_note_width(), 
             self.config.get_note_height(),
             (255, 255, 255),
-            self.config.get_base_speed()
+            adjusted_speed
         )
         
         while self.running:

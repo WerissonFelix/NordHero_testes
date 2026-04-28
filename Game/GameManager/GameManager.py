@@ -8,6 +8,12 @@ from Screens.Match_summary import match_summary
 import pygame, time, os
 
 class ManageGame:
+    """
+    Controlador principal do jogo de ritmo.
+    
+    Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
+    execução do jogo com detecção de notas, pausa e tela de resultado final.
+    """
     def __init__(self, user,music_path):
         pygame.font.init()
         self.user = user
@@ -57,7 +63,7 @@ class ManageGame:
     def load_to_run(self):    
         """
         Carrega todas as notes antes do jogo começar, está
-        separado da def run porque este carregamento é pesado 
+        separado do método run() porque este carregamento é pesado 
         e demora alguns segundos para calcular todas as notas
         """ 
         
@@ -85,6 +91,11 @@ class ManageGame:
             self.countdown()
     
     def pause_game(self, total_notes, notes_hit):
+        """
+        
+        Pausa a música e exibe o menu de pausa.
+        
+        """
         self.mixer.music.pause()
         
         pause_menu(self.user, self.music_path, total_notes, notes_hit)
@@ -95,7 +106,9 @@ class ManageGame:
         
 
     def countdown(self, was_paused = False):  
-        
+        """
+        Exibe contagem regressiva (3, 2, 1, GO!) antes de iniciar.
+        """
         time.sleep(2)  
         while self.count >= 0: 
             if self.count >= 0 and time.time() - self.start_time > 1:
@@ -118,6 +131,12 @@ class ManageGame:
             self.run()
         
     def run(self):
+        """
+        
+        Loop principal do jogo de ritmo.
+        
+        """
+        
         score = 0
         self.mixer = self.audio.load_music()
         
@@ -127,9 +146,7 @@ class ManageGame:
         speed_multiplier = self.bpm / self.base_bpm if self.bpm > 0 else 1.0
         
         min_speed = 0.5  
-        max_speed = 2.0  
-        
-        
+        max_speed = 2.0    
         
         speed_multiplier = max(min_speed, min(speed_multiplier, max_speed))
         
@@ -141,6 +158,14 @@ class ManageGame:
             (255, 255, 255),
             adjusted_speed
         )
+        
+        """ 
+        Loop principal do jogo.
+    
+        Inicializa música, calcula velocidade baseada no BPM da música,
+        processa entrada/tecla pressionada do jogador, atualiza notas e renderiza
+        feedback visual (score, ratings, lanes) a 60 FPS.
+        """
         
         while self.running:
             dt = self.clock.tick(60) / 1000

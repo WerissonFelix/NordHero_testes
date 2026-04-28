@@ -1,5 +1,10 @@
 
 class GameConfig:
+    """
+    Classe que contém as principais configurações para o jogo funcionar.
+    Seus métodos consistem em retornar suas instâncias para que outras classes/defs possam 
+    usar.
+    """    
     def __init__(self):
         self.screen_width = 800
         self.screen_height = 600
@@ -12,6 +17,11 @@ class GameConfig:
         self.NOTE_WIDTH = 50
         self.NOTE_HEIGHT = 25
 
+    """
+    
+    Cada def que tenha um get_ no nome retornará seus respectivos valores das variáveis,
+    
+    """
     def get_screen_width(self):
         return self.screen_width
     
@@ -38,6 +48,13 @@ class GameConfig:
     
     def get_note_height(self):
         return self.NOTE_HEIGHT
+    
+    """
+    
+    Cada def que tiver um set_ no seu nome, atualizará o default da respectiva variável
+    da class GameConfig, pra essas é necessário passar um valor como parâmetro.
+    
+    """
     
     def set_screen_width(self, value):
         if value <= 0:

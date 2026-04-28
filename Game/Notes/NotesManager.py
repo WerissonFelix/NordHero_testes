@@ -2,6 +2,12 @@ import pygame
 from Game.Config.Game_Config import GameConfig
 
 class NoteManager:
+    """ 
+    Gerencia a criação, movimentação e colisão de notas musicais no jogo.
+    
+    Responsável por atualizar posições das notas, detectar acertos do jogador
+    e calcular pontuação baseada na precisão do timing.
+    """
     def __init__(self,  width, height, color,speed):
         self.width = width
         self.height = height
@@ -22,11 +28,34 @@ class NoteManager:
         self.x = 0
         self.y = 0  
         self.notes_hit = 0
-    def while_running(self,score, current_time, notes, spawn_offset, screen, keys, keys_pressed):            
+        
+    def while_running(self,score, current_time, notes, spawn_offset, screen, keys, keys_pressed):  
+        """
+        Atualiza posição das notas, detecta colisões e calcula pontuação.
+        
+        Percorre todas as notas ativas, calcula posição Y baseado no tempo.
+        A posição Y atualizar a cada frame do while principal, o que vai dar uma 
+        sensação de movimento da nota.
+        
+        Verifica colisão com teclas e determina precisão do acerto.   
+        
+        retorna o novo score (se pontuar) e o rating da respectiva nota.
+        """
+                  
         for note in notes:
             note_time, lane = note
 
             if note_time - spawn_offset <= current_time:
+                """ 
+                Atualiza a Y de acordo com o tempo em que a nota aparece na música e o 
+                tempo atual que a música está.
+                
+                O cálculo da speed é feito no GameManager, no método run().
+                o Speed é baseado no BPM da música.
+                
+                o X é fixo, cada note terá o X alinhado com seu respectivo lane.
+                """
+                
                 time_diff = note_time - current_time
                 self.y = 400 - (time_diff * self.speed)
 
@@ -52,6 +81,7 @@ class NoteManager:
                             score += 25     
                         self.notes_hit +=1                     
                         self.notes_to_remove.append(note)
+                        
                 elif self.y > 600:
                     self.rating = "Miss" 
                     self.notes_to_remove.append(note)

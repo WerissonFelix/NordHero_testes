@@ -1,6 +1,15 @@
 import pygame
 
 class LaneManager:
+    """
+    
+    Class para gerenciar as Lanes da partida (Os retângulos que ficam fixos), contém
+    sua posição na tela (x e y), cores e o tipo do formato.
+    
+    Seus métodos consistem em desenhar as lanes com a cor default e 
+    a atualizar a cor quando a lane é pressionada.
+    
+    """
     def __init__(self, x, y, color_default, color_pressed, key):
         self.x = x
         self.y = y

@@ -16,7 +16,11 @@ from Features.NameValidator import NameValidator
 
 class DataVerifier:
     """
-    Classe para verificar o resultado final de email e senha, e então,efetuar operaçõe no banco de dados.
+    Verifica e processa dados de formulários (login, cadastro, atualização).
+    
+    Coordena a validação de email, senha e nome usando validadores específicos
+    e executa operações no banco de dados (inserir, selecionar, atualizar)
+    conforme o tipo de screen.
     """
     def __init__(self, screen_name: str):
         self.screen_name = screen_name
@@ -24,6 +28,11 @@ class DataVerifier:
         self.password_verified = None
         self.name_verified = None
     def verify_data_for_create_login(self, email, password, name: None, user_id: int = None):
+        """
+        
+        Valida dados para criação de conta ou login.
+        
+        """
         self.email_verified = EmailValidator(email.get_value())
 
         if self.screen_name == "creat_account":
@@ -53,6 +62,12 @@ class DataVerifier:
             return self.call_database_for_process(email,password, name,user_id)
 
     def verify_just_for_update(self, email , name, user_id: int = None):
+        """
+        Valida dados para atualização de perfil.
+        
+        Compara valores novos com dados atuais do banco.
+        Só valida campos que foram alterados.
+        """
         user = select_user(None, user_id)
         
         self.email_verified = EmailValidator(email.get_value())
@@ -78,6 +93,9 @@ class DataVerifier:
             return self.call_database_for_process(email_result,None,name_result,user_id)
         
     def call_database_for_process(self, email, password: None , name: None, user_id: int = None):
+        """
+        Executa a operação apropriada no banco de dados.
+        """
         if self.screen_name == "creat_account":
             user = insert_user(name.get_value(),email.get_value(),password.get_value())
 

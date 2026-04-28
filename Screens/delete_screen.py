@@ -9,6 +9,12 @@ pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
 def delete_menu(user, profile_options):
+    """
+    Exibe a tela de confirmação para exclusão de conta.
+    
+    Pergunta ao usuário se deseja realmente deletar sua conta
+    e executa a exclusão permanente dos dados se confirmado.
+    """
     
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS

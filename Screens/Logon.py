@@ -9,6 +9,13 @@ pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
 def login_screen(initial_screen):
+    """
+    Exibe o formulário de login do usuário.
+    
+    Coleta email e senha para autenticação e valida as credenciais
+    do usuário no sistema.
+    """
+    
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
     

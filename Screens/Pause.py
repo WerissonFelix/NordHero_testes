@@ -7,6 +7,13 @@ pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
 def pause_menu(user,music_path, total_notes, notes_hit):
+    """
+    Exibe o menu de pausa durante o jogo.
+    
+    Oferece opções para retomar o jogo, acessar configurações
+    ou sair da partida atual mostrando o resumo do jogo.
+    """
+    
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.Match_summary import match_summary

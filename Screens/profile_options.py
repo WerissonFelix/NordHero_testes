@@ -10,6 +10,12 @@ pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
 def profile_options_menu(user):
+    """
+    Exibe o menu de opções do perfil do usuário.
+    
+    Permite acessar funcionalidades de atualização de dados,
+    exclusão de conta ou retornar à tela principal.
+    """
     
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS

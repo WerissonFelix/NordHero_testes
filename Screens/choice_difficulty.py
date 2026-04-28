@@ -8,6 +8,13 @@ pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
 def choice_difficulty(user):
+    """
+    Exibe a tela de seleção de dificuldade do jogo.
+    
+    Permite ao usuário escolher entre os níveis Easy, Normal e Hard,
+    e navega para a tela de seleção de música com a dificuldade escolhida.
+    """
+    
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.choice_music import choice_music

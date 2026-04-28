@@ -8,6 +8,14 @@ pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
 def data_error_screen(erro_message,screen_error_name, user = None):
+    """
+    Exibe uma tela de erro com mensagens personalizadas.
+    
+    Mostra os erros encontrados durante operações e fornece
+    navegação de volta para a tela apropriada conforme o contexto do erro.
+    
+    """
+    
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_background_color = (0, 0, 0)
     theme.title_font = pygame_menu.font.FONT_BEBAS

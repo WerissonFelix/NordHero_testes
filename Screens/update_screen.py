@@ -6,6 +6,12 @@ pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
 def update_menu(user, profile_options):
+    """
+    Exibe o formulário de atualização de dados do usuário.
+    
+    Permite modificar nome e email do usuário logado,
+    com validação dos novos dados antes da atualização.
+    """
     from Features.Dados_Verificacao import DataVerifier
     
     theme = pygame_menu.themes.THEME_DARK.copy()

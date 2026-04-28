@@ -7,6 +7,13 @@ surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load("./Images/telainicial.png")
 
 def initial_screen(login_screen,create_account_menu):
+    """
+    Exibe a tela inicial do jogo com opções de acesso.
+    
+    Oferece navegação para login, criação de conta ou saída do sistema.
+    É a primeira tela apresentada ao usuário.
+    """
+    
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
         drawing_mode=IMAGE_MODE_FILL

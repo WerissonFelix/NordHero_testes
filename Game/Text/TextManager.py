@@ -1,7 +1,15 @@
 import pygame
 
 class TextManager:
+    """
+    Gerencia exibição de textos de feedback com efeitos visuais e fade-out.
+    
+    """
     def __init__(self):        
+        """
+        Inicializa transparência, fonte, paleta de cores e estado inicial.
+        
+        """
         self.alpha = 0
         self.font = pygame.font.Font(None, 36)
         self.col_spd = 5
@@ -30,6 +38,12 @@ class TextManager:
         self.rainbow_change = 0
         self.color = (255,255,255)    
     def draw_rating(self, rating, screen):
+        """
+        Renderiza avaliação com cor específica e fade-out.
+        "Bad"=vermelho, "Good"=verde, "Perfect"=arco-íris.
+        Retorna a cor usada.
+        
+        """
         if rating != "":
             self.current_message = rating
             self.alpha = 255
@@ -52,7 +66,8 @@ class TextManager:
             screen.blit(temp_surf, (10,300))
             self.alpha = max(self.alpha - 4, 0)  
         return self.color
-    def effect_text_rating(self):    
+    def effect_text_rating(self): 
+        """Anima cores RGB da cor padrão """   
         for i in range(3):
             self.def_col[i] += self.col_spd * self.col_dir[i]
             
@@ -61,6 +76,11 @@ class TextManager:
             elif self.def_col[i] <= 0:
                 self.def_col[i] = 255
     def rainbow_effect(self):
+        """ 
+        Aplica efeito rainbow para os textos, ao percorrer a lista self.rainbow 
+        e troca o index, fazendo o efeito rainbow
+
+        """
         self.rainbow_change += self.rainbow_speed
         
         if self.rainbow_change > 1:

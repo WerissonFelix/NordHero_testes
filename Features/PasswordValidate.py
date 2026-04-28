@@ -3,6 +3,15 @@ from password_validator import PasswordValidator
 
 
 class PasswordValidate:
+    """
+    Validador de senha com regras de segurança.
+    
+    Verifica se a senha atende aos requisitos mínimos:
+    - Tamanho entre 8 e 20 caracteres
+    - Pelo menos 1 número
+    - Pelo menos 1 símbolo
+    - Sem espaços em branco
+    """
     def __init__(self,password: str):
         self.password = password
         self.schema = PasswordValidator()
@@ -14,6 +23,10 @@ class PasswordValidate:
             "has_spaces": "A senha nao pode conter espacos"
         }
     def validate(self):
+        """
+        Executa todas as validações e retorna o resultado.
+        """
+        
         self.verify_exceptions()
         print(self.validation_results)
         if False not in self.validation_results.values() :
@@ -22,8 +35,13 @@ class PasswordValidate:
             errors = self.get_error_messages()
             return errors, False
 
-
     def verify_exceptions(self):
+        """
+        
+        Executa cada regra de validação individualmente.
+        
+        """
+        
         len_valid = self.schema.min(8).max(20).validate(self.password)
 
         has_num = self.schema.has().digits().validate(self.password)
@@ -40,6 +58,10 @@ class PasswordValidate:
         }
 
     def get_error_messages(self) -> list:
+        """
+        Coleta mensagens de erro apenas das regras que falharam.
+        """
+        
         return [
             self.error_messages[k]
             for k,v in self.validation_results.items()

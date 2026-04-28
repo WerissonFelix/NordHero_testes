@@ -10,6 +10,12 @@ connection  = sqlite3.connect(db_path)
 cursor = connection.cursor()
 
 def table_user():
+    """
+    Cria a tabela 'user' no banco de dados.
+    
+    Cria a estrutura da tabela com colunas para identificação,
+    nome, email (único) e senha. 
+    """
     query = """
         CREATE TABLE IF NOT EXISTS user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +31,3 @@ def table_user():
     print("Table user created successfully")
 
 table_user()
-
-
-
-

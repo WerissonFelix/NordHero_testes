@@ -5,6 +5,13 @@ from DataBase.inserts import connection,cursor
 
 
 def delete_user(id_user,email):
+    """
+    Exclui um usuário do banco de dados e retorna à tela inicial.
+    
+    Remove permanentemente o registro do usuário baseado no ID
+    e redireciona para a tela inicial do sistema.
+    """
+    
     from Screens.Inital import initial_screen
     from Screens.Logon import login_screen
     from Screens.Creat_Account import create_account_menu
@@ -12,16 +19,6 @@ def delete_user(id_user,email):
 
     cursor.execute(query,(id_user,))
     connection.commit()
-
-    """
-    try: 
-        cursor.execute("select * from user where email = ?",(email,))
-        connection.commit()
-        
-        user = cursor.fetchone()
-            
-    except:
-    """
 
     return initial_screen(login_screen,create_account_menu)
 

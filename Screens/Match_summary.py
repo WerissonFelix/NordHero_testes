@@ -8,6 +8,13 @@ surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
 music = ""
 def match_summary(user, total_notes, notes_hit):
+    """
+    Exibe o resumo de desempenho após uma partida.
+    
+    Calcula e mostra a precisão do jogador, total de notas,
+    notas acertadas e ranking (S, A, B, D) baseado na performance.
+    """
+    
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.choice_difficulty import choice_difficulty

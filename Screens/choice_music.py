@@ -9,6 +9,13 @@ surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
 music = ""
 def choice_music(user, difficulty_level):
+    """
+    Exibe a tela de seleção de música baseada na dificuldade escolhida.
+    
+    Apresenta diferentes listas de músicas conforme o nível de dificuldade
+    e permite iniciar o jogo com a música selecionada.
+    """
+    
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     

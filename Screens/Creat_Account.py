@@ -9,6 +9,13 @@ pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
 def create_account_menu(initial_screen,login_screen):
+    """
+    Exibe o formulário de criação de nova conta de usuário.
+    
+    Coleta nome, email e senha do usuário e realiza a validação
+    dos dados para criar uma nova conta no sistema.
+    """
+    
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
 

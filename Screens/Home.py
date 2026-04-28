@@ -9,6 +9,13 @@ surface = pygame.display.set_mode((600, 400))
 fundo = pygame.image.load('./Images/telainicial.png')
 
 def home_screen(user,profile_menu):
+    """
+    Exibe a tela principal do jogo após o login.
+    
+    Mostra informações do usuário conectado e oferece opções para
+    iniciar o jogo, acessar configurações ou sair do sistema.
+    """
+    
     from Screens.choice_difficulty import choice_difficulty
     fundo = BaseImage(
         image_path="./Images/telainicial.png",

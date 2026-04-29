@@ -137,8 +137,8 @@ Siga os passos abaixo para rodar o projeto localmente.
 ### 📥 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/WerissonFelix/NordHero_testes.git
+cd NordHero_testes
 ```
 ## 🐍 Ambiente Virtual (venv)
 

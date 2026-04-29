@@ -5,7 +5,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
-fundo = pygame.image.load('./Images/telainicial.png')
+fundo = pygame.image.load('./Images/Summary.png')
 music = ""
 def match_summary(user, total_notes, notes_hit):
     """
@@ -20,7 +20,7 @@ def match_summary(user, total_notes, notes_hit):
     from Screens.choice_difficulty import choice_difficulty
     
     fundo = BaseImage(
-        image_path="./Images/telainicial.png",
+        image_path="./Images/Summary.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

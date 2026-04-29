@@ -22,7 +22,7 @@ class ManageGame:
         self.textManage  = TextManager()
         self.clock = pygame.time.Clock()
         current_dir = os.path.dirname(__file__)
-        bg_path = os.path.join(current_dir, "..", "..", "Images", "telainicial.png")
+        bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaDoJogo.png")
         self.background = pygame.image.load(bg_path)
 
         self.background = pygame.transform.scale(

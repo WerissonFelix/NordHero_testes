@@ -23,7 +23,7 @@ def pause_menu(user,music_path, total_notes, notes_hit):
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_update_menu = BaseImage(
-        image_path="./Images/TelaUpdateScreen.png",
+        image_path="./Images/Pause.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

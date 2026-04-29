@@ -8,7 +8,47 @@ Consiste em valorar a cultura nordestina por meio do contato entre jogo e músic
 
 O objetivo do jogo é acertar as notas no tempo correto utilizando as teclas indicadas na tela, acumulando pontos conforme a precisão do jogador.
 ---
+## 🌐 Links Importantes
+# Planilha
+```Text
+https://docs.google.com/spreadsheets/d/1T2XSy7NpLsRkdkxux9JnRgOK-wjYF0P2s0cBXR7m5Qc/edit?usp=sharing
+```
+# Drive
+```Text
+https://drive.google.com/drive/folders/1rl5iMOgW-th0i1TBMqgVqCrCdI3Dv5LT?usp=sharing
+```
+## 🚀 Release 1.0
 
+| Funcionalidade | Descrição |
+|---------------|----------|
+| Sistema de Usuário | Cadastro, login, validação de dados e persistência em banco SQLite. |
+| Interface Completa | Telas de navegação (login, cadastro, home, menus e jogo). |
+| Escolha de Dificuldade | Seleção entre níveis de dificuldade (Easy, Normal, Hard). |
+| Escolha de Música | Seleção da música para iniciar a partida. |
+| Sistema de Jogo | Execução da partida com notas, lanes e input do jogador. |
+| Sistema de Pontuação | Cálculo de pontos com base na precisão dos acertos. |
+| Sistema de Pausa | Permite pausar e retomar o jogo. |
+| Resumo Final | Exibe estatísticas da partida ao final. |
+
+---
+
+## 🚀 Release 2.0
+
+| Funcionalidade | Descrição |
+|---------------|----------|
+| Configuração de Controles | Permitir ao usuário personalizar as teclas do jogo. |
+| Classificação por Instrumento | Organizar músicas com base no instrumento principal. |
+| Classificação por Tipo | Separar músicas entre instrumental e vocal. |
+| Expansão de Controles | Adicionar mais teclas em níveis de dificuldade mais altos. |
+| Ranking "Global" | Criar ranking entre jogadores para cada música. |
+
+---
+
+## 🚀 Release 3.0
+
+| Funcionalidade | Descrição |
+|---------------|----------|
+| A definir | Funcionalidades futuras ainda não especificadas. |
 ## 🕹️ Sobre o Projeto
 
 O **NORD HERO** funciona como um jogo musical em que o usuário escolhe uma dificuldade, seleciona uma música e joga acompanhando as notas que aparecem na tela.

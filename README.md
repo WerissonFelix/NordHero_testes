@@ -41,6 +41,7 @@ https://drive.google.com/drive/folders/1rl5iMOgW-th0i1TBMqgVqCrCdI3Dv5LT?usp=sha
 | Classificação por Tipo | Separar músicas entre instrumental e vocal. |
 | Expansão de Controles | Adicionar mais teclas em níveis de dificuldade mais altos. |
 | Ranking "Global" | Criar ranking entre jogadores para cada música. |
+| Envio de email| Código de verificação para atualizar senha. |
 
 ---
 

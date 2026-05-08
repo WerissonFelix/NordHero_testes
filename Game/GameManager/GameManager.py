@@ -47,10 +47,10 @@ class ManageGame:
         
         self.default_lane = [
             
-            LaneManager(180,500,(255,0,0), (220,0,0),pygame.K_a),
-            LaneManager(280,500,(0,255,0), (0,220,0),pygame.K_s),
-            LaneManager(380,500,(0,0,255), (0,0,220),pygame.K_d),
-            LaneManager(480,500,(255,255,0), (220,220,0),pygame.K_f),
+            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1),
+            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2),
+            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3),
+            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4),
         ]
         
         self.mixer = None    

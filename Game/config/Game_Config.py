@@ -7,12 +7,12 @@ class GameConfig:
     usar.
     """    
     
-    key1 = pygame.K_a
-    key2 = pygame.K_s
-    key3 = pygame.K_d
-    key4 = pygame.K_f 
-    
     def __init__(self):
+        self.key1 = pygame.K_a
+        self.key2 = pygame.K_s
+        self.key3 = pygame.K_d
+        self.key4 = pygame.K_f 
+        
         self.screen_width = 800
         self.screen_height = 600
         self.FPS = 60

@@ -29,7 +29,6 @@ class ManageGame:
             self.background,
             (self.config.get_screen_width(), self.config.get_screen_height())
         )
-        
         self.audio = AudioAnalyzer(self.music_path)
         self.notesManage = None
         self.screen = pygame.display.set_mode(
@@ -98,7 +97,15 @@ class ManageGame:
         """
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path, total_notes, notes_hit)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit, None, self.config)
+        
+        self.default_lane = [
+            
+            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1),
+            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2),
+            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3),
+            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4),
+        ]
         
         self.countdown(True)
         
@@ -159,6 +166,11 @@ class ManageGame:
             adjusted_speed
         )
         
+        key1 = pygame.key.name(self.config.key1)
+        key2 = pygame.key.name(self.config.key2)
+        key3 = pygame.key.name(self.config.key3)
+        key4 = pygame.key.name(self.config.key4)
+        
         """ 
         Loop principal do jogo.
     
@@ -166,7 +178,7 @@ class ManageGame:
         processa entrada/tecla pressionada do jogador, atualiza notas e renderiza
         feedback visual (score, ratings, lanes) a 60 FPS.
         """
-        
+               
         while self.running:
             dt = self.clock.tick(60) / 1000
             for event in pygame.event.get():
@@ -176,6 +188,11 @@ class ManageGame:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.pause_game(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
+                        key1 = pygame.key.name(self.config.key1)
+                        key2 = pygame.key.name(self.config.key2)
+                        key3 = pygame.key.name(self.config.key3)
+                        key4 = pygame.key.name(self.config.key4)
+                        
                 elif event.type == MUSIC_END_EVENT:
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
@@ -192,15 +209,15 @@ class ManageGame:
                 else:
                     key.draw_line()
             
-            key_a = self.font.render("a", True, ((255, 255, 255)))    
-            key_s = self.font.render("s", True, ((255, 255, 255)))
-            key_d = self.font.render("d", True, ((255, 255, 255)))    
-            key_f = self.font.render("f", True, ((255, 255, 255)))    
+            key_1 = self.font.render(key1, True, ((255, 255, 255)))    
+            key_2 = self.font.render(key2, True, ((255, 255, 255)))
+            key_3 = self.font.render(key3, True, ((255, 255, 255)))    
+            key_4 = self.font.render(key4, True, ((255, 255, 255)))    
             
-            self.screen.blit(key_a, (220, 520))
-            self.screen.blit(key_s, (320, 520))
-            self.screen.blit(key_d, (420, 520))
-            self.screen.blit(key_f, (520, 520))
+            self.screen.blit(key_1, (220, 520))
+            self.screen.blit(key_2, (320, 520))
+            self.screen.blit(key_3, (420, 520))
+            self.screen.blit(key_4, (520, 520))
         
             score, rating = self.notesManage.while_running(
                 score,

@@ -5,6 +5,8 @@ from pygame_menu.examples.other.widget_positioning import label
 
 from Features.Dados_Verificacao import DataVerifier
 
+from models.user import User
+
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
@@ -56,14 +58,12 @@ def create_account_menu(initial_screen,login_screen):
     senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     senha_input.translate(180, 0)
 
-    print(type(nome_input))
-    creat_menu.add.button('CREATE ACCOUNT',
-                          validator.verify_data_for_create_login,
-                          email_input,
-                          senha_input,
-                          nome_input,
-                          None
-                          )
-
+    def create_callback():
+        user = User(None, nome_input.get_value(), email_input.get_value(), senha_input.get_value())
+        validator.verify_data_for_create_login(user)
+        
+    
+    creat_menu.add.button('CREATE ACCOUNT',create_callback)
     creat_menu.add.button('BACK', initial_screen, login_screen,create_account_menu)
+    
     creat_menu.mainloop(surface)

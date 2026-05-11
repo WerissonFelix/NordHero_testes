@@ -6,9 +6,9 @@ class User:
     Representa um usuário do sistema
     """
     
-    id: int
+    id: int | None
     
-    name: str
+    name: str | None
     email: str
     password: str
     

@@ -4,6 +4,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 from Screens.Creat_Account import create_account_menu
 from Features.Dados_Verificacao import DataVerifier
+from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
@@ -54,7 +55,13 @@ def login_screen(initial_screen):
     senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     senha_input.translate(180, 0)
 
-    login_menu.add.button("LOGIN", validator.verify_data_for_create_login, email_input, senha_input, None, None)
+    
+    def login_callback():
+        nonlocal email_input
+        user = User(None, None, email_input.get_value(), senha_input.get_value())
+        validator.verify_data_for_create_login(user)
+        
+    login_menu.add.button("LOGIN", login_callback)
     login_menu.add.button('EXIT',  initial_screen, login_screen, create_account_menu)
 
     login_menu.mainloop(surface)

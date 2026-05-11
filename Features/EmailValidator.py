@@ -1,5 +1,6 @@
 from email_validator import validate_email, EmailNotValidError
-from DataBase.selects import select_user
+from DataBase.repositories.user_repository import UserRepository
+#from DataBase.selects import select_user
 
 class EmailValidator:
     """
@@ -10,8 +11,9 @@ class EmailValidator:
     ou o email verificado, em ambos os casos, retornará uma tupla: (str, bool)
 
     """
-    def __init__(self, email: str):
+    def __init__(self, email: str, user_repository: UserRepository):
         self.email = email
+        self.user_repository = user_repository
         self.email_verified = None
         self.message_error = None
     def validate_for_create_screen(self) -> tuple:
@@ -22,14 +24,14 @@ class EmailValidator:
             email_info = validate_email(self.email, check_deliverability=True)
             self.email_verified = email_info.normalized
 
-            user_account = select_user(self.email)
+            user_account = self.user_repository.get_by_email(self.email)
 
             if user_account is None:
                 return self.email_verified, True
             else:
                 self.message_error = "email already registered"
                 return self.message_error, False
-
+            
         except EmailNotValidError as e:
             self.message_error = str(e)
             return self.message_error, False
@@ -42,7 +44,7 @@ class EmailValidator:
             email_info = validate_email(self.email, check_deliverability=False)
             self.email_verified = email_info.normalized
 
-            user_account = select_user(self.email)
+            user_account = self.user_repository.get_by_email(self.email)
 
             if user_account is not None:
                 return self.email_verified, True
@@ -62,7 +64,7 @@ class EmailValidator:
             email_info = validate_email(self.email, check_deliverability=False)
             self.email_verified = email_info.normalized
 
-            user_account = select_user(self.email)
+            user_account = self.user_repository.get_by_email(self.email)
 
             if user_account is None:
                 return self.email_verified, True

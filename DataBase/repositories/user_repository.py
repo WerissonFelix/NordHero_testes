@@ -17,8 +17,7 @@ class UserRepository(BaseRepository):
         """
         
         return self.fetchone(query, (user_id,))
-        
-        
+           
     def get_by_email(self, email):
         query = """
         select * from user

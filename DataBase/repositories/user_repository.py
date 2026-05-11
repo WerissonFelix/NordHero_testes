@@ -1,0 +1,52 @@
+from DataBase.repositories.base_repository import BaseRepository
+from models.user import User
+
+class UserRepository(BaseRepository):
+    
+    def create(self, user: User):
+        query =  """
+        insert into user (name,email,password) 
+        values(?, ?, ?)
+        """
+        self.execute(query, (user.name, user.email, user.password))
+        
+    def get_by_id(self, user_id):
+        query = """
+        select * from user 
+        where id = ?
+        """
+        
+        return self.fetchone(query, (user_id,))
+        
+        
+    def get_by_email(self, email):
+        query = """
+        select * from user
+        where email = ?
+        """
+        
+        return self.fetchone(query, (email,))
+    
+    def get_all(self):
+        query = """
+        select * from user
+        """
+        
+        return self.fetchall(query)
+    
+    def update(self, user: User):
+        query = """
+        update user
+        set name = ?, email = ?
+        where id = ?
+        """
+        
+        self.execute(query, (user.name, user.email, user.id))
+
+    def delete(self, user_id):
+        query = """
+        delete from user 
+        where id = ?
+        """
+        
+        self.execute(query, (user_id,))

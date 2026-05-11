@@ -66,24 +66,24 @@ class DataVerifier:
         else:
             return self.call_database_for_process(user)
 
-    def verify_just_for_update(self, email , name, user_id: int = None):
+    def verify_just_for_update(self, default_user: User):
         """
         Valida dados para atualização de perfil.
         
         Compara valores novos com dados atuais do banco.
         Só valida campos que foram alterados.
         """
-        user = select_user(None, user_id)
+        user = self.user_repository.get_by_id(default_user.id)
         
-        self.email_verified = EmailValidator(email.get_value(), self.user_repository)
-        self.name_verified = NameValidator(name.get_value())
+        self.email_verified = EmailValidator(default_user.email, self.user_repository)
+        self.name_verified = NameValidator(default_user.name)
         
-        if user[2] != email.get_value():
+        if user[2] != default_user.email:
             email_result, email_valid = self.email_verified.validate_for_update_screen()
         else:
             email_result, email_valid =  user[2], True
             
-        if user[1] != name.get_value():
+        if user[1] != default_user.name:
             name_result, name_valid = self.name_verified.validate()
         else:
             name_result = user[1]
@@ -95,7 +95,7 @@ class DataVerifier:
             return data_error_screen(name_result, self.screen_name, user)
         
         else:
-            return self.call_database_for_process(email_result,None,name_result,user_id)
+            return self.call_database_for_process(default_user)
         
     def call_database_for_process(self, default_user: User):
         """

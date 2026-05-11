@@ -5,14 +5,18 @@ from Screens.Data_error import data_error_screen
 from Screens.profile_options import profile_options_menu
 
 # Data Base imports
+from DataBase.repositories.user_repository import UserRepository
 from DataBase.inserts import insert_user
 from DataBase.selects import select_user
 from DataBase.updates import update_user
 
+#models imports
+from models.user import User
 # Outhers Features imports
 from Features.EmailValidator import EmailValidator
 from Features.PasswordValidate import PasswordValidate
 from Features.NameValidator import NameValidator
+
 
 class DataVerifier:
     """
@@ -24,27 +28,28 @@ class DataVerifier:
     """
     def __init__(self, screen_name: str):
         self.screen_name = screen_name
+        self.user_repository = UserRepository()
         self.email_verified = None
         self.password_verified = None
         self.name_verified = None
-    def verify_data_for_create_login(self, email, password, name: None, user_id: int = None):
+    def verify_data_for_create_login(self, user: User):
         """
         
         Valida dados para criação de conta ou login.
         
         """
-        self.email_verified = EmailValidator(email.get_value())
+        self.email_verified = EmailValidator(user.email, self.user_repository)
 
         if self.screen_name == "creat_account":
             email_result, email_valid = self.email_verified.validate_for_create_screen()
             
-            self.name_verified = NameValidator(name.get_value())
+            self.name_verified = NameValidator(user.name)
             name_result, name_valid = self.name_verified.validate()    
         elif self.screen_name == "logon":
             email_result, email_valid = self.email_verified.validate_for_login_screen()
             name_valid = True
             
-        self.password_verified = PasswordValidate(password.get_value())
+        self.password_verified = PasswordValidate(user.password)
         password_result, password_valid = self.password_verified.validate()
         
         if email_valid == False:
@@ -59,7 +64,7 @@ class DataVerifier:
             return data_error_screen(name_result, self.screen_name)
         
         else:
-            return self.call_database_for_process(email,password, name,user_id)
+            return self.call_database_for_process(user)
 
     def verify_just_for_update(self, email , name, user_id: int = None):
         """
@@ -70,7 +75,7 @@ class DataVerifier:
         """
         user = select_user(None, user_id)
         
-        self.email_verified = EmailValidator(email.get_value())
+        self.email_verified = EmailValidator(email.get_value(), self.user_repository)
         self.name_verified = NameValidator(name.get_value())
         
         if user[2] != email.get_value():
@@ -92,19 +97,22 @@ class DataVerifier:
         else:
             return self.call_database_for_process(email_result,None,name_result,user_id)
         
-    def call_database_for_process(self, email, password: None , name: None, user_id: int = None):
+    def call_database_for_process(self, default_user: User):
         """
         Executa a operação apropriada no banco de dados.
         """
         if self.screen_name == "creat_account":
-            user = insert_user(name.get_value(),email.get_value(),password.get_value())
+            self.user_repository.create(default_user)
+            user = self.user_repository.get_by_email(default_user.email)
 
         elif self.screen_name == "logon":
-            user = select_user(email.get_value())
-
-            if (user[2] == email.get_value() and user[3] == password.get_value()) == False:
+            
+            user = self.user_repository.get_by_email(default_user.email)
+        
+            if (user[2] == default_user.email and user[3] == default_user.password) == False:
                 return data_error_screen("incorrect email or password", self.screen_name)
         else:
-            user = update_user(user_id, name, email)
+            self.user_repository.update(default_user)
+            user = self.user_repository.get_by_id(default_user.id)
 
         return home_screen(user, profile_options_menu)

@@ -1,6 +1,7 @@
 import pygame
 import pygame_menu
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
@@ -54,7 +55,13 @@ def update_menu(user, profile_options):
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 
-    update.add.button("UPDATE", validator.verify_just_for_update, email_input, nome_input, user[0])
+    def update_callback():
+        new_user = User(user[0], nome_input.get_value(), email_input.get_value(), user[-1])
+        validator.verify_just_for_update(new_user)
+        
+    update.add.button("UPDATE", update_callback)
     update.add.button('BACK', profile_options, user)
 
     update.mainloop(surface)
+
+

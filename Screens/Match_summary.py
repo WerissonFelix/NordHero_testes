@@ -2,12 +2,13 @@ import pygame
 import pygame_menu
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/Summary.png')
 music = ""
-def match_summary(user, total_notes, notes_hit):
+def match_summary(user: User, total_notes, notes_hit):
     """
     Exibe o resumo de desempenho após uma partida.
     
@@ -41,7 +42,7 @@ def match_summary(user, total_notes, notes_hit):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     choice = pygame_menu.Menu(
-        f'Connected as: {user[1]}',
+        f'Connected as: {user.name}',
         800,
         500,
         theme=theme

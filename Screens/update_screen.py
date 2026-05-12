@@ -6,7 +6,7 @@ from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 
-def update_menu(user, profile_options):
+def update_menu(user: User, profile_options):
     """
     Exibe o formulário de atualização de dados do usuário.
     
@@ -43,20 +43,20 @@ def update_menu(user, profile_options):
 
         theme=theme)
 
-    update.add.label(f"Name: {user[1]}   Email: {user[2]}", font_color=(255, 255, 0))
+    update.add.label(f"Name: {user.name}   Email: {user.email}", font_color=(255, 255, 0))
     
     validator = DataVerifier("update_screen")
 
-    nome_input = update.add.text_input('Name: ', default=user[1], maxchar=20)
+    nome_input = update.add.text_input('Name: ', default=user.name, maxchar=20)
     nome_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     nome_input.translate(180, 0)
 
-    email_input = update.add.text_input('Email: ', default=user[2], maxchar=20)
+    email_input = update.add.text_input('Email: ', default=user.email, maxchar=20)
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 
     def update_callback():
-        new_user = User(user[0], nome_input.get_value(), email_input.get_value(), user[-1])
+        new_user = User(user.id, nome_input.get_value(), email_input.get_value(), user.password)
         validator.verify_just_for_update(new_user)
         
     update.add.button("UPDATE", update_callback)

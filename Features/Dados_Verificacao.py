@@ -78,12 +78,12 @@ class DataVerifier:
         self.email_verified = EmailValidator(default_user.email, self.user_repository)
         self.name_verified = NameValidator(default_user.name)
         
-        if user[2] != default_user.email:
+        if user.email != default_user.email:
             email_result, email_valid = self.email_verified.validate_for_update_screen()
         else:
-            email_result, email_valid =  user[2], True
+            email_result, email_valid =  user.email, True
             
-        if user[1] != default_user.name:
+        if user.name != default_user.name:
             name_result, name_valid = self.name_verified.validate()
         else:
             name_result = user[1]
@@ -109,7 +109,7 @@ class DataVerifier:
             
             user = self.user_repository.get_by_email(default_user.email)
         
-            if (user[2] == default_user.email and user[3] == default_user.password) == False:
+            if (user.email == default_user.email and user.password == default_user.password) == False:
                 return data_error_screen("incorrect email or password", self.screen_name)
         else:
             self.user_repository.update(default_user)

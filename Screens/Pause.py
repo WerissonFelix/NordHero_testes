@@ -2,11 +2,13 @@ import pygame
 import pygame_menu
 
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+from models.user import User
+
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
-def pause_menu(user,music_path, total_notes, notes_hit, setting_menu = None, config = None):
+def pause_menu(user: User,music_path, total_notes, notes_hit, setting_menu = None, config = None):
     """
     Exibe o menu de pausa durante o jogo.
     

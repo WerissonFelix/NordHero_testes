@@ -16,7 +16,13 @@ class UserRepository(BaseRepository):
         where id = ?
         """
         
-        return self.fetchone(query, (user_id,))
+        row = self.fetchone(query, (user_id,))
+        
+        if row is None: 
+            return None
+        
+        return User(row[0], row[1], row[2], row[3])
+    
            
     def get_by_email(self, email):
         query = """
@@ -24,7 +30,13 @@ class UserRepository(BaseRepository):
         where email = ?
         """
         
-        return self.fetchone(query, (email,))
+        row = self.fetchone(query, (email,))
+        
+        if row is None:
+            return None
+        
+        return User(row[0], row[1], row[2], row[3])
+    
     
     def get_all(self):
         query = """

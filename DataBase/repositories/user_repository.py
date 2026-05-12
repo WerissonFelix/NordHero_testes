@@ -43,7 +43,16 @@ class UserRepository(BaseRepository):
         select * from user
         """
         
-        return self.fetchall(query)
+        all_users = self.fetchall(query)
+        
+        rows = []
+        
+        for row in all_users:
+            rows.append(User(
+                row[0], row[1], row[2], row[3]
+            ))
+               
+        return rows
     
     def update(self, user: User):
         query = """

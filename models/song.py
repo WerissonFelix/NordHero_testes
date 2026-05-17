@@ -11,5 +11,5 @@ class Song:
     title: str
     artist: str
     
-    bpm: float
+    bpm: float 
     duration_seconds: int

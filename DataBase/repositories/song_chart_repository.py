@@ -12,7 +12,7 @@ class SongChartsRepository(BaseRepository):
     
     def get_by_id(self, chart_id):
         query = """
-        select from song_charts
+        select * from song_charts
         where id = ?
         """
         row = self.fetchone(query, (chart_id,))
@@ -20,7 +20,7 @@ class SongChartsRepository(BaseRepository):
         if row is None:
             return
         
-        return SongChart(row[0], row[1], row[2], row[3])
+        return SongChart(row[0], row[1], row[2], row[3], row[4])
     
     def update(self, chart_id):
         query = """
@@ -39,4 +39,51 @@ class SongChartsRepository(BaseRepository):
         """
         
         self.execute(query, (chart_id,))
+    
+    def get_by_song_and_difficulty(self, song_id, difficulty_id):
+        query = """
+        select * from song_charts
+        where (song_id = ? and difficulty_id = ?)
+        """  
         
+        row = self.fetchone(query, (song_id, difficulty_id))
+        
+        if row is None:
+            return None
+        
+        return SongChart(row[0], row[1], row[2], row[3], row[4])
+        
+    def get_all_charts_by_song(self, song_id):
+        query = """
+        select * from song_charts
+        where song_id = ?
+        """
+        
+        rows = self.fetchall(query, (song_id, ))
+        
+        if rows is None:
+            return None
+        
+        all_charts = []
+        for row in rows:
+            all_charts.append(SongChart(row[0], row[1], row[2], row[3], row[4]))
+        
+        return all_charts
+        
+    def get_all_charts_by_difficulty(self, difficulty_id):
+        query = """
+        select * from song_charts 
+        where difficulty_id = ?
+        """
+        rows = self.fetchall(query, (difficulty_id, ))
+        
+        if rows in None:
+            return None
+        
+        all_charts = []
+        
+        for row in rows:
+            all_charts.append(SongChart(row[0], row[1], row[2], row[3], row[4]))
+            
+        return all_charts
+            

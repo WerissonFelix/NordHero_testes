@@ -8,9 +8,9 @@ class SongChart:
     
     id: int | None
     
-    song_id = int
-    difficulty_id = int
+    song_id : int
+    difficulty_id : int
     
-    max_possible_score = int
-    notes_count = int
+    max_possible_score : int
+    notes_count : int
     

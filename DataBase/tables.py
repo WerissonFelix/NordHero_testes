@@ -51,6 +51,7 @@ def table_songs():
             artist varchar(255) NOT NULL,
             
             bpm FLOAT NOT NULL,
+            file_path,
             duration_seconds INTEGER NOT NULL
         )  
     """

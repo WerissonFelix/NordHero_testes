@@ -6,10 +6,10 @@ class SongRepository(BaseRepository):
     
     def create(self, song: Song):
         query = """
-        insert into songs (title, artist, bpm, duration_seconds)
-        values (?, ?, ?, ?)
+        insert into songs (title, artist, bpm, file_path, duration_seconds)
+        values (?, ?, ?, ?, ?)
         """
-        self.execute(query, (song.title, song.artist, song.bpm, song.duration_seconds))
+        self.execute(query, (song.title, song.artist, song.bpm, song.file_path, song.duration_seconds))
         
     def get_by_id(self, song_id):
         query = """
@@ -21,7 +21,7 @@ class SongRepository(BaseRepository):
         if row is None:
             return
         
-        return Song(row[0], row[1], row[2], row[3], row[4])
+        return Song(row[0], row[1], row[2], row[3], row[4], row[5])
         
     def get_by_title(self, song_id):
         query = """
@@ -34,7 +34,7 @@ class SongRepository(BaseRepository):
         if row is None:
             return
         
-        return Song(row[0], row[1], row[2], row[3], row[4])
+        return Song(row[0], row[1], row[2], row[3], row[4], row[5])
     
     def get_all(self):
         query = """
@@ -52,7 +52,8 @@ class SongRepository(BaseRepository):
                     row[1], 
                     row[2], 
                     row[3], 
-                    row[4]
+                    row[4],
+                    row[5]
                 )
             )
         
@@ -62,11 +63,11 @@ class SongRepository(BaseRepository):
         query = """
         update songs
         set title = ?, artist = ?,
-        bpm = ?, duration_seconds = ?
+        bpm = ?, file_path = ?, duration_seconds = ?
         where id = ?
         """
         
-        self.execute(query, (song.title, song.artist, song.bpm, song.duration_seconds, song.id))
+        self.execute(query, (song.title, song.artist, song.bpm, song.file_path, song.duration_seconds, song.id))
         
     def delete_song(self, song_id):
         query = """

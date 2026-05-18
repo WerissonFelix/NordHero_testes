@@ -66,12 +66,44 @@ class ScoreRepository(BaseRepository):
             all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
         return all_scores
     
-    def get_by_user_difficulty(self, user_id, difficulty):
+    def get_by_user_difficulty(self, user_id, difficulty_id):
+        query = """  
+        select scores.*
+        from scores
+        inner join song_charts ON scores.chart_id = song_charts.id
         
-        """     
-        
-        Acho que aqui será necessário usar um inner join, porque a tabela score não tem difficulty id, mas a tabela 
-        song_charts tem difficulty id, e scores tem chart id, ou sejaaa, inner join provávelmente vai resolver, mas 
-        preciso revisar isso antes.
-        
+        where (scores.user_id = ? and song_charts.difficulty_id = ?)
         """
+        
+        rows = self.fetchall(query, (user_id, difficulty_id))
+        
+        if rows is None:
+            return None
+        
+        all_scores = []
+        
+        for row in rows:
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+        return all_scores
+    
+    def get_best_by_user_and_chart(self, user_id, chart_id):
+        """ 
+        Retorna o melhor score do jogador naquele chart especifico 
+        """
+        
+        query = """
+        select * from scores
+        
+        where (user_id = ? and chart_id = ?)
+        
+        order by score DESC
+        limit 1
+        """
+        
+        row = self.fetchone(query, (user_id, chart_id))
+        
+        if row is None:
+            return None
+        
+        return Score(row[0],row[1], row[2], row[3], row[4], row[5])
+        

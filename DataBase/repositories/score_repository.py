@@ -106,4 +106,31 @@ class ScoreRepository(BaseRepository):
             return None
         
         return Score(row[0],row[1], row[2], row[3], row[4], row[5])
+    
+    """ 
+    ======================================================================
+            FUNÇÕES RELACIONADOS PARA VÁRIOS USER (MAIS DE UM JOGADOR)
+    ======================================================================
+    """
+    
+    def get_top_scores_by_chart(self, chart_id):
+        query = """ 
+        select * from scores
+        where chart_id = ?
+        
+        order by score DESC
+        limit 10
+        """
+        # Na teoria, se estou usando o fetchmany, então não precisaria do limit na query, o contrário vale tbm.
+        rows = self.fetchall(query, 10, (chart_id,))
+        
+        if rows is None:
+            return None
+        
+        all_scores = []
+        
+        for row in rows:
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+        return all_scores
+    
         

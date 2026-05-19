@@ -1,9 +1,12 @@
 import pygame
 import pygame_menu
+
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
-from Game.GameManager.GameManager import ManageGame
+
+from DataBase.repositories.difficulty_repository import DifficultyRepository
 from models.user import User
+
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
@@ -71,17 +74,21 @@ def choice_difficulty(user:User):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
     
-    difficulty = 'Easy'
+    difficultyManeger = DifficultyRepository()
+    
+    dificuldades = difficultyManeger.get_all()
+    
+    difficulty = dificuldades[0].name
     def set_difficulty(value, selected_value):
         nonlocal  difficulty
         difficulty = selected_value
-        
+    
     choice.add.selector(
     "Select difficulty :", 
     [
-        ('Easy', 'Easy'),
-        ('Normal', 'Normal'),
-        ('Hard', 'Hard')
+        (dificuldades[0].name, dificuldades[0].name),
+        (dificuldades[1].name, dificuldades[1].name),
+        (dificuldades[2].name, dificuldades[2].name)
     ],
     onchange=set_difficulty
     )

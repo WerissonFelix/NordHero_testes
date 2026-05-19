@@ -61,7 +61,7 @@ class SongChartsRepository(BaseRepository):
         
         rows = self.fetchall(query, (song_id, ))
         
-        if rows is None:
+        if len(rows) == 0:
             return None
         
         all_charts = []

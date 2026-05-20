@@ -6,10 +6,10 @@ class SongRepository(BaseRepository):
     
     def create(self, song: Song):
         query = """
-        insert into songs (title, artist, bpm, duration_seconds, file_path)
-        values (?, ?, ?, ?, ?)
+        insert into songs (title, artist, bpm, duration_seconds, file_path, story_difficulty_id)
+        values (?, ?, ?, ?, ?, ?)
         """
-        self.execute(query, (song.title, song.artist, song.bpm, song.duration_seconds, song.file_path))
+        self.execute(query, (song.title, song.artist, song.bpm, song.duration_seconds, song.file_path, song.story_difficulty_id))
         
     def get_by_id(self, song_id):
         query = """
@@ -21,7 +21,7 @@ class SongRepository(BaseRepository):
         if row is None:
             return
         
-        return Song(row[0], row[1], row[2], row[3], row[4], row[5])
+        return Song(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
         
     def get_by_title(self, song_id):
         query = """
@@ -34,7 +34,33 @@ class SongRepository(BaseRepository):
         if row is None:
             return
         
-        return Song(row[0], row[1], row[2], row[3], row[4], row[5])
+        return Song(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+    
+    def get_by_story_difficulty_id(self, story_difficulty_id):
+        query = """
+        select * from songs
+        where story_difficulty_id = ?
+        """
+        
+        all_songs = self.fetchall(query, (story_difficulty_id,))
+        
+        rows = []
+        
+        for row in all_songs:
+            rows.append(
+                Song(
+                    row[0], 
+                    row[1], 
+                    row[2], 
+                    row[3], 
+                    row[4],
+                    row[5],
+                    row[6]
+                )
+            )
+        
+        return rows
+    
     
     def get_all(self):
         query = """
@@ -53,7 +79,8 @@ class SongRepository(BaseRepository):
                     row[2], 
                     row[3], 
                     row[4],
-                    row[5]
+                    row[5],
+                    row[6]
                 )
             )
         
@@ -63,11 +90,12 @@ class SongRepository(BaseRepository):
         query = """
         update songs
         set title = ?, artist = ?,
-        bpm = ?, file_path = ?, duration_seconds = ?
+        bpm = ?, file_path = ?, duration_seconds = ?,
+        story_difficulty_id = ? 
         where id = ?
         """
         
-        self.execute(query, (song.title, song.artist, song.bpm, song.file_path, song.duration_seconds, song.id))
+        self.execute(query, (song.title, song.artist, song.bpm, song.file_path, song.duration_seconds, song.story_difficulty_id, song.id))
         
     def delete_song(self, song_id):
         query = """

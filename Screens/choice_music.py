@@ -92,7 +92,8 @@ def choice_music(user: User, difficulty: Difficulty):
     
     all_charts = chartManeger.get_all_charts_by_difficulty(difficulty.id)
     
-    songs = [songManeger.get_by_id(chart.song_id) for chart in all_charts] 
+    songs = songManeger.get_by_story_difficulty_id(difficulty.id)
+     
     print(all_charts)
     print(songs)
     music_selector = choice.add.selector(

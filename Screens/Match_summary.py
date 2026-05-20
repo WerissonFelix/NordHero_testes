@@ -2,13 +2,19 @@ import pygame
 import pygame_menu
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+
+from DataBase.repositories.score_repository import ScoreRepository
+from DataBase.repositories.song_repository import SongRepository
+from DataBase.repositories.song_chart_repository import SongChartsRepository
+
+from models.score import Score
 from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/Summary.png')
 music = ""
-def match_summary(user: User, total_notes, notes_hit):
+def match_summary(user: User, total_notes, notes_hit, file_path):
     """
     Exibe o resumo de desempenho após uma partida.
     
@@ -81,6 +87,16 @@ def match_summary(user: User, total_notes, notes_hit):
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
+    
+    scoreManager = ScoreRepository()
+    songManager = SongRepository()
+    chartManeger = SongChartsRepository()
+    
+    song = songManager.get_by_file_path(file_path)
+    chart = chartManeger.get_by_song_and_difficulty(song.id, song.story_difficulty_id)
+    
+    score = Score(None, user.id, chart.id , notes_hit, accuracy, raking)
+    scoreManager.create(score)
     
     choice.add.button("CHOOCE ANOTHER SONG", choice_difficulty, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)

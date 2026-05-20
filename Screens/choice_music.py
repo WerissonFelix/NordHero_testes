@@ -7,6 +7,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 from DataBase.repositories.song_chart_repository import SongChartsRepository
 from DataBase.repositories.song_repository import SongRepository
+from DataBase.repositories.score_repository import ScoreRepository
 
 from models.difficulty import Difficulty
 from models.user import User
@@ -78,28 +79,45 @@ def choice_music(user: User, difficulty: Difficulty):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
     
+    lbl_rank = choice.add.label(
+        f"Best Score: 'N/A'", 
+        font_size=20, 
+        font_name=pygame_menu.font.FONT_MUNRO
+    )
     selected_music = [None] 
     
     def start_game(music_selector):
         if selected_music[0] is None:
-            selected_music[0] = music_selector.get_value()[0][1]
+            selected_music[0] = music_selector.get_value()[0][1][0]
         
         gameManager = ManageGame(user,selected_music[0])
         gameManager.load_to_run()
     
     chartManeger = SongChartsRepository()
     songManeger = SongRepository()
+    scoreManeger = ScoreRepository()
     
     all_charts = chartManeger.get_all_charts_by_difficulty(difficulty.id)
     
     songs = songManeger.get_by_story_difficulty_id(difficulty.id)
-     
-    print(all_charts)
-    print(songs)
+    
+    def change_rank(selected, value):
+        global music
+        file_path, song_id = value
+        music = file_path
+        
+        chart = chartManeger.get_by_song_and_difficulty(song_id, difficulty.id)
+        score = scoreManeger.get_best_by_user_and_chart(user.id, chart.id)
+        print(score)
+        lbl_rank.set_title(
+            f"""Best Score: {score.rank if score else 'N/A'}
+                Best Accuracy: {score.accuracy if score else 'N/A'}%
+            """
+        )
     music_selector = choice.add.selector(
         'MUSIC :',
-        [(song.title, song.file_path) for song in songs],
-        onselect=music            
+        [(song.title, (song.file_path, song.id)) for song in songs],
+        onchange=change_rank           
     )
 
     choice.add.button("START GAME", start_game, music_selector)

@@ -51,8 +51,12 @@ def table_songs():
             artist varchar(255) NOT NULL,
             
             bpm FLOAT NOT NULL,
-            file_path,
-            duration_seconds INTEGER NOT NULL
+            duration_seconds INTEGER NOT NULL,
+            file_path TEXT NOT NULL,
+            
+            story_difficulty_id INTEGER NOT NULL,
+            
+            FOREIGN KEY(story_difficulty_id) REFERENCES difficulties(id)
         )  
     """
     

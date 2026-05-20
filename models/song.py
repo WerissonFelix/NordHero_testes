@@ -14,3 +14,4 @@ class Song:
     bpm: float 
     duration_seconds: int
     file_path: str
+    story_difficulty_id: int

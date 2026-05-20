@@ -78,7 +78,7 @@ def choice_difficulty(user:User):
     
     dificuldades = difficultyManeger.get_all()
     
-    difficulty = dificuldades[0].name
+    difficulty = dificuldades[0]
     def set_difficulty(value, selected_value):
         nonlocal  difficulty
         difficulty = selected_value
@@ -86,9 +86,9 @@ def choice_difficulty(user:User):
     choice.add.selector(
     "Select difficulty :", 
     [
-        (dificuldades[0].name, dificuldades[0].name),
-        (dificuldades[1].name, dificuldades[1].name),
-        (dificuldades[2].name, dificuldades[2].name)
+        (dificuldades[0].name, dificuldades[0]),
+        (dificuldades[1].name, dificuldades[1]),
+        (dificuldades[2].name, dificuldades[2])
     ],
     onchange=set_difficulty
     )

@@ -12,5 +12,5 @@ class Song:
     artist: str
     
     bpm: float 
-    file_path: str
     duration_seconds: int
+    file_path: str

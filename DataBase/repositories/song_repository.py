@@ -6,10 +6,10 @@ class SongRepository(BaseRepository):
     
     def create(self, song: Song):
         query = """
-        insert into songs (title, artist, bpm, file_path, duration_seconds)
+        insert into songs (title, artist, bpm, duration_seconds, file_path)
         values (?, ?, ?, ?, ?)
         """
-        self.execute(query, (song.title, song.artist, song.bpm, song.file_path, song.duration_seconds))
+        self.execute(query, (song.title, song.artist, song.bpm, song.duration_seconds, song.file_path))
         
     def get_by_id(self, song_id):
         query = """

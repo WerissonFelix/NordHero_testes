@@ -77,7 +77,7 @@ class SongChartsRepository(BaseRepository):
         """
         rows = self.fetchall(query, (difficulty_id, ))
         
-        if rows in None:
+        if len(rows) == 0:
             return None
         
         all_charts = []

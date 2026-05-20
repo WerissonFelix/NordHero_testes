@@ -1,15 +1,21 @@
 import pygame
 import pygame_menu
+
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+
 from Game.GameManager.GameManager import ManageGame
+from DataBase.repositories.song_chart_repository import SongChartsRepository
+from DataBase.repositories.song_repository import SongRepository
+
+from models.difficulty import Difficulty
 from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
-music = ""
-def choice_music(user: User, difficulty_level):
+music = None
+def choice_music(user: User, difficulty: Difficulty):
     """
     Exibe a tela de seleção de música baseada na dificuldade escolhida.
     
@@ -80,39 +86,21 @@ def choice_music(user: User, difficulty_level):
         
         gameManager = ManageGame(user,selected_music[0])
         gameManager.load_to_run()
-    print(difficulty_level)
-    if difficulty_level == "Easy":
-        music_selector = choice.add.selector(
-            'MUSIC :', 
-            [
-            ('Die With Smile', "Game\music\Die With A Smile (Instrumental) - Lady Gaga"), 
-            ('Ludovico Einaudi - Una Mattina', "Game\music\Ludovico Einaudi - Una Mattina (The Intouchables) - Rousseau (youtube)"), 
-            ('Debussy - Clair de Lune - Rousseau', "Game\music\Debussy - Clair de Lune - Rousseau (youtube)")
-            ],
-            onchange=music)
-        
-    elif difficulty_level == "Normal":
-        music_selector = choice.add.selector(
-            'MUSIC :', 
-            [
-            ('Billie Jean', "Game\music\Michael Jackson  Billie Jean [Instrumental Version] - HIStoryWorldTourMJ (youtube)"), 
-            ('Stay With me', "Game\music\Miki Matsubara - Stay With Me"), 
-            ("Another One Bites The Dust - Queen", "Game\music\Another One Bites The Dust - Instrumental"),
-            ('Fallen Down - toby Fox', "Game\music\Fallen Down (Reprise) - Toby Fox (youtube)"), 
-            ('I Thought I Saw Your Face Today', "Game\music\I Thought I Saw Your Face Today - She & Him (Instrumental)")
-            ],
-            onchange=music)
-        
-    else:
-        music_selector = choice.add.selector(
-            'MUSIC :', 
-            [
-            ('Megalovania', "Game\music\MEGALOVANIA - Toby Fox"), 
-            ('Abolish the IRS', "Game\music\Abolish the IRS"), 
-            ('Ana Vidovic - Asturias by Isaac Albéniz ', "Game\music\Ana Vidovic - Asturias by Isaac Albéniz -"),
-            ('Like Him- Tyler the Creator', "Game\music\Like Him (Instrumental) - Tyler the Creator - pb (abandoned) (youtube)")
-            ],
-            onchange=music)
+    
+    chartManeger = SongChartsRepository()
+    songManeger = SongRepository()
+    
+    all_charts = chartManeger.get_all_charts_by_difficulty(difficulty.id)
+    
+    songs = [songManeger.get_by_id(chart.song_id) for chart in all_charts] 
+    print(all_charts)
+    print(songs)
+    music_selector = choice.add.selector(
+        'MUSIC :',
+        [(song.title, song.file_path) for song in songs],
+        onselect=music            
+    )
+
     choice.add.button("START GAME", start_game, music_selector)
     choice.add.button("BACK", home_screen, user, profile_options_menu)
     choice.mainloop(surface)

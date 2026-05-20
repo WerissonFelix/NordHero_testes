@@ -2,7 +2,10 @@ from DataBase.repositories.base_repository import BaseRepository
 from models.difficulty import Difficulty
 
 class DifficultyRepository(BaseRepository):
-    
+    """
+    Gerencia as operações de banco de dados relacionadas às dificuldades do jogo.
+    Fornece métodos para criar novas dificuldades, buscar por nome e listar todas as dificuldades disponíveis.
+    """
     def create_difficulty(self, difficulty: Difficulty):
         query = """
         insert into difficulties (name)

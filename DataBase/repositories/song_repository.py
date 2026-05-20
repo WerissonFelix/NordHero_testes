@@ -61,6 +61,18 @@ class SongRepository(BaseRepository):
         
         return rows
     
+    def get_by_file_path(self, file_path: str):
+        query = """
+        select * from songs
+        where file_path = ?
+        """
+        
+        row = self.fetchone(query, (file_path,))
+        
+        if row is None:
+            return
+        
+        return Song(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
     
     def get_all(self):
         query = """

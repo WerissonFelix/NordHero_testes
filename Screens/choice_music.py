@@ -79,11 +79,18 @@ def choice_music(user: User, difficulty: Difficulty):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
     
-    lbl_rank = choice.add.label(
+    lbl_rank_personal = choice.add.label(
         f"Best Score: 'N/A'", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
+    
+    lbl_rank_global = choice.add.label(
+        f"Best Scores: 'N/A'", 
+        font_size=20, 
+        font_name=pygame_menu.font.FONT_MUNRO
+    )
+    
     selected_music = [None] 
     
     def start_game(music_selector):
@@ -108,12 +115,27 @@ def choice_music(user: User, difficulty: Difficulty):
         
         chart = chartManeger.get_by_song_and_difficulty(song_id, difficulty.id)
         score = scoreManeger.get_best_by_user_and_chart(user.id, chart.id)
+        
         print(score)
-        lbl_rank.set_title(
+        
+        lbl_rank_personal.set_title(
             f"""Best Score: {score.rank if score else 'N/A'}
                 Best Accuracy: {score.accuracy if score else 'N/A'}%
             """
         )
+        
+        scores = scoreManeger.get_top_scores_by_chart(chart.id)
+        
+        if scores is None:
+            ranks = None
+        else:
+            ranks = ", ".join(s.rank if s is not None else "N/A" for s in scores)  
+         
+        lbl_rank_global.set_title(
+            f"""Best Scores: {ranks if ranks else 'N/A'}
+            """
+        )
+        
     music_selector = choice.add.selector(
         'MUSIC :',
         [(song.title, (song.file_path, song.id)) for song in songs],

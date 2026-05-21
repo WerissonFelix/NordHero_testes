@@ -122,15 +122,18 @@ class ScoreRepository(BaseRepository):
         limit 10
         """
         # Na teoria, se estou usando o fetchmany, então não precisaria do limit na query, o contrário vale tbm.
-        rows = self.fetchall(query, 10, (chart_id,))
+        rows = self.fetchall(query, (chart_id,))
         
-        if rows is None:
+        if len(rows) == 0:
             return None
         
         all_scores = []
         
         for row in rows:
-            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+            if row is None:
+                all_scores.append(None)
+            else:
+                all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
         return all_scores
     
         

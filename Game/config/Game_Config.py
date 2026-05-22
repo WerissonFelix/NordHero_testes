@@ -1,3 +1,4 @@
+import pygame
 
 class GameConfig:
     """
@@ -5,7 +6,13 @@ class GameConfig:
     Seus métodos consistem em retornar suas instâncias para que outras classes/defs possam 
     usar.
     """    
+    
     def __init__(self):
+        self.key1 = pygame.K_a
+        self.key2 = pygame.K_s
+        self.key3 = pygame.K_d
+        self.key4 = pygame.K_f 
+        
         self.screen_width = 800
         self.screen_height = 600
         self.FPS = 60

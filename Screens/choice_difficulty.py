@@ -1,13 +1,16 @@
 import pygame
 import pygame_menu
+
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
-from Game.GameManager.GameManager import ManageGame
+
+from DataBase.repositories.difficulty_repository import DifficultyRepository
+from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
-def choice_difficulty(user):
+def choice_difficulty(user:User):
     """
     Exibe a tela de seleção de dificuldade do jogo.
     
@@ -41,7 +44,7 @@ def choice_difficulty(user):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     choice = pygame_menu.Menu(
-        f'Connected as: {user[1]}',
+        f'Connected as: {user.name}',
         800,
         500,
         theme=theme
@@ -49,12 +52,12 @@ def choice_difficulty(user):
     
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
     lbl_nome = choice.add.label(
-        f"Name: {user[1]}", 
+        f"Name: {user.name}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
     lbl_email = choice.add.label(
-        f"email: {user[2]}", 
+        f"email: {user.email}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
@@ -71,17 +74,21 @@ def choice_difficulty(user):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
     
-    difficulty = 'Easy'
+    difficultyManeger = DifficultyRepository()
+    
+    dificuldades = difficultyManeger.get_all()
+    
+    difficulty = dificuldades[0]
     def set_difficulty(value, selected_value):
         nonlocal  difficulty
         difficulty = selected_value
-        
+    
     choice.add.selector(
     "Select difficulty :", 
     [
-        ('Easy', 'Easy'),
-        ('Normal', 'Normal'),
-        ('Hard', 'Hard')
+        (dificuldades[0].name, dificuldades[0]),
+        (dificuldades[1].name, dificuldades[1]),
+        (dificuldades[2].name, dificuldades[2])
     ],
     onchange=set_difficulty
     )

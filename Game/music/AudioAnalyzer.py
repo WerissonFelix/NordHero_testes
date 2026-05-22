@@ -33,7 +33,7 @@ class AudioAnalyzer:
         4. Classifica cada beat em uma lane (0-3) baseado em percentis
         5. Retorna lista de notas [beat_time, lane] e BPM
         """
-        signal_wave, sample_rate = librosa.load(self.music_path + ".mp3")
+        signal_wave, sample_rate = librosa.load(self.music_path)
         # librosa.load retorna: um numpy array e um int, sendo, respectivamente, o nome das variáveis
 
         time, beat_frames = librosa.beat.beat_track(y=signal_wave, sr=sample_rate)
@@ -108,7 +108,7 @@ class AudioAnalyzer:
             mixer_
         """
         mixer.init()
-        mixer.music.load(self.music_path + ".mp3")
+        mixer.music.load(self.music_path)
         mixer.music.play()
         
         return mixer

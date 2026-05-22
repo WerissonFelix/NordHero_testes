@@ -3,12 +3,12 @@ import pygame_menu
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
-
+from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 fundo = pygame.image.load('./Images/telainicial.png')
 
-def home_screen(user,profile_menu):
+def home_screen(user : User, profile_menu):
     """
     Exibe a tela principal do jogo após o login.
     
@@ -39,7 +39,7 @@ def home_screen(user,profile_menu):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     home_menu = pygame_menu.Menu(
-        f'Connected as: {user[1]}',
+        f'Connected as: {user.name}',
         800,
         500,
         theme=theme
@@ -47,12 +47,12 @@ def home_screen(user,profile_menu):
     
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
     lbl_nome = home_menu.add.label(
-        f"Name: {user[1]}", 
+        f"Name: {user.name}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
     lbl_email = home_menu.add.label(
-        f"email: {user[2]}", 
+        f"email: {user.email}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )

@@ -2,11 +2,13 @@ import pygame
 import pygame_menu
 
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
+from models.user import User
+
 
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
-def pause_menu(user,music_path, total_notes, notes_hit):
+def pause_menu(user: User, music_path, total_notes, notes_hit, setting_menu = None, config = None):
     """
     Exibe o menu de pausa durante o jogo.
     
@@ -17,6 +19,7 @@ def pause_menu(user,music_path, total_notes, notes_hit):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.Match_summary import match_summary
+    from Screens.settings import change_controls_menu
     from Game.GameManager.GameManager import ManageGame
     
     theme = pygame_menu.themes.THEME_DARK.copy()
@@ -50,10 +53,14 @@ def pause_menu(user,music_path, total_notes, notes_hit):
     manager = ManageGame(user,music_path)
     
     def resume_game():
+        nonlocal setting_menu
         menu.disable()
+        if setting_menu:
+            setting_menu.disable()
+        
          
-    menu.add.button("SETTINGS",)
+    menu.add.button("SETTINGS", change_controls_menu, config)
     menu.add.button('RESUME', resume_game)
-    menu.add.button("QUIT", match_summary, user, total_notes, notes_hit)
+    menu.add.button("QUIT", match_summary, user, total_notes, notes_hit, music_path)
 
     menu.mainloop(surface)

@@ -28,8 +28,10 @@ class NoteManager:
         self.x = 0
         self.y = 0  
         self.notes_hit = 0
+        self.combo = 0
+        self.extra_score = 0
         
-    def while_running(self,score, current_time, notes, spawn_offset, screen, keys, keys_pressed):  
+    def while_running(self, score, current_time, notes, spawn_offset, screen, keys, keys_pressed):  
         """
         Atualiza posição das notas, detecta colisões e calcula pontuação.
         
@@ -62,34 +64,47 @@ class NoteManager:
                 self.x = 200 + lane * 100
 
                 rect = pygame.Rect(self.x, self.y, self.width, self.height)
-
-                pygame.draw.rect(screen, (255, 255, 255),rect)
-
+                
+                pygame.draw.rect(screen, (255, 255, 255),rect)     
+                
                 if rect.colliderect(keys[lane].rect):
                     if keys_pressed[keys[lane].key]: 
                                                               
                         distance = abs(rect.centery - keys[lane].rect.centery)
                         
-                        if distance <= 12:                          
-                           self.rating = "Perfect" 
-                           score += 100
+                        if distance <= 12:
+                            self.rating = "Perfect" 
+                            score += 100
+                            self.combo += 1
+                            self.extra_score = 0
+                            if  1 < self.combo <= 5 :   
+                                self.extra_score = 5
+                            elif 5 < self.combo <= 10:
+                                self.extra_score = 10
+                            elif 10 < self.combo <= 20:
+                                self.extra_score = 15
+                            score += self.extra_score 
+                            
                         elif 13 <= distance <= 18:
                             self.rating = "Good"
                             score += 50
+                            self.combo = self.extra_score = 0
                         elif distance >= 19:
                             self.rating = "Bad"
-                            score += 25     
+                            score += 25 
+                            self.combo = self.extra_score = 0
+                                
                         self.notes_hit +=1                     
-                        self.notes_to_remove.append(note)
-                        
+                        self.notes_to_remove.append(note)        
                 elif self.y > 600:
                     self.rating = "Miss" 
                     self.notes_to_remove.append(note)
         for n in self.notes_to_remove:
             if n in notes:
                 notes.remove(n)
-        return score, self.rating
+        return score, self.rating, self.combo, self.extra_score
 
     def get_notes_hit(self):
         return self.notes_hit
+    
    

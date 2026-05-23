@@ -111,7 +111,6 @@ class ManageGame:
         
         self.mixer.music.unpause()
         
-
     def countdown(self, was_paused = False):  
         """
         Exibe contagem regressiva (3, 2, 1, GO!) antes de iniciar.
@@ -219,7 +218,7 @@ class ManageGame:
             self.screen.blit(key_3, (420, 520))
             self.screen.blit(key_4, (520, 520))
         
-            self.score, rating = self.notesManage.while_running(
+            self.score, rating, combo, extra = self.notesManage.while_running(
                 self.score,
                 current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
@@ -228,6 +227,13 @@ class ManageGame:
             
             color = self.textManage.draw_rating(rating,self.screen)
             self.textManage.effect_text_rating()     
+            
+            if combo > 1:        
+                combo_text = self.font.render(f"Combo: {combo}", True, color)
+                self.screen.blit(combo_text, (10, 50))
+                
+                extra_text = self.font.render(f"+{extra}", True, color)
+                self.screen.blit(extra_text, (10, 90))
             
             score_text = self.font.render(f"Score: {self.score}", True, ((255, 255, 0)))    
             self.screen.blit(score_text, (10, 10))

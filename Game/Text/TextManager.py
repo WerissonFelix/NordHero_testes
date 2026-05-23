@@ -54,6 +54,7 @@ class TextManager:
                 self.color = self.rainbow[5]
             elif self.current_message == "Perfect":
                 self.color = self.rainbow_effect()
+                combo_color = self.color
             else: 
                 self.color = self.rainbow[-1]
                 
@@ -65,7 +66,10 @@ class TextManager:
             
             screen.blit(temp_surf, (10,300))
             self.alpha = max(self.alpha - 4, 0)  
-        return self.color
+            
+            if self.current_message == "Perfect":
+                return combo_color
+        return self.color    
     def effect_text_rating(self): 
         """Anima cores RGB da cor padrão """   
         for i in range(3):

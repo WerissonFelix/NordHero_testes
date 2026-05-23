@@ -45,7 +45,10 @@ class NoteManager:
         """
                   
         for note in notes:
-            note_time, lane = note
+            note_time = note[0]
+            lane = note[1]
+            
+            duracao =  note[3] if len(note) > 3 else 0
 
             if note_time - spawn_offset <= current_time:
                 """ 
@@ -63,9 +66,19 @@ class NoteManager:
 
                 self.x = 200 + lane * 100
 
-                rect = pygame.Rect(self.x, self.y, self.width, self.height)
+                altura_base = self.height
+                if duracao > 0:
+                    altura_real = self.height + (duracao * self.speed)
+                    rect_y = self.y - (altura_real - self.height) 
+                else:
+                    altura_real = altura_base
+                    rect_y = self.y
+                
+                rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
                 
                 pygame.draw.rect(screen, (255, 255, 255),rect)     
+                
+                hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
                 
                 if rect.colliderect(keys[lane].rect):
                     if keys_pressed[keys[lane].key]:  
@@ -82,6 +95,7 @@ class NoteManager:
         for n in self.notes_to_remove:
             if n in notes:
                 notes.remove(n)
+        self.notes_to_remove.clear()
                 
         return score, self.rating, self.combo, self.extra_score
 

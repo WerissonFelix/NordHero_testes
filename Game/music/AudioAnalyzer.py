@@ -19,8 +19,12 @@ class AudioAnalyzer:
         self.notes = []
         self.qtd_notes = 0
         self.time =  120 # Fallback
-    
+        
+        self.times = []
+        self.lanes = []
+        self.lanes_notes = {0: [], 1: [], 2: [], 3: []}
     def Generate_map(self):
+        
         
         """
         
@@ -46,10 +50,8 @@ class AudioAnalyzer:
         self.qtd_notes = len(beat_times)
         print(f"Tempo detectado: {time} BPM")
         print(f"Total de beats: {self.qtd_notes}")
-
-        
+ 
         """
-
         A partir daqui ocorre a análise da frequência da música, aqui 
         o áudio é transformado em espectro, que é tipo uma mistura de várias frequências
         ao mesmo tempo. 
@@ -57,8 +59,8 @@ class AudioAnalyzer:
         Essa transformação é precisa porque o espectro mostra quais frequências
         existem naquele instante e o quão forte cada uma é, isso é importante
         para classificar em qual lane vai cair.
-        
         """
+        
         S = np.abs(librosa.stft(y=signal_wave))
         freqs = librosa.fft_frequencies(sr=sample_rate)
 
@@ -89,17 +91,46 @@ class AudioAnalyzer:
 
                 if freq < percentiles[0]:
                     lane = 0
+                    self.lanes_notes[0].append(beat_time)
                 elif freq < percentiles[1]:
                     lane = 1
+                    self.lanes_notes[1].append(beat_time)
                 elif freq < percentiles[2]:
                     lane = 2
+                    self.lanes_notes[2].append(beat_time)
                 else:
                     lane = 3
-
-                self.notes.append([beat_time, lane])
-
+                    self.lanes_notes[3].append(beat_time)
+                #self.notes.append([beat_time, lane])
+        self.verify_for_long_notes(self.times, self.lanes)
         return self.notes, self.time
     
+    def verify_for_long_notes(self, lanes_notes):
+        """ verifica se existem notas muito próximas, o que pode indicar uma nota longa. """
+        
+        
+        for lane, times in self.lanes_notes.items():
+            sequencia = []
+            
+            for i in range(len(times)):
+                tempo_atual = times[i]
+                
+                if len(sequencia) == 0:
+                    sequencia.append(tempo_atual)
+                    
+                tempo_anterior = sequencia[-1]
+                
+                if tempo_atual - tempo_anterior < 0.5:
+                    sequencia.append(tempo_atual)
+                else:
+                    if len(sequencia) > 4:
+                        duracao = abs(sequencia[-1] - sequencia[0])
+                        self.notes.append([sequencia[0], lane, len(sequencia), duracao])
+                    else:
+                        for t in sequencia:
+                            self.notes.append([t, lane, 1])
+                    sequencia = [tempo_atual]
+            
     def load_music(self): 
         """
         Toca a música

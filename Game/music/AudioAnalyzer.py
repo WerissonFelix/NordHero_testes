@@ -102,10 +102,10 @@ class AudioAnalyzer:
                     lane = 3
                     self.lanes_notes[3].append(beat_time)
                 #self.notes.append([beat_time, lane])
-        self.verify_for_long_notes(self.times, self.lanes)
+        self.verify_for_long_notes()
         return self.notes, self.time
     
-    def verify_for_long_notes(self, lanes_notes):
+    def verify_for_long_notes(self):
         """ verifica se existem notas muito próximas, o que pode indicar uma nota longa. """
         
         
@@ -130,7 +130,14 @@ class AudioAnalyzer:
                         for t in sequencia:
                             self.notes.append([t, lane, 1])
                     sequencia = [tempo_atual]
-            
+                        
+                if tempo_atual == times[-1]:
+                    if len(sequencia) > 4:
+                        duracao = abs(sequencia[-1] - sequencia[0])
+                        self.notes.append([sequencia[0], lane, len(sequencia), duracao])
+                    else:
+                        for t in sequencia:
+                            self.notes.append([t, lane, 1])         
     def load_music(self): 
         """
         Toca a música

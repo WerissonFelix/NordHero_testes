@@ -84,13 +84,7 @@ def choice_music(user: User, difficulty: Difficulty):
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    
-    lbl_rank_global = choice.add.label(
-        f"Best Scores: 'N/A'", 
-        font_size=20, 
-        font_name=pygame_menu.font.FONT_MUNRO
-    )
-    
+      
     selected_music = [None] 
     
     def start_game(music_selector):
@@ -107,7 +101,7 @@ def choice_music(user: User, difficulty: Difficulty):
     all_charts = chartManeger.get_all_charts_by_difficulty(difficulty.id)
     
     songs = songManeger.get_by_story_difficulty_id(difficulty.id)
-    
+    table = choice.add.table()
     def change_rank(selected, value):
         global music
         file_path, song_id = value
@@ -119,23 +113,21 @@ def choice_music(user: User, difficulty: Difficulty):
         print(score)
         
         lbl_rank_personal.set_title(
-            f"""Best Score: {score.rank if score else 'N/A'}
-                Best Accuracy: {score.accuracy if score else 'N/A'}%
-            """
+            f"""Best Score: {score.rank if score else 'N/A'} | Best Accuracy: {score.accuracy if score else 'N/A'}%"""
         )
         
         scores = scoreManeger.get_top_scores_by_chart(chart.id)
         
-        if scores is None:
-            ranks = None
-        else:
-            ranks = ", ".join(s.rank if s is not None else "N/A" for s in scores)  
-         
-        lbl_rank_global.set_title(
-            f"""Best Scores: {ranks if ranks else 'N/A'}
-            """
-        )
-        
+        try: 
+            table.clear()          
+        except AssertionError as e:   
+            pass
+        if scores is not None:
+            for score in scores:
+                table.add_row([f"Score: {score.score}", f"Rank: {score.rank}", f"Accuracy: {score.accuracy}%"])  
+                                
+        table.cell_border_color = (255, 255, 255)
+                
     music_selector = choice.add.selector(
         'MUSIC :',
         [(song.title, (song.file_path, song.id)) for song in songs],

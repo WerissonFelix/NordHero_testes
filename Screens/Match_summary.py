@@ -14,7 +14,7 @@ pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/Summary.png')
 music = ""
-def match_summary(user: User, total_notes, notes_hit, file_path):
+def match_summary(user: User, total_notes, notes_hit, file_path, score):
     """
     Exibe o resumo de desempenho após uma partida.
     
@@ -95,8 +95,8 @@ def match_summary(user: User, total_notes, notes_hit, file_path):
     song = songManager.get_by_file_path(file_path)
     chart = chartManeger.get_by_song_and_difficulty(song.id, song.story_difficulty_id)
     
-    score = Score(None, user.id, chart.id , notes_hit, accuracy, raking)
-    scoreManager.create(score)
+    score_match = Score(None, user.id, chart.id , score, accuracy, raking)
+    scoreManager.create(score_match)
     
     choice.add.button("CHOOCE ANOTHER SONG", choice_difficulty, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)

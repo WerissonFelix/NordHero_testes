@@ -8,7 +8,7 @@ from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
-def pause_menu(user: User, music_path, total_notes, notes_hit, setting_menu = None, config = None):
+def pause_menu(user: User, music_path, total_notes, notes_hit, score, setting_menu = None, config = None):
     """
     Exibe o menu de pausa durante o jogo.
     
@@ -61,6 +61,6 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, setting_menu = No
          
     menu.add.button("SETTINGS", change_controls_menu, config)
     menu.add.button('RESUME', resume_game)
-    menu.add.button("QUIT", match_summary, user, total_notes, notes_hit, music_path)
+    menu.add.button("QUIT", match_summary, user, total_notes, notes_hit, music_path, score)
 
     menu.mainloop(surface)

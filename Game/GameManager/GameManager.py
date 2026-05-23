@@ -89,7 +89,7 @@ class ManageGame:
             self.notes, self.bpm = self.audio.Generate_map()
             self.countdown()
     
-    def pause_game(self, total_notes, notes_hit):
+    def pause_game(self, total_notes, notes_hit, score):
         """
         
         Pausa a música e exibe o menu de pausa.
@@ -97,7 +97,7 @@ class ManageGame:
         """
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path, total_notes, notes_hit, None, self.config)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, None, self.config)
         
         self.default_lane = [
             
@@ -144,7 +144,7 @@ class ManageGame:
         
         """
         
-        score = 0
+        self.score = 0
         self.mixer = self.audio.load_music()
         
         MUSIC_END_EVENT = pygame.USEREVENT + 1
@@ -187,7 +187,7 @@ class ManageGame:
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.pause_game(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
+                        self.pause_game(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit(), self.score)
                         key1 = pygame.key.name(self.config.key1)
                         key2 = pygame.key.name(self.config.key2)
                         key3 = pygame.key.name(self.config.key3)
@@ -219,8 +219,8 @@ class ManageGame:
             self.screen.blit(key_3, (420, 520))
             self.screen.blit(key_4, (520, 520))
         
-            score, rating = self.notesManage.while_running(
-                score,
+            self.score, rating = self.notesManage.while_running(
+                self.score,
                 current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
                 keys_pressed
@@ -229,14 +229,14 @@ class ManageGame:
             color = self.textManage.draw_rating(rating,self.screen)
             self.textManage.effect_text_rating()     
             
-            score_text = self.font.render(f"Score: {score}", True, ((255, 255, 0)))    
+            score_text = self.font.render(f"Score: {self.score}", True, ((255, 255, 0)))    
             self.screen.blit(score_text, (10, 10))
             
             pygame.display.update()
     
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)
-        match_summary(self.user, total_notes, notes_hit)
+        match_summary(self.user, total_notes, notes_hit, self.music_path, self.score)
     # fazer uma def resume_party que mostra os resultados da partida, só chama se
     # o jogador quitar ou for até ao fim
     # se quitar, volta pra home

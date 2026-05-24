@@ -81,7 +81,7 @@ class NoteManager:
                 hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
                 
                 if rect.colliderect(keys[lane].rect):
-                    if keys_pressed[keys[lane].key]:  
+                    if keys[lane] in keys_pressed:  
                         distance = abs(rect.centery - keys[lane].rect.centery) 
                                                                  
                         score = self.create_rating(distance, score)

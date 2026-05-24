@@ -180,6 +180,8 @@ class ManageGame:
                
         while self.running:
             dt = self.clock.tick(60) / 1000
+            self.keys_pressed = []
+                
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -191,23 +193,35 @@ class ManageGame:
                         key2 = pygame.key.name(self.config.key2)
                         key3 = pygame.key.name(self.config.key3)
                         key4 = pygame.key.name(self.config.key4)
-                        
+                    else:
+                        for key in self.default_lane:
+                            if event.key == key.key:
+                                self.keys_pressed.append(key)
+                                key.update_line()
                 elif event.type == MUSIC_END_EVENT:
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
             self.screen.blit(self.background, (0, 0))
-            
-            keys_pressed = pygame.key.get_pressed()
+           
+            keys_held = pygame.key.get_pressed()
+            for key in self.default_lane:
+                if keys_held[key.key]:
+                    key.update_line()
+                else:
+                    key.draw_line()
+                
             current_time = self.mixer.music.get_pos() / 1000
+            """
+            keys_pressed = pygame.key.get_pressed()
             
             for key in self.default_lane:
-              
+               
                 if keys_pressed[key.key]:
                     key.update_line()
                     
                 else:
                     key.draw_line()
-            
+            """
             key_1 = self.font.render(key1, True, ((255, 255, 255)))    
             key_2 = self.font.render(key2, True, ((255, 255, 255)))
             key_3 = self.font.render(key3, True, ((255, 255, 255)))    
@@ -222,7 +236,7 @@ class ManageGame:
                 self.score,
                 current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
-                keys_pressed
+                self.keys_pressed
             )
             
             color = self.textManage.draw_rating(rating,self.screen)

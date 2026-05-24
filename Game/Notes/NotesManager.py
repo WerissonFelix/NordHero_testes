@@ -30,6 +30,7 @@ class NoteManager:
         self.notes_hit = 0
         self.combo = 0
         self.extra_score = 0
+        self.active_long_notes = []
         
     def while_running(self, score, current_time, notes, spawn_offset, screen, keys, keys_pressed):  
         """
@@ -42,8 +43,7 @@ class NoteManager:
         Verifica colisão com teclas e determina precisão do acerto.   
         
         retorna o novo score (se pontuar) e o rating da respectiva nota.
-        """
-                  
+        """          
         for note in notes:
             note_time = note[0]
             lane = note[1]
@@ -70,26 +70,58 @@ class NoteManager:
                 if duracao > 0:
                     altura_real = self.height + (duracao * self.speed)
                     rect_y = self.y - (altura_real - self.height) 
+                    
+                    rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
+                    
+                    bottom_y = self.y + self.height
+                    
+                    if note in self.active_long_notes:
+                        bottom_y = keys[lane].rect.centery
+                        
+                    draw_height = bottom_y - rect_y
+                    
+                    if draw_height > 0:
+                        rect_draw = pygame.Rect(self.x, rect_y, self.width, draw_height)
+                        pygame.draw.rect(screen, (255, 255, 255), rect_draw)
                 else:
                     altura_real = altura_base
                     rect_y = self.y
+                    rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
+                    pygame.draw.rect(screen, (255, 255, 255), rect)    
                 
-                rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
-                
-                pygame.draw.rect(screen, (255, 255, 255),rect)     
-                
-                hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
-                
-                if rect.colliderect(keys[lane].rect):
-                    if keys[lane] in keys_pressed:  
-                        distance = abs(rect.centery - keys[lane].rect.centery) 
-                                                                 
-                        score = self.create_rating(distance, score)
+                if rect.colliderect(keys[lane].rect):        
+                    is_held_down = keys[lane] in keys_pressed
+                    if duracao > 0:
+                        print(note, "Duração:", duracao, "s")
+                        if is_held_down and note not in self.active_long_notes:
+                            self.active_long_notes.append(note)
                         
-                        self.notes_hit +=1                     
-                        self.notes_to_remove.append(note)        
-                elif self.y > 600:
+                        elif note in self.active_long_notes: 
+                            if is_held_down:
+                                
+                                if rect_y >= keys[lane].rect.centery:
+                                    self.rating = "Perfect"
+                                    score += 100 + (duracao * 10)
+                                    self.combo += 1
+                                    self.notes_hit += 1
+                                    self.notes_to_remove.append(note)
+                                    self.active_long_notes.remove(note)
+                            else:
+                                self.rating = "Miss"
+                                self.combo = 0
+                                self.notes_to_remove.append(note)
+                                self.active_long_notes.remove(note)
+                    else: 
+                        if is_held_down:   
+                            distance = abs(rect.centery - keys[lane].rect.centery) 
+                                                                 
+                            score = self.create_rating(distance, score)
+                        
+                            self.notes_hit +=1                     
+                            self.notes_to_remove.append(note)       
+                elif rect_y > 600:
                     self.rating = "Miss" 
+                    self.combo = self.extra_score = 0
                     self.notes_to_remove.append(note)
                     
         for n in self.notes_to_remove:

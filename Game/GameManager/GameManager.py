@@ -177,12 +177,11 @@ class ManageGame:
         processa entrada/tecla pressionada do jogador, atualiza notas e renderiza
         feedback visual (score, ratings, lanes) a 60 FPS.
         """
-        self.keys_pressed = []      
+        self.keys_pressed = [] 
         while self.running:
-            
+                     
             dt = self.clock.tick(60) / 1000
-            
-                
+        
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -200,9 +199,13 @@ class ManageGame:
                                 self.keys_pressed.append(key)
                                 key.update_line()
                 if event.type == pygame.KEYUP:
-                    if event.key in self.keys_pressed:
-                        self.keys_pressed.remove(event.key)
-                        key.update_line()
+                    for key in self.default_lane:
+                        if event.key == key.key:
+                            try:
+                                self.keys_pressed.remove(key)
+                            except ValueError:
+                                pass
+                            key.update_line()
                 elif event.type == MUSIC_END_EVENT:
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
@@ -216,17 +219,7 @@ class ManageGame:
                     key.draw_line()
                 
             current_time = self.mixer.music.get_pos() / 1000
-            """
-            keys_pressed = pygame.key.get_pressed()
-            
-            for key in self.default_lane:
-               
-                if keys_pressed[key.key]:
-                    key.update_line()
-                    
-                else:
-                    key.draw_line()
-            """
+
             key_1 = self.font.render(key1, True, ((255, 255, 255)))    
             key_2 = self.font.render(key2, True, ((255, 255, 255)))
             key_3 = self.font.render(key3, True, ((255, 255, 255)))    
@@ -237,11 +230,12 @@ class ManageGame:
             self.screen.blit(key_3, (420, 520))
             self.screen.blit(key_4, (520, 520))
         
-            self.score, rating, combo, extra = self.notesManage.while_running(
+            self.score, rating, combo, extra, self.keys_pressed = self.notesManage.while_running(
                 self.score,
                 current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
-                self.keys_pressed
+                self.keys_pressed,
+                keys_held
             )
             
             color = self.textManage.draw_rating(rating,self.screen)
@@ -262,9 +256,3 @@ class ManageGame:
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)
         match_summary(self.user, total_notes, notes_hit, self.music_path, self.score)
-    # fazer uma def resume_party que mostra os resultados da partida, só chama se
-    # o jogador quitar ou for até ao fim
-    # se quitar, volta pra home
-    # até o fim, volta pro choice_music
-    # mostra o Rank do jogador com base na porcentagem de acerto
-    # tentar mostrar quantos miss, goods, perfects (opcional) no final

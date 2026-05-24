@@ -32,7 +32,7 @@ class NoteManager:
         self.extra_score = 0
         self.active_long_notes = []
         
-    def while_running(self, score, current_time, notes, spawn_offset, screen, keys, keys_pressed):  
+    def while_running(self, score, current_time, notes, spawn_offset, screen, keys, keys_pressed, keys_held):  
         """
         Atualiza posição das notas, detecta colisões e calcula pontuação.
         
@@ -90,18 +90,20 @@ class NoteManager:
                     pygame.draw.rect(screen, (255, 255, 255), rect)    
                 
                 if rect.colliderect(keys[lane].rect):        
-                    is_held_down = keys[lane] in keys_pressed
+            
+                    just_pressed = keys[lane] in keys_pressed
+                    
+                    is_held_down = keys_held[keys[lane].key]
+                    
                     if duracao > 0:
-                        print(note, "Duração:", duracao, "s")
                         if is_held_down and note not in self.active_long_notes:
                             self.active_long_notes.append(note)
-                        
+                            
                         elif note in self.active_long_notes: 
                             if is_held_down:
-                                
                                 if rect_y >= keys[lane].rect.centery:
                                     self.rating = "Perfect"
-                                    score += 100 + (duracao * 10)
+                                    score += 100
                                     self.combo += 1
                                     self.notes_hit += 1
                                     self.notes_to_remove.append(note)
@@ -112,13 +114,17 @@ class NoteManager:
                                 self.notes_to_remove.append(note)
                                 self.active_long_notes.remove(note)
                     else: 
-                        if is_held_down:   
+                        if just_pressed:   
                             distance = abs(rect.centery - keys[lane].rect.centery) 
-                                                                 
+                                                       
                             score = self.create_rating(distance, score)
                         
                             self.notes_hit +=1                     
-                            self.notes_to_remove.append(note)       
+                            self.notes_to_remove.append(note)
+                            try:
+                                keys_pressed.remove(keys[lane])
+                            except ValueError:
+                                pass
                 elif rect_y > 600:
                     self.rating = "Miss" 
                     self.combo = self.extra_score = 0
@@ -129,7 +135,7 @@ class NoteManager:
                 notes.remove(n)
         self.notes_to_remove.clear()
                 
-        return score, self.rating, self.combo, self.extra_score
+        return score, self.rating, self.combo, self.extra_score, keys_pressed
 
     def create_rating(self, distance, score):
         """Cria texto de avaliação ("Bad", "Good", "Perfect")"""     

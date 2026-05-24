@@ -177,16 +177,17 @@ class ManageGame:
         processa entrada/tecla pressionada do jogador, atualiza notas e renderiza
         feedback visual (score, ratings, lanes) a 60 FPS.
         """
-               
+        self.keys_pressed = []      
         while self.running:
+            
             dt = self.clock.tick(60) / 1000
-            self.keys_pressed = []
+            
                 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
-                elif event.type == pygame.KEYDOWN:
+                    quit()    
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.pause_game(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit(), self.score)
                         key1 = pygame.key.name(self.config.key1)
@@ -198,6 +199,10 @@ class ManageGame:
                             if event.key == key.key:
                                 self.keys_pressed.append(key)
                                 key.update_line()
+                if event.type == pygame.KEYUP:
+                    if event.key in self.keys_pressed:
+                        self.keys_pressed.remove(event.key)
+                        key.update_line()
                 elif event.type == MUSIC_END_EVENT:
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         

@@ -9,7 +9,7 @@ class Song:
     id: int | None
     
     title: str
-    artist: str
+    type: str
     
     bpm: float 
     duration_seconds: int

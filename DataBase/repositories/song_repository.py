@@ -6,10 +6,10 @@ class SongRepository(BaseRepository):
     
     def create(self, song: Song):
         query = """
-        insert into songs (title, artist, bpm, duration_seconds, file_path, story_difficulty_id)
+        insert into songs (title, type, bpm, duration_seconds, file_path, story_difficulty_id)
         values (?, ?, ?, ?, ?, ?)
         """
-        self.execute(query, (song.title, song.artist, song.bpm, song.duration_seconds, song.file_path, song.story_difficulty_id))
+        self.execute(query, (song.title, song.type, song.bpm, song.duration_seconds, song.file_path, song.story_difficulty_id))
         
     def get_by_id(self, song_id):
         query = """
@@ -101,13 +101,13 @@ class SongRepository(BaseRepository):
     def update_song_by_id(self, song: Song):
         query = """
         update songs
-        set title = ?, artist = ?,
+        set title = ?, type = ?,
         bpm = ?, file_path = ?, duration_seconds = ?,
         story_difficulty_id = ? 
         where id = ?
         """
         
-        self.execute(query, (song.title, song.artist, song.bpm, song.file_path, song.duration_seconds, song.story_difficulty_id, song.id))
+        self.execute(query, (song.title, song.type, song.bpm, song.file_path, song.duration_seconds, song.story_difficulty_id, song.id))
         
     def delete_song(self, song_id):
         query = """

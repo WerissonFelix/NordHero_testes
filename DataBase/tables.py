@@ -48,7 +48,7 @@ def table_songs():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             
             title varchar(255) NOT NULL,
-            artist varchar(255) NOT NULL,
+            type varchar(255) NOT NULL,
             
             bpm FLOAT NOT NULL,
             duration_seconds INTEGER NOT NULL,

@@ -27,6 +27,8 @@ story_difficulty_map = {
     "I Thought I Saw Your Face Today - She & Him (Instrumental)": 2,
     "Fallen Down (Reprise) - Toby Fox (youtube)": 2,
     "Another One Bites The Dust - Instrumental": 2,
+    "I Thought I Saw Your Face Today (FULL)": 2,
+    "She & Him - I Thought I Saw Your Face Today (Acapella_Vocals Only)": 2,
     "Michael Jackson  Billie Jean [Instrumental Version] - HIStoryWorldTourMJ (youtube)": 2,
 
     "Abolish the IRS": 3,

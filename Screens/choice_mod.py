@@ -10,7 +10,7 @@ from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
-def choice_difficulty(user:User, mod:str):
+def choice_mod(user:User):
     """
     Exibe a tela de seleção de dificuldade do jogo.
     
@@ -20,7 +20,7 @@ def choice_difficulty(user:User, mod:str):
     
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
-    from Screens.choice_music import choice_music
+    from Screens.choice_difficulty import choice_difficulty
     
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
@@ -79,26 +79,25 @@ def choice_difficulty(user:User, mod:str):
     dificuldades = difficultyManeger.get_all()
     
     difficulty = dificuldades[0]
-    def set_difficulty(value, selected_value):
+    def set_mod(value, selected_value):
         nonlocal  difficulty
         difficulty = selected_value
     
     choice.add.selector(
-    "Select difficulty :", 
+    "Select Mod :", 
     [
-        (dificuldades[0].name, dificuldades[0]),
-        (dificuldades[1].name, dificuldades[1]),
-        (dificuldades[2].name, dificuldades[2])
+        ("Single Player", "Single Player"),
+        ("2 Players", "2 Players")
     ],
-    onchange=set_difficulty
+    onchange=set_mod
     )
     
     choice.add.label(
-        "Each level has different sounds. The difficulty is based on the speed of the sound.", 
+        "", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
 
-    choice.add.button("Continue", lambda: choice_music(user, difficulty, mod))
+    choice.add.button("Continue", lambda: choice_difficulty(user, difficulty))
     choice.add.button("BACK", home_screen, user, profile_options_menu)        
     choice.mainloop(surface)

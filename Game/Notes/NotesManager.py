@@ -75,6 +75,8 @@ class NoteManager:
                     
                     bottom_y = self.y + self.height
                     
+                    start_hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
+                                                   
                     if note in self.active_long_notes:
                         bottom_y = keys[lane].rect.centery
                         
@@ -88,7 +90,7 @@ class NoteManager:
                     rect_y = self.y
                     rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
                     pygame.draw.rect(screen, (255, 255, 255), rect)    
-                
+                    
                 if rect.colliderect(keys[lane].rect):        
             
                     just_pressed = keys[lane] in keys_pressed
@@ -101,10 +103,14 @@ class NoteManager:
                             
                         elif note in self.active_long_notes: 
                             if is_held_down:
+                                
+                                if start_hitbox.colliderect(keys[lane].rect):
+                                    distance = abs(start_hitbox.centery - keys[lane].rect.centery)     
+                                    is_held_down = keys_held[keys[lane].key]
+                                    self.create_rating(distance, score)
+                                    
                                 if rect_y >= keys[lane].rect.centery:
-                                    self.rating = "Perfect"
                                     score += 100
-                                    self.combo += 1
                                     self.notes_hit += 1
                                     self.notes_to_remove.append(note)
                                     self.active_long_notes.remove(note)

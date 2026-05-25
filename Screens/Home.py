@@ -16,7 +16,7 @@ def home_screen(user : User, profile_menu):
     iniciar o jogo, acessar configurações ou sair do sistema.
     """
     
-    from Screens.choice_difficulty import choice_difficulty
+    from Screens.choice_mod import choice_mod
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
         drawing_mode=IMAGE_MODE_FILL
@@ -69,7 +69,7 @@ def home_screen(user : User, profile_menu):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
 
-    home_menu.add.button("START", choice_difficulty, user)
+    home_menu.add.button("START", choice_mod, user)
     home_menu.add.button("SETTINGS", profile_menu, user)
     home_menu.add.button("EXIT", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

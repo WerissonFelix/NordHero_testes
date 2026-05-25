@@ -16,7 +16,7 @@ pygame.init()
 surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/telainicial.png')
 music = None
-def choice_music(user: User, difficulty: Difficulty):
+def choice_music(user: User, difficulty: Difficulty, mod:str):
     """
     Exibe a tela de seleção de música baseada na dificuldade escolhida.
     
@@ -127,12 +127,20 @@ def choice_music(user: User, difficulty: Difficulty):
                 table.add_row([f"Score: {score.score}", f"Rank: {score.rank}", f"Accuracy: {score.accuracy}%"])  
                                 
         table.cell_border_color = (255, 255, 255)
-                
-    music_selector = choice.add.selector(
-        'MUSIC :',
-        [(song.title, (song.file_path, song.id)) for song in songs],
-        onchange=change_rank           
-    )
+    
+    if mod == "2 Players":
+        music_selector = choice.add.selector(
+            'MUSIC :',
+            [("I thought I saw your face today", ("Game\music\I Thought I Saw Your Face Today (FULL).mp3",14)) ],
+            onchange=change_rank           
+        )
+
+    else:
+        music_selector = choice.add.selector(
+            'MUSIC :',
+            [(song.title, (song.file_path, song.id)) for song in songs],
+            onchange=change_rank           
+        )
 
     choice.add.button("START GAME", start_game, music_selector)
     choice.add.button("BACK", home_screen, user, profile_options_menu)

@@ -65,5 +65,3 @@ def load_and_register_music():
             continue
         else:
             songManager.create(music)
-
-load_and_register_music()

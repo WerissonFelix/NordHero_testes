@@ -36,7 +36,32 @@ class SongRepository(BaseRepository):
         
         return Song(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
     
-    def get_by_story_difficulty_id(self, story_difficulty_id):
+    def get_by_type(self, type: str):
+        query = """
+        select * from songs
+        where type = ?
+        """
+        
+        all_songs = self.fetchall(query, (type,))
+        
+        rows = []
+        
+        for row in all_songs:
+            rows.append(
+                Song(
+                    row[0], 
+                    row[1], 
+                    row[2], 
+                    row[3], 
+                    row[4],
+                    row[5],
+                    row[6]
+                )
+            )
+        
+        return rows   
+    
+    def get_by_story_difficulty_id(self, story_difficulty_id: int):
         query = """
         select * from songs
         where story_difficulty_id = ?

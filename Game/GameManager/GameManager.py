@@ -29,17 +29,17 @@ class ManageGame:
         self.audio = AudioAnalyzer(self.music_path)
         self.notesManage = None
         if mod == "Single Player":  
-            width = self.config.get_screen_width()
-            height = self.config.get_screen_height()
+            self.width = self.config.get_screen_width()
+            self.height = self.config.get_screen_height()
               
         else:
-            width = 1280
-            height = 720
+            self.width = 1280
+            self.height = 720
             
         self.screen = pygame.display.set_mode(
             (
-            width,
-            height
+            self.width,
+            self.height
             )
         )
         
@@ -47,7 +47,7 @@ class ManageGame:
 
         self.background = pygame.transform.scale(
             self.background,
-            (width, height)
+            (self.width, self.height)
         )
         
         self.font = pygame.font.Font(None, 36)
@@ -59,10 +59,10 @@ class ManageGame:
         
         self.default_lane = [
             
-            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, width, height),
-            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, width, height),
-            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, width, height),
-            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, width, height),
+            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, self.width, self.height),
+            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, self.width, self.height),
+            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, self.width, self.height),
+            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),
         ]
         
         self.mixer = None    
@@ -118,10 +118,10 @@ class ManageGame:
         
         self.default_lane = [
             
-            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1),
-            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2),
-            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3),
-            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4),
+            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, self.width, self.height),
+            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, self.width, self.height),
+            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, self.width, self.height),
+            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),
         ]
         
         self.countdown(True)
@@ -182,7 +182,8 @@ class ManageGame:
             self.config.get_note_width(), 
             self.config.get_note_height(),
             (255, 255, 255),
-            adjusted_speed
+            adjusted_speed,
+            self.mod
         )
         
         key1 = pygame.key.name(self.config.key1)

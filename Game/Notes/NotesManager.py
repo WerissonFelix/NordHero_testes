@@ -8,12 +8,13 @@ class NoteManager:
     Responsável por atualizar posições das notas, detectar acertos do jogador
     e calcular pontuação baseada na precisão do timing.
     """
-    def __init__(self,  width, height, color,speed):
+    def __init__(self,  width, height, color, speed, mod):
         self.width = width
         self.height = height
         self.color = color
         self.handled = True
         self.speed = speed
+        self.mod = mod
         self.font = pygame.font.Font(None, 36)
         self.notes_to_remove = []
         
@@ -49,7 +50,7 @@ class NoteManager:
             lane = note[1]
             
             duracao =  note[3] if len(note) > 3 else 0
-
+            limite = 600 if self.mod == "Single Player" else 720
             if note_time - spawn_offset <= current_time:
                 """ 
                 Atualiza a Y de acordo com o tempo em que a nota aparece na música e o 
@@ -131,7 +132,7 @@ class NoteManager:
                                 keys_pressed.remove(keys[lane])
                             except ValueError:
                                 pass
-                elif rect_y > 600:
+                elif rect_y > limite:
                     self.rating = "Miss" 
                     self.combo = self.extra_score = 0
                     self.notes_to_remove.append(note)

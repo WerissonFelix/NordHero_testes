@@ -126,7 +126,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
                                 
         table.cell_border_color = (255, 255, 255)
     
-    if mod == "2 Player":
+    if mod == "2 Players":
         multiSongManeger = MultiplayerSongsRepository()
         songs = multiSongManeger.get_by_difficulty(difficulty.id)
         music_selector = choice.add.selector(
@@ -142,8 +142,6 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
             [(song.title, (song.file_path, song.id)) for song in songs],
             onchange=change_rank           
         )
-    
-    
     
     choice.add.button("START GAME", start_game, music_selector)
     choice.add.button("BACK", home_screen, user, profile_options_menu)

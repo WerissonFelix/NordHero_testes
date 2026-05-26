@@ -22,7 +22,7 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
     from Screens.settings import change_controls_menu
     from Game.GameManager.GameManager import ManageGame
     
-    if mod == "2 Player":
+    if mod == "2 Players":
         surface = pygame.display.set_mode((1280, 720))
     else:
         surface = pygame.display.set_mode((800, 500))

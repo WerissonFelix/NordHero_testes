@@ -82,7 +82,7 @@ def choice_mod(user:User):
     "Select Mod :", 
     [
         ("Single Player", "Single Player"),
-        ("2 Players", "2 Player")
+        ("2 Players", "2 Players")
     ],
     onchange=set_mod
     )

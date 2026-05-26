@@ -63,7 +63,15 @@ class ManageGame:
             LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, self.width, self.height),
             LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, self.width, self.height),
             LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),
+            
+           
         ]
+        
+        if self.mod == "2 Players":
+            self.default_lane.append(LaneManager(780, 500, (255,0,0), (220,0,0), self.config.key5, self.width, self.height))
+            self.default_lane.append(LaneManager(880, 500, (0,255,0), (0,220,0), self.config.key6, self.width, self.height))
+            self.default_lane.append(LaneManager(980, 500, (0,0,255), (0,0,220), self.config.key7, self.width, self.height))
+            self.default_lane.append(LaneManager(1080, 500, (255,255,0), (220,220,0), self.config.key8, self.width, self.height))
         
         self.mixer = None    
         self.count = 4
@@ -77,8 +85,7 @@ class ManageGame:
         Carrega todas as notes antes do jogo começar, está
         separado do método run() porque este carregamento é pesado 
         e demora alguns segundos para calcular todas as notas
-        """ 
-        
+        """  
         text = "Loading"
         time.sleep(2)
         while self.count_to_load < 4:
@@ -101,8 +108,6 @@ class ManageGame:
             
             pygame.display.flip()                
         else:
-            print(self.screen.get_height())
-            print(self.screen.get_width())
             self.notes, self.bpm = self.audio.Generate_map()
             self.countdown()
     
@@ -117,12 +122,22 @@ class ManageGame:
         pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.mod, None, self.config)
         
         self.default_lane = [
-            
+    
             LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, self.width, self.height),
             LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, self.width, self.height),
             LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, self.width, self.height),
             LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),
         ]
+        
+        if self.mod == "2 Players":
+            self.default_lane.append(  
+                LaneManager(780, 500, (255,0,0), (220,0,0), self.config.key5, self.width, self.height))
+            self.default_lane.append(
+                LaneManager(880, 500, (0,255,0), (0,220,0), self.config.key6, self.width, self.height))
+            self.default_lane.append(
+                LaneManager(980, 500, (0,0,255), (0,0,220), self.config.key7, self.width, self.height))
+            self.default_lane.append(
+                LaneManager(1080, 500, (255,255,0), (220,220,0), self.config.key8, self.width, self.height))
         
         self.countdown(True)
         
@@ -147,8 +162,7 @@ class ManageGame:
             img_rect = img.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
             
             self.screen.blit(img, img_rect )
-            
-            
+        
             pygame.display.flip()
             
         self.count = 4
@@ -186,10 +200,20 @@ class ManageGame:
             self.mod
         )
         
-        key1 = pygame.key.name(self.config.key1)
-        key2 = pygame.key.name(self.config.key2)
-        key3 = pygame.key.name(self.config.key3)
-        key4 = pygame.key.name(self.config.key4)
+        keys = [
+            pygame.key.name(self.config.key1),
+            pygame.key.name(self.config.key2),
+            pygame.key.name(self.config.key3),
+            pygame.key.name(self.config.key4),
+        ]
+
+        if self.mod == "2 Players":
+            keys.extend([
+                pygame.key.name(self.config.key5),
+                pygame.key.name(self.config.key6),
+                pygame.key.name(self.config.key7),
+                pygame.key.name(self.config.key8),
+            ])
         
         """ 
         Loop principal do jogo.
@@ -240,16 +264,20 @@ class ManageGame:
                     key.draw_line()
                 
             current_time = self.mixer.music.get_pos() / 1000
-
-            key_1 = self.font.render(key1, True, ((255, 255, 255)))    
-            key_2 = self.font.render(key2, True, ((255, 255, 255)))
-            key_3 = self.font.render(key3, True, ((255, 255, 255)))    
-            key_4 = self.font.render(key4, True, ((255, 255, 255)))    
             
-            self.screen.blit(key_1, (220, 520))
-            self.screen.blit(key_2, (320, 520))
-            self.screen.blit(key_3, (420, 520))
-            self.screen.blit(key_4, (520, 520))
+            
+            for i, key in enumerate(keys):
+                text = self.font.render(key, True, (255, 255, 255))
+                
+                if i < 4:
+                    x = 220 + (i * 100)
+
+                else:
+                    x = 820 + ((i - 4) * 100)
+
+                y = 520
+
+                self.screen.blit(text, (x, y))
         
             self.score, rating, combo, extra, self.keys_pressed = self.notesManage.while_running(
                 self.score,

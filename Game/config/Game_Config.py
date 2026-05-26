@@ -13,6 +13,12 @@ class GameConfig:
         self.key3 = pygame.K_d
         self.key4 = pygame.K_f 
         
+        self.key5 = pygame.K_h
+        self.key6 = pygame.K_j
+        self.key7 = pygame.K_k
+        self.key8 = pygame.K_l
+        
+        
         self.screen_width = 800
         self.screen_height = 600
         self.FPS = 60

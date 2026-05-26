@@ -92,12 +92,22 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
         if selected_music[0] is None:
             selected_music[0] = music_selector.get_value()[0][1][0]
         
-        gameManager = ManageGame(user, selected_music[0], mod)
+
+        if mod == "2 Players":
+            multi_song = multiSongManeger.get_by_id(music_selector.get_value()[0][1][1])
+            instrumental_song = songManeger.get_by_id(multi_song.instrumental_song)
+            vocal_song = songManeger.get_by_id(multi_song.vocal_song)
+            
+            gameManager = ManageGame(user, instrumental_song.file_path, mod, vocal_song.file_path)
+        else:
+            gameManager = ManageGame(user, selected_music[0], mod)
+            
         gameManager.load_to_run()
     
     chartManeger = SongChartsRepository()
     songManeger = SongRepository()
     scoreManeger = ScoreRepository()
+    multiSongManeger = MultiplayerSongsRepository()
     
     table = choice.add.table()
     def change_rank(selected, value):
@@ -127,7 +137,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
         table.cell_border_color = (255, 255, 255)
     
     if mod == "2 Players":
-        multiSongManeger = MultiplayerSongsRepository()
+        
         songs = multiSongManeger.get_by_difficulty(difficulty.id)
         music_selector = choice.add.selector(
             'MUSIC :',

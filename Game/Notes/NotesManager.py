@@ -65,7 +65,10 @@ class NoteManager:
                 time_diff = note_time - current_time
                 self.y = 400 - (time_diff * self.speed)
 
-                self.x = 200 + lane * 100
+                if lane >= 4:
+                    self.x = 800 + (lane - 4)  * 100
+                else:
+                    self.x = 200 + lane * 100 
 
                 altura_base = self.height
                 if duracao > 0:

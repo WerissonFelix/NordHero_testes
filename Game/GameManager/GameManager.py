@@ -14,11 +14,12 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user, music_path, mod):
+    def __init__(self, user, music_path, mod, second_music_path=None):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
         self.music_path = music_path
+        self.second_music_path = second_music_path
         self.textManage  = TextManager()
         self.clock = pygame.time.Clock()
         current_dir = os.path.dirname(__file__)
@@ -26,13 +27,15 @@ class ManageGame:
     
         self.mod = mod
             
-        self.audio = AudioAnalyzer(self.music_path)
         self.notesManage = None
+        
         if mod == "Single Player":  
             self.width = self.config.get_screen_width()
             self.height = self.config.get_screen_height()
+            self.audio = AudioAnalyzer(self.music_path, self.mod)
               
         else:
+            self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
             self.width = 1280
             self.height = 720
             
@@ -62,8 +65,7 @@ class ManageGame:
             LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, self.width, self.height),
             LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, self.width, self.height),
             LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, self.width, self.height),
-            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),
-            
+            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),    
            
         ]
         
@@ -98,7 +100,7 @@ class ManageGame:
             if self.count_to_load == 4:
                 text = "Please, wait"
             
-            self.screen.fill((0, 0, 0))  
+            self.screen.fill((0, 0, 0))
                 
             img = self.font.render(text, True, (255, 255, 255))
         
@@ -106,7 +108,7 @@ class ManageGame:
             
             self.screen.blit(img, img_rect )
             
-            pygame.display.flip()                
+            pygame.display.flip()
         else:
             self.notes, self.bpm = self.audio.Generate_map()
             self.countdown()

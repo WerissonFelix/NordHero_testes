@@ -82,6 +82,8 @@ def table_multiplayer_songs():
             instrumental_song INTEGER NOT NULL,
             vocal_song INTEGER NOT NULL,
             
+            bpm FLOAT NOT NULL,
+            duration_seconds INTEGER NOT NULL,
             file_path TEXT NOT NULL,
             
             story_difficulty_id INTEGER NOT NULL,

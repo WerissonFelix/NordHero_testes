@@ -63,6 +63,37 @@ def table_songs():
     cursor.execute(query)
     connection.commit()
 
+def table_multiplayer_songs():
+    """ 
+    Cria a tabela de músicas para o modo multiplayer.
+    
+    Armazena dados específicos para o modo multiplayer:
+    - título
+    - caminho do arquivo
+    - referência para as músicas instrumental e vocal usadas no modo multiplayer
+    - referência para a dificuldade usada no modo multiplayer
+    """  
+    query = """
+        CREATE TABLE IF NOT EXISTS multiplayer_songs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            
+            title varchar(255) NOT NULL,
+            
+            instrumental_song INTEGER NOT NULL,
+            vocal_song INTEGER NOT NULL,
+            
+            file_path TEXT NOT NULL,
+            
+            story_difficulty_id INTEGER NOT NULL,
+            
+            foreign KEY(story_difficulty_id) REFERENCES difficulties(id)    
+            foreign KEY(instrumental_song) REFERENCES songs(id),
+            foreign KEY(vocal_song) REFERENCES songs(id)
+        )
+    """
+    cursor.execute(query)
+    connection.commit()
+    
 def table_difficulties():
     """
     Cria a tabela de dificuldades.
@@ -159,3 +190,4 @@ table_songs()
 table_difficulties()
 table_song_charts()
 table_socores()
+table_multiplayer_songs()

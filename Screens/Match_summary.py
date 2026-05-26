@@ -7,6 +7,7 @@ from DataBase.repositories.score_repository import ScoreRepository
 from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.song_chart_repository import SongChartsRepository
 
+from Screens import choice_mod
 from models.score import Score
 from models.user import User
 
@@ -24,7 +25,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
-    from Screens.choice_difficulty import choice_difficulty
+    from Screens.choice_mod import choice_mod
     
     fundo = BaseImage(
         image_path="./Images/Summary.png",
@@ -98,6 +99,6 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     score_match = Score(None, user.id, chart.id , score, accuracy, raking)
     scoreManager.create(score_match)
     
-    choice.add.button("CHOOCE ANOTHER SONG", choice_difficulty, user)
+    choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
     choice.mainloop(surface)

@@ -92,7 +92,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
         if selected_music[0] is None:
             selected_music[0] = music_selector.get_value()[0][1][0]
         
-        gameManager = ManageGame(user,selected_music[0])
+        gameManager = ManageGame(user, selected_music[0], mod)
         gameManager.load_to_run()
     
     chartManeger = SongChartsRepository()

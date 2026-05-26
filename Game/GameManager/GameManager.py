@@ -59,7 +59,7 @@ class ManageGame:
         self.count_to_load = -1
         self.is_paused = False
         
-    def load_to_run(self, mod):    
+    def load_to_run(self):    
         """
         Carrega todas as notes antes do jogo começar, está
         separado do método run() porque este carregamento é pesado 

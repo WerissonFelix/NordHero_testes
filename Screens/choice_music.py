@@ -7,6 +7,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 from DataBase.repositories.song_chart_repository import SongChartsRepository
 from DataBase.repositories.song_repository import SongRepository
+from DataBase.repositories.multiplayer_songs_repository import MultiplayerSongsRepository
 from DataBase.repositories.score_repository import ScoreRepository
 
 from models.difficulty import Difficulty
@@ -98,7 +99,6 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
     songManeger = SongRepository()
     scoreManeger = ScoreRepository()
     
-    songs = songManeger.get_by_type_and_difficulty(mod, difficulty.id)
     table = choice.add.table()
     def change_rank(selected, value):
         global music
@@ -126,12 +126,24 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
                                 
         table.cell_border_color = (255, 255, 255)
     
-  
-    music_selector = choice.add.selector(
-        'MUSIC :',
-        [(song.title, (song.file_path, song.id)) for song in songs],
-        onchange=change_rank           
-    )
+    if mod == "2 Player":
+        multiSongManeger = MultiplayerSongsRepository()
+        songs = multiSongManeger.get_by_difficulty(difficulty.id)
+        music_selector = choice.add.selector(
+            'MUSIC :',
+            [(song.title, (song.file_path, song.id)) for song in songs ],
+        )
+        
+    else:
+        print(mod)
+        songs = songManeger.get_by_type_and_difficulty("Instrumental", difficulty.id)    
+        music_selector = choice.add.selector(
+            'MUSIC :',
+            [(song.title, (song.file_path, song.id)) for song in songs],
+            onchange=change_rank           
+        )
+    
+    
     
     choice.add.button("START GAME", start_game, music_selector)
     choice.add.button("BACK", home_screen, user, profile_options_menu)

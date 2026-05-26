@@ -4,7 +4,6 @@ import pygame_menu
 from pygame_menu.locals import ALIGN_RIGHT
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
-from DataBase.repositories.difficulty_repository import DifficultyRepository
 from models.user import User
 
 pygame.init()
@@ -73,21 +72,17 @@ def choice_mod(user:User):
     lbl_nome.set_float(True)
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
-    
-    difficultyManeger = DifficultyRepository()
-    
-    dificuldades = difficultyManeger.get_all()
-    
-    difficulty = dificuldades[0]
+
+    mod = "Single Player"
     def set_mod(value, selected_value):
-        nonlocal  difficulty
-        difficulty = selected_value
+        nonlocal  mod
+        mod = selected_value
     
     choice.add.selector(
     "Select Mod :", 
     [
         ("Single Player", "Single Player"),
-        ("2 Players", "2 Players")
+        ("2 Players", "2 Player")
     ],
     onchange=set_mod
     )
@@ -98,6 +93,6 @@ def choice_mod(user:User):
         font_name=pygame_menu.font.FONT_MUNRO
     )
 
-    choice.add.button("Continue", lambda: choice_difficulty(user, difficulty))
+    choice.add.button("Continue", lambda: choice_difficulty(user, mod))
     choice.add.button("BACK", home_screen, user, profile_options_menu)        
     choice.mainloop(surface)

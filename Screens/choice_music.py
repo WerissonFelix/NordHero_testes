@@ -98,9 +98,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
     songManeger = SongRepository()
     scoreManeger = ScoreRepository()
     
-    all_charts = chartManeger.get_all_charts_by_difficulty(difficulty.id)
-    
-    songs = songManeger.get_by_story_difficulty_id(difficulty.id)
+    songs = songManeger.get_by_type_and_difficulty(mod, difficulty.id)
     table = choice.add.table()
     def change_rank(selected, value):
         global music
@@ -128,20 +126,13 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
                                 
         table.cell_border_color = (255, 255, 255)
     
-    if mod == "2 Players":
-        music_selector = choice.add.selector(
-            'MUSIC :',
-            [("I thought I saw your face today", ("Game\music\I Thought I Saw Your Face Today (FULL).mp3",14)) ],
-            onchange=change_rank           
-        )
-
-    else:
-        music_selector = choice.add.selector(
-            'MUSIC :',
-            [(song.title, (song.file_path, song.id)) for song in songs],
-            onchange=change_rank           
-        )
-
+  
+    music_selector = choice.add.selector(
+        'MUSIC :',
+        [(song.title, (song.file_path, song.id)) for song in songs],
+        onchange=change_rank           
+    )
+    
     choice.add.button("START GAME", start_game, music_selector)
     choice.add.button("BACK", home_screen, user, profile_options_menu)
     choice.mainloop(surface)

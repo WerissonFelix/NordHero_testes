@@ -88,7 +88,7 @@ def table_multiplayer_songs():
             
             story_difficulty_id INTEGER NOT NULL,
             
-            foreign KEY(story_difficulty_id) REFERENCES difficulties(id)    
+            foreign KEY(story_difficulty_id) REFERENCES difficulties(id),    
             foreign KEY(instrumental_song) REFERENCES songs(id),
             foreign KEY(vocal_song) REFERENCES songs(id)
         )
@@ -193,3 +193,4 @@ table_difficulties()
 table_song_charts()
 table_socores()
 table_multiplayer_songs()
+

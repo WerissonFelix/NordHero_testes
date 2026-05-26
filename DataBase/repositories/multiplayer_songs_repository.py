@@ -113,3 +113,30 @@ class MultiplayerSongsRepository(BaseRepository):
         
         return rows
     
+    def get_all(self):
+        query = """
+        select * from multiplayer_songs
+        """
+        
+        all_songs = self.fetchall(query)
+        
+        rows = []
+        
+        if len(all_songs) == 0:
+            return None
+        
+        for row in all_songs:
+            rows.append(
+                MultiplayerSong(
+                    row[0],
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4],
+                    row[5],
+                    row[6],
+                    row[7]
+                )
+            )
+        
+        return rows

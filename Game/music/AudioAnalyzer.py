@@ -23,7 +23,7 @@ class AudioAnalyzer:
         self.times = []
         self.lanes = []
         self.lanes_notes = {0: [], 1: [], 2: [], 3: []}
-    def Generate_map(self):
+    def Generate_map(self, mod):
         
         
         """

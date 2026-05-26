@@ -14,7 +14,7 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user,music_path):
+    def __init__(self, user, music_path, mod):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
@@ -23,20 +23,33 @@ class ManageGame:
         self.clock = pygame.time.Clock()
         current_dir = os.path.dirname(__file__)
         bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaDoJogo.png")
+    
+        self.mod = mod
+            
+        self.audio = AudioAnalyzer(self.music_path)
+        self.notesManage = None
+        if mod == "Single Player":  
+            width = self.config.get_screen_width()
+            height = self.config.get_screen_height()
+              
+        else:
+            width = 1280
+            height = 720
+            
+        self.screen = pygame.display.set_mode(
+            (
+            width,
+            height
+            )
+        )
+        
         self.background = pygame.image.load(bg_path)
 
         self.background = pygame.transform.scale(
             self.background,
-            (self.config.get_screen_width(), self.config.get_screen_height())
+            (width, height)
         )
-        self.audio = AudioAnalyzer(self.music_path)
-        self.notesManage = None
-        self.screen = pygame.display.set_mode(
-            (
-            self.config.get_screen_width(),
-            self.config.get_screen_height()
-            )
-        )      
+        
         self.font = pygame.font.Font(None, 36)
         self.running = False
         
@@ -46,10 +59,10 @@ class ManageGame:
         
         self.default_lane = [
             
-            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1),
-            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2),
-            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3),
-            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4),
+            LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, width, height),
+            LaneManager(280,500, (0,255,0), (0,220,0), self.config.key2, width, height),
+            LaneManager(380,500, (0,0,255), (0,0,220), self.config.key3, width, height),
+            LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, width, height),
         ]
         
         self.mixer = None    
@@ -81,11 +94,15 @@ class ManageGame:
             self.screen.fill((0, 0, 0))  
                 
             img = self.font.render(text, True, (255, 255, 255))
+        
+            img_rect = img.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
             
-            self.screen.blit(img, (350,300))
+            self.screen.blit(img, img_rect )
             
             pygame.display.flip()                
         else:
+            print(self.screen.get_height())
+            print(self.screen.get_width())
             self.notes, self.bpm = self.audio.Generate_map()
             self.countdown()
     
@@ -97,7 +114,7 @@ class ManageGame:
         """
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, None, self.config)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.mod, None, self.config)
         
         self.default_lane = [
             
@@ -127,7 +144,10 @@ class ManageGame:
             
             img = self.font.render(text, True, (255, 255, 255))
             
-            self.screen.blit(img, (350,300))
+            img_rect = img.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
+            
+            self.screen.blit(img, img_rect )
+            
             
             pygame.display.flip()
             

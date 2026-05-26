@@ -8,7 +8,7 @@ from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((800, 500))
 
-def pause_menu(user: User, music_path, total_notes, notes_hit, score, setting_menu = None, config = None):
+def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setting_menu = None, config = None):
     """
     Exibe o menu de pausa durante o jogo.
     
@@ -22,6 +22,11 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, setting_me
     from Screens.settings import change_controls_menu
     from Game.GameManager.GameManager import ManageGame
     
+    if mod == "2 Player":
+        surface = pygame.display.set_mode((1280, 720))
+    else:
+        surface = pygame.display.set_mode((800, 500))
+        
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
@@ -50,7 +55,7 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, setting_me
 
         theme=theme)
     
-    manager = ManageGame(user,music_path)
+    manager = ManageGame(user, music_path, mod)
     
     def resume_game():
         nonlocal setting_menu

@@ -236,10 +236,21 @@ class ManageGame:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.pause_game(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit(), self.score)
-                        key1 = pygame.key.name(self.config.key1)
-                        key2 = pygame.key.name(self.config.key2)
-                        key3 = pygame.key.name(self.config.key3)
-                        key4 = pygame.key.name(self.config.key4)
+                         
+                        keys = [
+                            pygame.key.name(self.config.key1),
+                            pygame.key.name(self.config.key2),
+                            pygame.key.name(self.config.key3),
+                            pygame.key.name(self.config.key4),
+                        ]
+
+                        if self.mod == "2 Players":
+                            keys.extend([
+                                pygame.key.name(self.config.key5),
+                                pygame.key.name(self.config.key6),
+                                pygame.key.name(self.config.key7),
+                                pygame.key.name(self.config.key8),
+                            ])
                     else:
                         for key in self.default_lane:
                             if event.key == key.key:

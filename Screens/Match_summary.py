@@ -62,15 +62,16 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         
         categorias = ["Miss", "Bad", "Good", "Perfect"]
         
-        player1 = [30, 40, 50, 100]
-        player2 = [0, 10, 70, 140]
+        player1 = [notes_hit["Miss"], notes_hit["Bad"], notes_hit["Good"], notes_hit["Perfect"]]
+        
+        #player2 = [0, 10, 70, 140]
         
         N = len(categorias)
         
         angulos = np.linspace(0 , 2*np.pi, N, endpoint=False).tolist()
         
         player1 += player1[:1]
-        player2 += player2[:1]
+        #player2 += player2[:1]
         angulos += angulos[:1]
         
         fig, ax = plt.subplots(figsize=(3, 3), subplot_kw=dict(polar=True))
@@ -79,11 +80,12 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         ax.fill(angulos, player1, alpha=0.9)
         
         #ax.plot(angulos, player2, linewidth = 2, label = "Player 2")
-        ax.fill(angulos, player2, alpha=0.9)
+        #ax.fill(angulos, player2, alpha=0.9)
         
         ax.set_xticks(angulos[:-1])
         ax.set_xticklabels(categorias, fontsize=12, fontweight='bold', fontfamily='sans-serif', color='white')
-        ax.set_ylim(0, max(max(player1), max(player2)) * 1.05)
+        #ax.set_ylim(0, max(max(player1), max(player2)) * 1.05)
+        ax.set_ylim(0, max(player1) * 1.05)
       
         
         plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
@@ -119,7 +121,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         else:
             return "D"
         
-    total = notes_hit["Miss"] + notes_hit["Bad"] + notes_hit["Good"] + notes_hit["Perfect"]
+    total = notes_hit["Bad"] + notes_hit["Good"] + notes_hit["Perfect"]
     
     accuracy = round((total / total_notes) * 100) if total_notes > 0 else 0    
     

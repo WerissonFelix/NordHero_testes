@@ -62,32 +62,33 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         
         categorias = ["Miss", "Bad", "Good", "Perfect"]
         
-        player1 = [notes_hit["Miss"], notes_hit["Bad"], notes_hit["Good"], notes_hit["Perfect"]]
-        
-        #player2 = [0, 10, 70, 140]
-        
+        player1 = [notes_hit[0]["Miss"], notes_hit[0]["Bad"], notes_hit[0]["Good"], notes_hit[0]["Perfect"]]
+    
         N = len(categorias)
         
         angulos = np.linspace(0 , 2*np.pi, N, endpoint=False).tolist()
         
         player1 += player1[:1]
-        #player2 += player2[:1]
+        
         angulos += angulos[:1]
         
         fig, ax = plt.subplots(figsize=(3, 3), subplot_kw=dict(polar=True))
         
-        #ax.plot(angulos, player1, linewidth = 2, label = "Player 1")
         ax.fill(angulos, player1, alpha=0.9)
         
-        #ax.plot(angulos, player2, linewidth = 2, label = "Player 2")
-        #ax.fill(angulos, player2, alpha=0.9)
-        
+        if len(notes_hit) > 1:
+            player2 = [notes_hit[1]["Miss"], notes_hit[1]["Bad"], notes_hit[1]["Good"], notes_hit[1]["Perfect"]]
+            player2 += player2[:1]
+            ax.fill(angulos, player2, alpha=0.9)
+            
+            limite = max(max(player1), max(player2)) * 1.05
+        else:
+            limite = max(player1) * 1.05
+            
         ax.set_xticks(angulos[:-1])
         ax.set_xticklabels(categorias, fontsize=12, fontweight='bold', fontfamily='sans-serif', color='white')
-        #ax.set_ylim(0, max(max(player1), max(player2)) * 1.05)
-        ax.set_ylim(0, max(player1) * 1.05)
+        ax.set_ylim(0, limite)
       
-        
         plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
         
         fig.patch.set_alpha(0)
@@ -121,26 +122,41 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         else:
             return "D"
         
-    total = notes_hit["Bad"] + notes_hit["Good"] + notes_hit["Perfect"]
+    total_player1 = sum(notes_hit[0].values())
     
-    accuracy = round((total / total_notes) * 100) if total_notes > 0 else 0    
+    if len(notes_hit) > 1:
+        total_player2 = sum(notes_hit[1].values())
+        
+        hit_notes_together = total_player1 + total_player2
+        accuracy = round((hit_notes_together / total_notes) * 100) if total_notes > 0 else 0   
+        raking = calculete_raking(accuracy)
+                                   
+        mensagem_total_notes = f"Total notes: {total_notes}"
+        mensagem_notes_hit = f"Hit notes together {hit_notes_together} | P1: {total_player1}  P2: {total_player2}"
+        mensagem_accuracy = f"Raking: {raking},  {accuracy}% accuracy"
+    else:
+        accuracy = round((total_player1 / total_notes) * 100) if total_notes > 0 else 0   
+        raking = calculete_raking(accuracy)
+        
+        mensagem_total_notes = f"Total notes: {total_notes}"
+        mensagem_notes_hit = f"Hit notes: {total_player1}"
+        mensagem_accuracy = f"Raking: {raking},  {accuracy}% accuracy"
     
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
     lbl_total_notes = choice.add.label(
-        f"Total notes: {total_notes}", 
+        f"{mensagem_total_notes}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
     
     lbl_notes_hit = choice.add.label(
-        f"Hit notes: {total}", 
+        f"{mensagem_notes_hit}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
-    raking = calculete_raking(accuracy)
     
     lbl_raking = choice.add.label(
-        f"Raking: {raking},  {accuracy}% accuracy", 
+        f"{mensagem_accuracy}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
@@ -170,7 +186,6 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
 
         choice.update(events)
         choice.draw(screen_surface)
-
-        
+    
         screen_surface.blit(graph_surface, (10, 10))
         pygame.display.flip()

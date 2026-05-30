@@ -118,8 +118,10 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
             return "N/A"
         else:
             return "D"
+        
+    total = notes_hit["Miss"] + notes_hit["Bad"] + notes_hit["Good"] + notes_hit["Perfect"]
     
-    accuracy = round((notes_hit / total_notes) * 100) if total_notes > 0 else 0    
+    accuracy = round((total / total_notes) * 100) if total_notes > 0 else 0    
     
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
     lbl_total_notes = choice.add.label(
@@ -129,7 +131,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     )
     
     lbl_notes_hit = choice.add.label(
-        f"Hit notes: {notes_hit}", 
+        f"Hit notes: {total}", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )

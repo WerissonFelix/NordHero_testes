@@ -12,7 +12,7 @@ from models.score import Score
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+screen_surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/Summary.png')
 music = ""
 def match_summary(user: User, total_notes, notes_hit, file_path, score):
@@ -26,7 +26,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.choice_mod import choice_mod
-    
+            
     fundo = BaseImage(
         image_path="./Images/Summary.png",
         drawing_mode=IMAGE_MODE_FILL
@@ -54,7 +54,57 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         500,
         theme=theme
         )
-    
+    def criar_grafico_radar():
+        import matplotlib.pyplot as plt
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        import numpy as np
+        
+        categorias = ["Miss", "Bad", "Good", "Perfect"]
+        
+        player1 = [30, 40, 50, 100]
+        player2 = [0, 10, 70, 140]
+        
+        N = len(categorias)
+        
+        angulos = np.linspace(0 , 2*np.pi, N, endpoint=False).tolist()
+        
+        player1 += player1[:1]
+        player2 += player2[:1]
+        angulos += angulos[:1]
+        
+        fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True))
+        
+        ax.plot(angulos, player1, linewidth = 2, label = "Player 1")
+        ax.fill(angulos, player1, alpha=0.25)
+        
+        ax.plot(angulos, player2, linewidth = 2, label = "Player 2")
+        ax.fill(angulos, player2, alpha=0.25)
+        
+        ax.set_xticks(angulos[:-1])
+        ax.set_xticklabels(categorias)
+        ax.set_ylim(0, max(max(player1), max(player2)) + 10)
+      
+        
+        plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
+        
+        fig.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+        
+        canvas = FigureCanvasAgg(fig)
+        canvas.draw()
+        
+        renderer = canvas.get_renderer()
+        
+        raw_data = renderer.buffer_rgba()
+        
+        size = canvas.get_width_height()
+        
+        graph_surface = pygame.image.frombuffer(raw_data, size, "RGBA")
+        
+        plt.close(fig)
+        
+        return graph_surface
+                 
     def calculete_raking(user_accuracy):
         if user_accuracy >= 95 :
             return "S"  
@@ -101,4 +151,20 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     
     choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
-    choice.mainloop(surface)
+    
+    choice.enable()
+    graph_surface = criar_grafico_radar()
+    while True:
+        events = pygame.event.get()
+
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+
+        choice.update(events)
+        choice.draw(screen_surface)
+
+        
+        screen_surface.blit(graph_surface, (0, 0))
+        pygame.display.flip()

@@ -49,11 +49,12 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     choice = pygame_menu.Menu(
-        f'Connected as: {user.name}',
+        f'',
         800,
         500,
         theme=theme
         )
+    
     def criar_grafico_radar():
         import matplotlib.pyplot as plt
         from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -72,23 +73,24 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         player2 += player2[:1]
         angulos += angulos[:1]
         
-        fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True))
+        fig, ax = plt.subplots(figsize=(3, 3), subplot_kw=dict(polar=True))
         
-        ax.plot(angulos, player1, linewidth = 2, label = "Player 1")
-        ax.fill(angulos, player1, alpha=0.25)
+        #ax.plot(angulos, player1, linewidth = 2, label = "Player 1")
+        ax.fill(angulos, player1, alpha=0.9)
         
-        ax.plot(angulos, player2, linewidth = 2, label = "Player 2")
-        ax.fill(angulos, player2, alpha=0.25)
+        #ax.plot(angulos, player2, linewidth = 2, label = "Player 2")
+        ax.fill(angulos, player2, alpha=0.9)
         
         ax.set_xticks(angulos[:-1])
-        ax.set_xticklabels(categorias)
-        ax.set_ylim(0, max(max(player1), max(player2)) + 10)
+        ax.set_xticklabels(categorias, fontsize=12, fontweight='bold', fontfamily='sans-serif', color='white')
+        ax.set_ylim(0, max(max(player1), max(player2)) * 1.05)
       
         
         plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
         
         fig.patch.set_alpha(0)
         ax.patch.set_alpha(0)
+        ax.grid(False)
         
         canvas = FigureCanvasAgg(fig)
         canvas.draw()
@@ -166,5 +168,5 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
         choice.draw(screen_surface)
 
         
-        screen_surface.blit(graph_surface, (0, 0))
+        screen_surface.blit(graph_surface, (10, 10))
         pygame.display.flip()

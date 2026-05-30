@@ -28,7 +28,7 @@ class NoteManager:
 
         self.x = 0
         self.y = 0  
-        self.notes_hit = 0
+        self.notes_hit = {"Miss": 0, "Bad": 0, "Good": 0, "Perfect": 0}
         self.combo = 0
         self.extra_score = 0
         self.active_long_notes = []
@@ -107,19 +107,17 @@ class NoteManager:
                             
                         elif note in self.active_long_notes: 
                             if is_held_down:
-                                
                                 if start_hitbox.colliderect(keys[lane].rect):
                                     distance = abs(start_hitbox.centery - keys[lane].rect.centery)     
                                     is_held_down = keys_held[keys[lane].key]
                                     self.create_rating(distance, score)
                                     
                                 if rect_y >= keys[lane].rect.centery:
-                                    score += 100
-                                    self.notes_hit += 1
                                     self.notes_to_remove.append(note)
                                     self.active_long_notes.remove(note)
                             else:
                                 self.rating = "Miss"
+                                self.notes_hit["Miss"] += 1
                                 self.combo = 0
                                 self.notes_to_remove.append(note)
                                 self.active_long_notes.remove(note)
@@ -128,8 +126,7 @@ class NoteManager:
                             distance = abs(rect.centery - keys[lane].rect.centery) 
                                                        
                             score = self.create_rating(distance, score)
-                        
-                            self.notes_hit +=1                     
+                                           
                             self.notes_to_remove.append(note)
                             try:
                                 keys_pressed.remove(keys[lane])
@@ -137,6 +134,7 @@ class NoteManager:
                                 pass
                 elif rect_y > limite:
                     self.rating = "Miss" 
+                    self.notes_hit["Miss"] += 1
                     self.combo = self.extra_score = 0
                     self.notes_to_remove.append(note)
                     
@@ -152,6 +150,7 @@ class NoteManager:
         if distance <= 12:
             self.rating = "Perfect" 
             score += 100
+            self.notes_hit["Perfect"] += 1
             self.combo += 1
             self.extra_score = 0
             if  1 < self.combo <= 5 :   
@@ -165,10 +164,12 @@ class NoteManager:
             self.rating = "Good"
             score += 50
             self.combo = self.extra_score = 0
+            self.notes_hit["Good"] += 1
         elif distance >= 19:
             self.rating = "Bad"
             score += 25 
             self.combo = self.extra_score = 0
+            self.notes_hit["Bad"] += 1
         return score
     
     def get_notes_hit(self):

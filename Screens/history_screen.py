@@ -69,30 +69,49 @@ def history_screen(user : User):
     history_menu.add.label("")
     
     labels = []
-    
+    selectors = []
+    def clear_lists(list):
+        if len(list) > 0:
+            for i in list:
+                history_menu.remove_widget(i)
+            list.clear()
+        else:
+            pass
+    def create_select_difficulty():
+        selector_difficulty = history_menu.add.selector(
+            "Difficulty:", 
+        [
+            ("---", "-"),
+            ("Easy", 1),
+            ("Normal", 2),
+            ("Hard", 3)
+        ], onchange=create_history
+    )
+        selectors.append(selector_difficulty)
     def create_history(selected, value):
-        all_scores = scoreManager.get_all_by_user_id(user.id)    
-        if value == "Recentes":
+        all_scores = scoreManager.get_all_by_user_id(user.id)  
+        if value == "-":
+            return None
+           
+        if value == "Geral":
+            final_scores = all_scores[:]
+        elif value == "Recentes":
             final_scores =  sorted(all_scores, key=lambda score: score.id, reverse=True)[:5]
         elif value == "Melhores Scores":
             final_scores = sorted(all_scores, key=lambda score: score.score, reverse=True)[:5]
-        elif value == "Melhores Scores":
-            print(value)
+            clear_lists(selectors)
         elif value == "music":
             print(value)
         elif value == "dificuldade":
-            print(value)
-        else:
-            final_scores = all_scores[:]
+            clear_lists(labels)
+            create_select_difficulty()
+            return None
+
+        if type(value) == int:
+            final_scores = scoreManager.get_by_user_difficulty(user.id, value)
         
-        if len(labels) > 0:
-            print(labels)
-            for label in labels:
-                history_menu.remove_widget(label)
-            labels.clear()
-        else:
-            pass
-            
+        clear_lists(labels)        
+        
         for score in final_scores:
             chart = chartManager.get_by_id(score.chart_id)
             song = songManager.get_by_id(chart.song_id)
@@ -114,11 +133,12 @@ def history_screen(user : User):
             
     choice_history = history_menu.add.selector(
         "History: ",
-        [("Geral", "Geral"),
+        [("----", "-"),
+         ("Geral", "Geral"),
          ("Recentes", "Recentes"),
          ("Melhores Scores", "Melhores Scores"),
-         ("Por music", "music"),
-         ("Por dificuldade", "dificuldade")  
+         ("Por dificuldade", "dificuldade"),
+         ("Por music", "music")
         ],
         onchange=create_history
     )

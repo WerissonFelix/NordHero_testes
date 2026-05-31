@@ -59,15 +59,69 @@ def history_screen(user : User):
     scoreManager = ScoreRepository()
     songManager = SongRepository()
     chartManager = SongChartsRepository()
-    
-    all_scores = scoreManager.get_all_by_user_id(user.id)
-    
+              
+    all_scores = scoreManager.get_all_by_user_id(user.id)  
     history_menu.add.label("")
     history_menu.add.label("")
     history_menu.add.label("")
     history_menu.add.label("HISTORICO DE PARTIDAS", font_size=30, font_name=pygame_menu.font.FONT_MUNRO)
     history_menu.add.label(f"TOTAL DE PARTIDAS: {len(all_scores)}", font_size=30, font_name=pygame_menu.font.FONT_MUNRO)
     history_menu.add.label("")
+    
+    labels = []
+    
+    def create_history(selected, value):
+        all_scores = scoreManager.get_all_by_user_id(user.id)    
+        if value == "Recentes":
+            final_scores =  sorted(all_scores, key=lambda score: score.id, reverse=True)[:5]
+        elif value == "Melhores Scores":
+            final_scores = sorted(all_scores, key=lambda score: score.score, reverse=True)[:5]
+        elif value == "Melhores Scores":
+            print(value)
+        elif value == "music":
+            print(value)
+        elif value == "dificuldade":
+            print(value)
+        else:
+            final_scores = all_scores[:]
+        
+        if len(labels) > 0:
+            print(labels)
+            for label in labels:
+                history_menu.remove_widget(label)
+            labels.clear()
+        else:
+            pass
+            
+        for score in final_scores:
+            chart = chartManager.get_by_id(score.chart_id)
+            song = songManager.get_by_id(chart.song_id)
+            
+            texto = (
+                f"{song.title[:20]:<20}"
+                f"{score.score:>8}"
+                f"{chart.difficulty_id:>6}"
+                f"{score.accuracy:>8.1f}%"
+            )   
+            
+            label = history_menu.add.label(
+                f"{texto}",
+                font_size=30,
+                font_name=pygame_menu.font.FONT_MUNRO    
+            )       
+            
+            labels.append(label)
+            
+    choice_history = history_menu.add.selector(
+        "History: ",
+        [("Geral", "Geral"),
+         ("Recentes", "Recentes"),
+         ("Melhores Scores", "Melhores Scores"),
+         ("Por music", "music"),
+         ("Por dificuldade", "dificuldade")  
+        ],
+        onchange=create_history
+    )
     
     history_menu.add.label(
         'MÚSICA                    SCORE      DIF      ACC',
@@ -79,24 +133,7 @@ def history_screen(user : User):
         '----------------------------------------------------',
         font_size=28,
         font_name=pygame_menu.font.FONT_MUNRO
-    )
-    for score in all_scores:
-        chart = chartManager.get_by_id(score.chart_id)
-        song = songManager.get_by_id(chart.song_id)
-        
-        texto = (
-            f"{song.title[:20]:<20}"
-            f"{score.score:>8}"
-            f"{chart.difficulty_id:>6}"
-            f"{score.accuracy:>8.1f}%"
-        )   
-        
-        history_menu.add.label(
-            f"{texto}",
-            font_size=30,
-            font_name=pygame_menu.font.FONT_MUNRO    
-        )
-        
+    )    
     history_menu.add.label("")
     
     history_menu.add.button("EXIT", home_screen, user, profile_options_menu)

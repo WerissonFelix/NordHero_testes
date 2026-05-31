@@ -50,7 +50,7 @@ def history_screen(user : User):
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
     history_menu = pygame_menu.Menu(
-        f'Connected as: {user.name}',
+        f'',
         800,
         500,
         theme=theme
@@ -60,33 +60,44 @@ def history_screen(user : User):
     songManager = SongRepository()
     chartManager = SongChartsRepository()
     
-    history_menu.add.vertical_margin(80)
-    table = history_menu.add.table()
-    
     all_scores = scoreManager.get_all_by_user_id(user.id)
-    table.add_row(
-        ["Song", "Score", "Difficulty", "Accuracy"],
-        cell_align=pygame_menu.locals.ALIGN_CENTER
+    
+    history_menu.add.label("")
+    history_menu.add.label("")
+    history_menu.add.label("")
+    history_menu.add.label("HISTORICO DE PARTIDAS", font_size=30, font_name=pygame_menu.font.FONT_MUNRO)
+    history_menu.add.label(f"TOTAL DE PARTIDAS: {len(all_scores)}", font_size=30, font_name=pygame_menu.font.FONT_MUNRO)
+    history_menu.add.label("")
+    
+    history_menu.add.label(
+        'MÚSICA                    SCORE      DIF      ACC',
+        font_size=30,
+        font_name=pygame_menu.font.FONT_MUNRO
     )
-    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
+    
+    history_menu.add.label(
+        '----------------------------------------------------',
+        font_size=28,
+        font_name=pygame_menu.font.FONT_MUNRO
+    )
     for score in all_scores:
         chart = chartManager.get_by_id(score.chart_id)
         song = songManager.get_by_id(chart.song_id)
         
-        table.add_row([f"{song.title} ", f"{score.score}", f"{chart.difficulty_id} ", f"{score.accuracy}%"])
+        texto = (
+            f"{song.title[:20]:<20}"
+            f"{score.score:>8}"
+            f"{chart.difficulty_id:>6}"
+            f"{score.accuracy:>8.1f}%"
+        )   
+        
+        history_menu.add.label(
+            f"{texto}",
+            font_size=30,
+            font_name=pygame_menu.font.FONT_MUNRO    
+        )
+        
+    history_menu.add.label("")
     
-    table.set_float(True)
-    table.translate(0, 50)
-    
-    lbl_email = history_menu.add.label(
-        f"email: {user.email}", 
-        font_size=20, 
-        font_name=pygame_menu.font.FONT_MUNRO
-    )
-    
-    lbl_email.set_float(True)
-    lbl_email.set_alignment(ALIGN_RIGHT)
-    lbl_email.translate(-20, -135)
-
     history_menu.add.button("EXIT", home_screen, user, profile_options_menu)
     history_menu.mainloop(surface)

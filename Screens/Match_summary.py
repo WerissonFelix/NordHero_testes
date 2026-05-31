@@ -15,6 +15,7 @@ pygame.init()
 screen_surface = pygame.display.set_mode((800, 500))
 fundo = pygame.image.load('./Images/Summary.png')
 music = ""
+
 def match_summary(user: User, total_notes, notes_hit, file_path, score):
     """
     Exibe o resumo de desempenho após uma partida.

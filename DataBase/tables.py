@@ -174,16 +174,33 @@ def table_socores():
             
             user_id INTEGER NOT NULL,
             chart_id INTEGER NOT NULL,
+            notes_hit_id INTEGER NOT NULL,
             
             score INTEGER NOT NULL,
             accuracy FLOAT NOT NULL,
             rank varchar(10) NOT NULL,
             
             FOREIGN KEY(chart_id) REFERENCES song_charts(id),
-            FOREIGN KEY(user_id) REFERENCES user(id)     
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(notes_hit_id) REFERENCES notes_hit(id) 
         )
     """
     
+    cursor.execute(query)
+    connection.commit()
+
+def notes_hit():
+    query = """
+        CREATE TABLE IF NOT EXISTS notes_hit(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+             
+            qtd_miss INTEGER NOT NULL,
+            qtd_good INTEGER NOT NULL,
+            qtd_perfect INTEGER NOT NULL
+
+        )
+    """
+
     cursor.execute(query)
     connection.commit()
     
@@ -193,4 +210,6 @@ table_difficulties()
 table_song_charts()
 table_socores()
 table_multiplayer_songs()
+notes_hit()
+
 

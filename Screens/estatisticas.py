@@ -47,13 +47,16 @@ def estatisticas_screen(user: User):
         720,
         theme=theme
         )
+    
+    scoreManager = ScoreRepository()
+    
     grafico_surface = None
     def gerenciar_graficos(seleted, value):
         nonlocal grafico_surface
         if value == 'Scores':
-            grafico_surface = criar_grafico()
+            grafico_surface = criar_grafico_linha(value)
         elif value == 'Accuracy':
-            grafico_surface = None
+            grafico_surface = criar_grafico_linha(value)
             pass
         elif value == 'Tipos de Notas':
             grafico_surface = None
@@ -77,14 +80,12 @@ def estatisticas_screen(user: User):
         
     )
     type_selector.translate(-20, -300)
-    def criar_grafico():
-        scoreManager = ScoreRepository()
+    def criar_grafico_linha(value):
+        fig, ax = plt.subplots(figsize=(5, 5), dpi=100)
         
         all_scores = scoreManager.get_all_by_user_id(user.id)
-        
-        scores = [score.score for score in all_scores]
-
-        fig, ax = plt.subplots(figsize=(5, 5), dpi=100)
+         
+        scores = [score.score if value == "Scores" else score.accuracy for score in all_scores]
 
         ax.plot(
             range(len(scores)),
@@ -95,10 +96,12 @@ def estatisticas_screen(user: User):
     
         ax.grid(True)
 
-        ax.set_title('Evolução dos Pontos', fontsize=16)
-        ax.set_xlabel('Tentativas', fontsize=12)
-        ax.set_ylabel('Pontos', fontsize=12)
+        title = "Evolução dos Pontos" if value == "Scores" else "Evolução da Accuracy"
+        y_label = "Pontos" if value == "Scores" else "Accuracy (%)"
         
+        ax.set_title(title, fontsize=16)
+        ax.set_xlabel('Tentativas', fontsize=12)
+        ax.set_ylabel(y_label, fontsize=12)
         
         fig.tight_layout()
         

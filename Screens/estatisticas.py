@@ -4,7 +4,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 from DataBase.repositories.score_repository import ScoreRepository
+from DataBase.repositories.song_chart_repository import SongChartsRepository
+
 from models.score import Score
+from models.song_chart import SongChart
 from models.user import User
 
 import pygame
@@ -49,6 +52,7 @@ def estatisticas_screen(user: User):
         )
     
     scoreManager = ScoreRepository()
+    chartManager = SongChartsRepository()
     
     grafico_surface = None
     def gerenciar_graficos(seleted, value):
@@ -62,7 +66,7 @@ def estatisticas_screen(user: User):
             grafico_surface = None
             pass
         elif value == 'Dificuldade':
-            grafico_surface = None
+            grafico_surface = criar_grafico_barra()
             pass
         else:
             grafico_surface = None
@@ -80,6 +84,46 @@ def estatisticas_screen(user: User):
         
     )
     type_selector.translate(-20, -300)
+    
+    def criar_grafico_barra():
+        all_easy = scoreManager.get_all_by_chart_difficulty(1)
+        all_normal = scoreManager.get_all_by_chart_difficulty(2)
+        all_hard = scoreManager.get_all_by_chart_difficulty(3)
+        
+        easy = [score.accuracy for score in all_easy] if all_easy is not None else 0
+        normal = [score.accuracy for score in all_normal] if all_normal is not None else 0
+        hard = [score.accuracy for score in all_hard] if all_hard is not None else 0 
+        
+        media_easy = sum(easy) // len(easy) if all_easy else 0
+        media_normal = sum(normal) // len(normal) if all_normal else 0
+        media_hard = sum(hard) // len(hard) if all_hard else 0
+        
+        dificuldades = ["Easy", "Normal", "Hard"]
+        accuracies =  [media_easy, media_normal, media_hard]
+        
+        fig, ax = plt.subplots(figsize=(5, 5), dpi=100)
+        
+        ax.barh(dificuldades, accuracies, color=['blue', 'orange', 'red'])
+        
+        ax.set_title("Média de Accuracy por Dificuldade", fontsize=16)
+        ax.set_xlabel("Accuracy (%)", fontsize=12)
+        ax.set_ylabel("Dificuldade", fontsize=12)
+        
+        canvas = FigureCanvasAgg(fig)
+        canvas.draw()
+
+        renderer = canvas.get_renderer()
+        raw_data = renderer.buffer_rgba()
+
+        surface = pygame.image.frombuffer(
+            raw_data,
+            canvas.get_width_height(),
+            "RGBA"
+        )
+
+        plt.close(fig)
+
+        return surface
     def criar_grafico_linha(value):
         fig, ax = plt.subplots(figsize=(5, 5), dpi=100)
         

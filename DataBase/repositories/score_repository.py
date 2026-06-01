@@ -107,6 +107,23 @@ class ScoreRepository(BaseRepository):
         
         return Score(row[0],row[1], row[2], row[3], row[4], row[5])
     
+    def get_all_by_chart_difficulty(self, difficulty_id):
+        query = """
+        select * from scores
+        inner join song_charts ON song_charts.id = scores.chart_id
+        where song_charts.difficulty_id = ?
+        """
+        rows = self.fetchall(query, (difficulty_id,))
+        
+        if len(rows) == 0:
+            return None
+        
+        all_scores = []
+        for row in rows:
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5])) 
+            
+        return all_scores
+    
     """ 
     ======================================================================
             FUNÇÕES RELACIONADOS PARA VÁRIOS USER (MAIS DE UM JOGADOR)

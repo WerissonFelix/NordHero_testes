@@ -52,7 +52,7 @@ class ScoreRepository(BaseRepository):
     def get_by_user_chart_id(self, user_id, chart_id):
         query = """
         select * from scores
-        where (user_id = ? and song_id = ?)
+        where (user_id = ? and chart_id = ?)
         """
         
         rows = self.fetchall(query, (user_id, chart_id))

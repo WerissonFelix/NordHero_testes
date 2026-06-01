@@ -77,6 +77,7 @@ def history_screen(user : User):
             list.clear()
         else:
             pass
+        
     def create_select_difficulty():
         selector_difficulty = history_menu.add.selector(
             "Difficulty:", 
@@ -88,9 +89,24 @@ def history_screen(user : User):
         ], onchange=create_history
     )
         selectors.append(selector_difficulty)
+    
+    def create_select_music(charts):
+        songs = [songManager.get_by_id(chart.song_id).title for chart in charts]
+        songs = list(set(songs))
+        music_selector = history_menu.add.selector(
+         "Music: ",
+         [("---", "-")] + [(song, song) for song in songs],
+         onchange=create_history
+        )
+        selectors.append(music_selector)
     def create_history(selected, value):
         all_scores = scoreManager.get_all_by_user_id(user.id)  
         if value == "-":
+            if selectors is not None:
+                clear_lists(selectors)
+
+            if labels is not None:
+                clear_lists(labels)
             return None
            
         if value == "Geral":
@@ -101,12 +117,27 @@ def history_screen(user : User):
             final_scores = sorted(all_scores, key=lambda score: score.score, reverse=True)[:5]
             clear_lists(selectors)
         elif value == "music":
-            print(value)
+            all_charts = [chartManager.get_by_id(score.chart_id) for score in all_scores]
+            clear_lists(selectors)
+            create_select_music(all_charts)
+            return None
         elif value == "dificuldade":
             clear_lists(labels)
+            try:
+                clear_lists(selectors)
+            except:
+                pass
             create_select_difficulty()
             return None
-
+        else:
+            song = songManager.get_by_title(value)
+            charts = chartManager.get_all_charts_by_song(song.id)
+            print(charts)
+            final_scores = []
+            for chart in charts:
+                score = scoreManager.get_by_user_chart_id(user.id, chart.id) 
+                if len(score) > 0:
+                    final_scores.extend(score)
         if type(value) == int:
             final_scores = scoreManager.get_by_user_difficulty(user.id, value)
         

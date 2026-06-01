@@ -18,6 +18,7 @@ def home_screen(user : User, profile_menu):
     
     from Screens.choice_mod import choice_mod
     from Screens.history_screen import history_screen
+    from Screens.estatisticas import estatisticas_screen
     
     fundo = BaseImage(
         image_path="./Images/telainicial.png",
@@ -72,6 +73,7 @@ def home_screen(user : User, profile_menu):
     lbl_nome.translate(-20, -160)
 
     home_menu.add.button("START", choice_mod, user)
+    home_menu.add.button("STATICTICS", estatisticas_screen, user)
     home_menu.add.button("HISTORY", history_screen, user)
     home_menu.add.button("SETTINGS", profile_menu, user)
     home_menu.add.button("EXIT", pygame_menu.events.EXIT)

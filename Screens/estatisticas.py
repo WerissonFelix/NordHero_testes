@@ -16,6 +16,10 @@ screen = pygame.display.set_mode((1080, 720))
 clock = pygame.time.Clock()
 
 def estatisticas_screen(user: User):   
+    
+    from Screens.Home import home_screen
+    from Screens.profile_options import profile_options_menu
+    
     fundo = BaseImage(
         image_path="./Images/Summary.png",
         drawing_mode=IMAGE_MODE_FILL
@@ -43,7 +47,36 @@ def estatisticas_screen(user: User):
         720,
         theme=theme
         )
+    grafico_surface = None
+    def gerenciar_graficos(seleted, value):
+        nonlocal grafico_surface
+        if value == 'Scores':
+            grafico_surface = criar_grafico()
+        elif value == 'Accuracy':
+            grafico_surface = None
+            pass
+        elif value == 'Tipos de Notas':
+            grafico_surface = None
+            pass
+        elif value == 'Dificuldade':
+            grafico_surface = None
+            pass
+        else:
+            grafico_surface = None
+            pass
     
+    type_selector = estatistica_menu.add.selector(
+        "Ver grafico de: ",
+        [
+        ("---", '-'),
+        ("Pontos/Scores", 'Scores'),
+        ("Accuracy", "Accuracy"),
+        ("Tipos de Notas", "Tipos de Notas"),
+        ("Por Dificuldade", "Dificuldade")
+        ], onchange=gerenciar_graficos
+        
+    )
+    type_selector.translate(-20, -300)
     def criar_grafico():
         scoreManager = ScoreRepository()
         
@@ -84,24 +117,32 @@ def estatisticas_screen(user: User):
         plt.close(fig)
 
         return surface
-
-    grafico_surface = criar_grafico()
-
+    
+    back_button =estatistica_menu.add.button("BACK", home_screen, user, profile_options_menu)
+    back_button.translate(-20, -300)
+    estatistica_menu.enable()
     running = True
     clock = pygame.time.Clock()
-    x = (screen.get_width() - grafico_surface.get_width()) // 2
-    y = 150
     while running:
-
-        for event in pygame.event.get():
+        
+        events = pygame.event.get()
+        
+        for event in events:
             if event.type == pygame.QUIT:
                 running = False
+                
+        estatistica_menu.update(events)
 
         screen.fill((30, 30, 30))
         
         estatistica_menu.draw(screen)
         
-        screen.blit(grafico_surface, (x,y))
+        if grafico_surface is not None:
+            x = (screen.get_width() - grafico_surface.get_width()) // 2
+
+            y = (screen.get_height() - grafico_surface.get_height()) // 2 + 80
+
+            screen.blit(grafico_surface, (x,y))
 
         pygame.display.flip()
         clock.tick(60)

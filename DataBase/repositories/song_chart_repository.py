@@ -86,4 +86,3 @@ class SongChartsRepository(BaseRepository):
             all_charts.append(SongChart(row[0], row[1], row[2], row[3], row[4]))
             
         return all_charts
-            

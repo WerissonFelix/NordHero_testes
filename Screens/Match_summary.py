@@ -6,8 +6,9 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from DataBase.repositories.score_repository import ScoreRepository
 from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.song_chart_repository import SongChartsRepository
+from DataBase.repositories.notes_hit_repository import NotesHitRepository
 
-from Screens import choice_mod
+from models.notes_hit import NotesHit
 from models.score import Score
 from models.user import User
 
@@ -165,11 +166,16 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     scoreManager = ScoreRepository()
     songManager = SongRepository()
     chartManeger = SongChartsRepository()
+    notesHitManager = NotesHitRepository()
     
     song = songManager.get_by_file_path(file_path)
     chart = chartManeger.get_by_song_and_difficulty(song.id, song.story_difficulty_id)
     
-    score_match = Score(None, user.id, chart.id , score, accuracy, raking)
+    notesHitManager.create(NotesHit(None, chart.id, notes_hit[0]["Miss"], notes_hit[0]["Bad"], notes_hit[0]["Good"], notes_hit[0]["Perfect"]))
+    
+    notes = notesHitManager.get_by_chart_id(chart.id)
+    
+    score_match = Score(None, user.id, chart.id, notes.id, score, accuracy, raking)
     scoreManager.create(score_match)
     
     choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)

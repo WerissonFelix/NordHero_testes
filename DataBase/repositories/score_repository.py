@@ -6,11 +6,11 @@ class ScoreRepository(BaseRepository):
     def create(self, score: Score):
         query = """
         insert into scores 
-        (user_id, chart_id, score, accuracy, rank)
-        values (?, ?, ?, ?, ?)
+        (user_id, chart_id, notes_hit_id, score, accuracy, rank)
+        values (?, ?, ?, ?, ?, ?)
         """
         
-        self.execute(query, (score.user_id, score.chart_id, score.score, score.accuracy, score.rank))
+        self.execute(query, (score.user_id, score.chart_id, score.notes_hit_id, score.score, score.accuracy, score.rank))
     
     def delete(self, score_id):
         query = """ 
@@ -46,7 +46,7 @@ class ScoreRepository(BaseRepository):
             return None
         
         for row in rows:
-            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6]))
         return all_scores
 
     def get_by_user_chart_id(self, user_id, chart_id):
@@ -63,7 +63,7 @@ class ScoreRepository(BaseRepository):
         all_scores = []
         
         for row in rows:
-            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6]))
         return all_scores
     
     def get_by_user_difficulty(self, user_id, difficulty_id):
@@ -83,7 +83,7 @@ class ScoreRepository(BaseRepository):
         all_scores = []
         
         for row in rows:
-            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6]))
         return all_scores
     
     def get_best_by_user_and_chart(self, user_id, chart_id):
@@ -105,7 +105,7 @@ class ScoreRepository(BaseRepository):
         if row is None:
             return None
         
-        return Score(row[0],row[1], row[2], row[3], row[4], row[5])
+        return Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6])
     
     def get_all_by_chart_difficulty(self, difficulty_id):
         query = """
@@ -120,7 +120,7 @@ class ScoreRepository(BaseRepository):
         
         all_scores = []
         for row in rows:
-            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5])) 
+            all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6])) 
             
         return all_scores
     
@@ -150,7 +150,7 @@ class ScoreRepository(BaseRepository):
             if row is None:
                 all_scores.append(None)
             else:
-                all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5]))
+                all_scores.append(Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6]))
         return all_scores
     
         

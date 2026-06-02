@@ -150,7 +150,6 @@ def table_song_charts():
     cursor.execute(query)
     connection.commit()
 
-
 def table_socores():
     """
     Cria a tabela de scores dos jogadores.
@@ -193,11 +192,15 @@ def notes_hit():
     query = """
         CREATE TABLE IF NOT EXISTS notes_hit(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chart_id INTEGER NOT NULL,
+             
              
             qtd_miss INTEGER NOT NULL,
+            qtd_bad INTEGER NOT NULL,
             qtd_good INTEGER NOT NULL,
-            qtd_perfect INTEGER NOT NULL
-
+            qtd_perfect INTEGER NOT NULL,
+            
+            FOREIGN KEY(chart_id) REFERENCES song_charts(id)
         )
     """
 
@@ -211,5 +214,4 @@ table_song_charts()
 table_socores()
 table_multiplayer_songs()
 notes_hit()
-
 

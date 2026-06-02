@@ -5,8 +5,10 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 from DataBase.repositories.score_repository import ScoreRepository
 from DataBase.repositories.song_chart_repository import SongChartsRepository
+from DataBase.repositories.notes_hit_repository import NotesHitRepository
 
 from models.score import Score
+from models.notes_hit import NotesHit
 from models.song_chart import SongChart
 from models.user import User
 
@@ -22,6 +24,7 @@ def estatisticas_screen(user: User):
     
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
+    import numpy as np
     
     fundo = BaseImage(
         image_path="./Images/Summary.png",
@@ -53,6 +56,8 @@ def estatisticas_screen(user: User):
     
     scoreManager = ScoreRepository()
     chartManager = SongChartsRepository()
+    notesHitManager = NotesHitRepository()
+    
     
     grafico_surface = None
     def gerenciar_graficos(seleted, value):
@@ -63,7 +68,7 @@ def estatisticas_screen(user: User):
             grafico_surface = criar_grafico_linha(value)
             pass
         elif value == 'Tipos de Notas':
-            grafico_surface = None
+            grafico_surface = criar_grafico_radar()
             pass
         elif value == 'Dificuldade':
             grafico_surface = criar_grafico_barra()
@@ -84,7 +89,69 @@ def estatisticas_screen(user: User):
         
     )
     type_selector.translate(-20, -300)
+    def criar_grafico_radar():
+        nonlocal grafico_surface 
+        
+        notes_hit = notesHitManager.get_all()
+        
+        miss = [notes.qtd_miss for notes in notes_hit] if notes_hit is not None else 0
+        bad = [notes.qtd_bad for notes in notes_hit] if notes_hit is not None else 0
+        good = [notes.qtd_good for notes in notes_hit] if notes_hit is not None else 0
+        perfect = [notes.qtd_perfect for notes in notes_hit] if notes_hit is not None else 0
+        
+        categorias = ["Miss", "Bad", "Good", "Perfect"]
+        
+        player = [sum(miss), sum(bad), sum(good), sum(perfect)]
     
+        N = len(categorias)
+        
+        angulos = np.linspace(0 , 2*np.pi, N, endpoint=False).tolist()
+        
+        player += player[:1]
+        
+        angulos += angulos[:1]
+        
+        fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True))
+        
+        ax.fill(angulos, player, alpha=0.9)
+        
+        '''  
+        if len(notes_hit) > 1:
+            player2 = [notes_hit[1]["Miss"], notes_hit[1]["Bad"], notes_hit[1]["Good"], notes_hit[1]["Perfect"]]
+            player2 += player2[:1]
+            ax.fill(angulos, player2, alpha=0.9)
+            
+            limite = max(max(player), max(player2)) * 1.05
+        else:
+        '''
+        
+        limite = max(player) * 1.05
+            
+        ax.set_xticks(angulos[:-1])
+        ax.set_xticklabels(categorias, fontsize=12, fontweight='bold', fontfamily='sans-serif', color='white')
+        ax.set_ylim(0, limite)
+      
+        plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
+        
+        fig.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+        ax.grid(False)
+        
+        canvas = FigureCanvasAgg(fig)
+        canvas.draw()
+        
+        renderer = canvas.get_renderer()
+        
+        raw_data = renderer.buffer_rgba()
+        
+        size = canvas.get_width_height()
+        
+        graph_surface = pygame.image.frombuffer(raw_data, size, "RGBA")
+        
+        plt.close(fig)
+        
+        return graph_surface
+                 
     def criar_grafico_barra():
         all_easy = scoreManager.get_all_by_chart_difficulty(1)
         all_normal = scoreManager.get_all_by_chart_difficulty(2)

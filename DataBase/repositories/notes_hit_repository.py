@@ -17,7 +17,25 @@ class NotesHitRepository(BaseRepository):
         """
         
         self.execute(query, (notes_hit.chart_id, notes_hit.qtd_miss, notes_hit.qtd_bad, notes_hit.qtd_good, notes_hit.qtd_perfect))
+    
+    def get_all(self):
+        """ 
+        busca todos os registros na tabela de notas acertadas, ou seja, a quantidade de miss, good e perfect.
+        """
+        query = """ 
+        select * from notes_hit
+        """
         
+        rows = self.fetchall(query)
+        
+        if len(rows) == 0:
+            return None
+        
+        notes_hit_list = []
+        
+        for row in rows:
+            notes_hit_list.append(NotesHit(row[0], row[1], row[2], row[3], row[4], row[5]))
+        return notes_hit_list
     def get_by_id(self, notes_hit_id):
         """ 
         busca um registro na tabela de notas acertadas, ou seja, a quantidade de miss, good e perfect, pelo id.

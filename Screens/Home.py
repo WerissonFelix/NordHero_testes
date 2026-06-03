@@ -5,7 +5,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 from models.user import User
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/telainicial.png')
 
 def home_screen(user : User, profile_menu):
@@ -43,8 +43,8 @@ def home_screen(user : User, profile_menu):
 
     home_menu = pygame_menu.Menu(
         f'Connected as: {user.name}',
-        800,
-        500,
+        1080, 
+        720,
         theme=theme
         )
     

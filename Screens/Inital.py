@@ -3,7 +3,7 @@ import pygame_menu
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load("./Images/telainicial.png")
 
 def initial_screen(login_screen,create_account_menu):
@@ -33,8 +33,8 @@ def initial_screen(login_screen,create_account_menu):
 
     initial_menu = pygame_menu.Menu(
         '',
-        800,
-        500,
+        1080, 
+        720,
         theme=theme )
 
     initial_menu.add.button('LOGIN', login_screen,initial_screen)

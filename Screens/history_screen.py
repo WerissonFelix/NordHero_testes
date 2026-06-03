@@ -12,7 +12,7 @@ from models.score import Score
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/telainicial.png')
 
 def history_screen(user : User):
@@ -51,8 +51,8 @@ def history_screen(user : User):
 
     history_menu = pygame_menu.Menu(
         f'',
-        800,
-        500,
+        1080, 
+        720,
         theme=theme
     )
     
@@ -99,6 +99,7 @@ def history_screen(user : User):
          onchange=create_history
         )
         selectors.append(music_selector)
+        
     def create_history(selected, value):
         all_scores = scoreManager.get_all_by_user_id(user.id)  
         if value == "-":
@@ -129,7 +130,7 @@ def history_screen(user : User):
                 pass
             create_select_difficulty()
             return None
-        else:
+        elif type(value) == str:
             song = songManager.get_by_title(value)
             charts = chartManager.get_all_charts_by_song(song.id)
             print(charts)

@@ -10,7 +10,7 @@ from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/telainicial.png')
-def choice_difficulty(user:User, mod:str):
+def choice_difficulty(user:User, mod:str, tipo:str):
     """
     Exibe a tela de seleção de dificuldade do jogo.
     
@@ -99,6 +99,6 @@ def choice_difficulty(user:User, mod:str):
         font_name=pygame_menu.font.FONT_MUNRO
     )
 
-    choice.add.button("Continue", lambda: choice_music(user, difficulty, mod))
+    choice.add.button("Continue", lambda: choice_music(user, difficulty, mod, tipo))
     choice.add.button("BACK", home_screen, user, profile_options_menu)        
     choice.mainloop(surface)

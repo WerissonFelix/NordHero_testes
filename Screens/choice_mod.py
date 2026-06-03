@@ -131,7 +131,7 @@ def choice_mod(user:User):
         
         selectors.append(selector_type)
         
-        continue_button = choice.add.button("Continue", lambda: choice_difficulty(user, mod))
+        continue_button = choice.add.button("Continue", lambda: choice_difficulty(user, mod, tipo))
         exit_button = choice.add.button("BACK", create_mod_selector)        
         buttons.append(continue_button)
         buttons.append(exit_button)        

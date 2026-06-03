@@ -17,7 +17,7 @@ pygame.init()
 surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/telainicial.png')
 music = None
-def choice_music(user: User, difficulty: Difficulty, mod:str):
+def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str):
     """
     Exibe a tela de seleção de música baseada na dificuldade escolhida.
     
@@ -146,7 +146,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
         
     else:
         print(mod)
-        songs = songManeger.get_by_type_and_difficulty("Instrumental", difficulty.id)    
+        songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)    
         music_selector = choice.add.selector(
             'MUSIC :',
             [(song.title, (song.file_path, song.id)) for song in songs],

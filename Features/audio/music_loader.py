@@ -32,6 +32,9 @@ story_difficulty_map = {
     "Another One Bites The Dust - Instrumental": (2, "Instrumental"),
     
     "I Thought I Saw Your Face Today (Acapella_Vocals Only)": (2, "Vocal"),
+    "Another One Bites The Dust - Queen  Vocal": (2, "Vocal"),
+    "Imagine Dragons - BELIEVER Vocal": (1, "Vocal"),
+    "Michael Jackson - Billie Jean Vocals Only": (2, "Vocal"),
     "Michael Jackson  Billie Jean [Instrumental Version] - HIStoryWorldTourMJ (youtube)": (2, "Instrumental"),
 
     "Abolish the IRS": (3, "Instrumental"),

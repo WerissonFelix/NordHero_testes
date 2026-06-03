@@ -7,7 +7,7 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/telainicial.png')
 def choice_mod(user:User):
     """
@@ -44,8 +44,8 @@ def choice_mod(user:User):
 
     choice = pygame_menu.Menu(
         f'Connected as: {user.name}',
-        800,
-        500,
+        1080, 
+        720,
         theme=theme
         )
     

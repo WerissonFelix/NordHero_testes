@@ -7,7 +7,7 @@ from Features.Dados_Verificacao import DataVerifier
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 
 def login_screen(initial_screen):
     """
@@ -40,8 +40,8 @@ def login_screen(initial_screen):
 
     login_menu = pygame_menu.Menu(
         '',
-        800,
-        500,
+        1080,
+        720,
 
     theme=theme)
 

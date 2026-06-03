@@ -14,7 +14,7 @@ from models.difficulty import Difficulty
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/telainicial.png')
 music = None
 def choice_music(user: User, difficulty: Difficulty, mod:str):
@@ -51,8 +51,8 @@ def choice_music(user: User, difficulty: Difficulty, mod:str):
 
     choice = pygame_menu.Menu(
         f'Connected as: {user.name}',
-        800,
-        500,
+        1080, 
+        720,
         theme=theme
         )
     

@@ -8,6 +8,6 @@ from Features.audio.music_loader import load_and_register_music
 load_and_register_music()
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 pygame.display.set_caption("NORD HERO")
 initial_screen(login_screen, create_account_menu)

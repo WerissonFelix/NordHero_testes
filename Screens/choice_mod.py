@@ -55,6 +55,7 @@ def choice_mod(user:User):
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
+    
     lbl_email = choice.add.label(
         f"email: {user.email}", 
         font_size=20, 
@@ -73,26 +74,75 @@ def choice_mod(user:User):
     lbl_nome.set_alignment(ALIGN_RIGHT)
     lbl_nome.translate(-20, -160)
 
+    selectors = []
+    buttons = []
+    def clear_lists():
+        nonlocal selectors, buttons
+        if len(selectors) > 0:
+            for i in selectors:
+                choice.remove_widget(i)
+            selectors.clear()
+            
+        if len(buttons) > 0:
+            for i in buttons:
+                choice.remove_widget(i)
+            buttons.clear()    
+        
     mod = "Single Player"
     def set_mod(value, selected_value):
         nonlocal  mod
         mod = selected_value
     
-    choice.add.selector(
-    "Select Mod :", 
-    [
-        ("Single Player", "Single Player"),
-        ("2 Players", "2 Players")
-    ],
-    onchange=set_mod
-    )
+    tipo = "Instrumental"
+    def set_type(value, selected_value):
+        nonlocal tipo 
+        tipo = selected_value
     
+    def create_mod_selector():  
+        clear_lists()
+              
+        mod_selector = choice.add.selector(
+        "Select Mod :", 
+        [
+            ("Single Player", "Single Player"),
+            ("2 Players", "2 Players")
+        ],
+        onchange=set_mod
+        )
+
+        selectors.append(mod_selector)
+        
+        continue_button = choice.add.button("Continue", create_select_type)
+        exit_button = choice.add.button("BACK", home_screen, user, profile_options_menu) 
+        buttons.append(continue_button)       
+        buttons.append(exit_button)
+        
+    def create_select_type():
+        clear_lists()
+        
+        selector_type = choice.add.selector(
+            'Type: ',
+            [
+                ("---", "-"),
+                ("Instrumental", "Instrumental"),
+                ("Vocal", "Vocal")
+            ], onchange=set_type
+        )
+        
+        selectors.append(selector_type)
+        
+        continue_button = choice.add.button("Continue", lambda: choice_difficulty(user, mod))
+        exit_button = choice.add.button("BACK", create_mod_selector)        
+        buttons.append(continue_button)
+        buttons.append(exit_button)        
+        
     choice.add.label(
         "", 
         font_size=20, 
         font_name=pygame_menu.font.FONT_MUNRO
     )
 
-    choice.add.button("Continue", lambda: choice_difficulty(user, mod))
-    choice.add.button("BACK", home_screen, user, profile_options_menu)        
+    if len(selectors) == 0 and len(buttons) == 0:
+        create_mod_selector()
+        
     choice.mainloop(surface)

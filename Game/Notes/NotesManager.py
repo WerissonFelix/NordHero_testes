@@ -167,7 +167,9 @@ class NoteManager:
             elif 5 < self.combo <= 10:
                 self.extra_score = 10
             elif 10 < self.combo <= 20:
-                self.extra_score = 15
+                self.extra_score = 15 
+            else:
+                self.extra_score = 20
             score += self.extra_score     
         elif 13 <= distance <= 18:
             self.rating = "Good"

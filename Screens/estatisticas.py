@@ -58,7 +58,6 @@ def estatisticas_screen(user: User):
     chartManager = SongChartsRepository()
     notesHitManager = NotesHitRepository()
     
-    
     grafico_surface = None
     def gerenciar_graficos(seleted, value):
         nonlocal grafico_surface
@@ -88,6 +87,18 @@ def estatisticas_screen(user: User):
         ], onchange=gerenciar_graficos
         
     )
+    
+    """   
+    def criar_selector_music():
+        songs = [songManager.get_by_id(chart.song_id).title for chart in charts]
+        songs = list(set(songs))
+        music_selector = history_menu.add.selector(
+         "Music: ",
+         [("---", "-")] + [(song, song) for song in songs],
+         onchange=create_history
+        )
+    """ 
+    
     type_selector.translate(-20, -300)
     def criar_grafico_radar():
         nonlocal grafico_surface 

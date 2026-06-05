@@ -14,13 +14,15 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user, music_path, mod, second_music_path=None):
+    def __init__(self, user, music_path, mod, second_music_path=None, tipo_2players= None):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
         self.music_path = music_path
         self.second_music_path = second_music_path
-        self.textManage  = TextManager()
+        self.tipo_2players = tipo_2players
+        
+        self.textManage  = TextManager(mod)
         self.clock = pygame.time.Clock()
         current_dir = os.path.dirname(__file__)
         bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaDoJogo.png")
@@ -180,7 +182,8 @@ class ManageGame:
         
         """
         
-        self.score = 0
+        self.score = [0, 0]
+        self.index_player = 0
         self.mixer = self.audio.load_music()
         
         MUSIC_END_EVENT = pygame.USEREVENT + 1
@@ -293,7 +296,7 @@ class ManageGame:
 
                 self.screen.blit(text, (x, y))
         
-            self.score, rating, combo, extra, self.keys_pressed = self.notesManage.while_running(
+            self.score, rating, combo, extra, self.keys_pressed, self.index_player = self.notesManage.while_running(
                 self.score,
                 current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
@@ -301,21 +304,45 @@ class ManageGame:
                 keys_held
             )
             
-            color = self.textManage.draw_rating(rating,self.screen)
-            self.textManage.effect_text_rating()     
-            
-            if combo > 1:        
-                combo_text = self.font.render(f"Combo: {combo}", True, color)
-                self.screen.blit(combo_text, (10, 50))
-                
-                extra_text = self.font.render(f"+{extra}", True, color)
-                self.screen.blit(extra_text, (10, 90))
-            
-            score_text = self.font.render(f"Score: {self.score}", True, ((255, 255, 0)))    
-            self.screen.blit(score_text, (10, 10))
-            
+            for k,v in enumerate(rating):
+                if v != "":
+                    self.textManage.draw_rating(rating, k)
+
+            color = self.textManage.update(self.screen, combo, extra)
+
+            if self.mod == "2 Players":
+                if self.tipo_2players == "Contra":
+                    score_text_p1 = self.font.render(
+                        f"P1: {self.score[0]}",
+                        True,
+                        (255, 255, 0)
+                    )
+
+                    score_text_p2 = self.font.render(
+                        f"P2: {self.score[1]}",
+                        True,
+                        (255, 255, 0)
+                    )
+
+                    self.screen.blit(score_text_p1, (10, 10))
+                    self.screen.blit(score_text_p2, (10, 50))
+
+                elif self.tipo_2players == "Juntos":
+                    score_text = self.font.render(
+                        f"Score: {sum(self.score)}",
+                        True,
+                        (255, 255, 0)
+                    )
+
+                    self.screen.blit(score_text, (10, 10))
+            else:
+                score_text = self.font.render(
+                    f"Score: {self.score[0]}",
+                    True,
+                    (255, 255, 0)
+                )
+                self.screen.blit(score_text, (10, 10))
             pygame.display.update()
-    
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)
         match_summary(self.user, total_notes, notes_hit, self.music_path, self.score)

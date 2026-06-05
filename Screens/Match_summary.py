@@ -13,7 +13,7 @@ from models.score import Score
 from models.user import User
 
 pygame.init()
-screen_surface = pygame.display.set_mode((800, 500))
+screen_surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/Summary.png')
 music = ""
 
@@ -52,8 +52,8 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
 
     choice = pygame_menu.Menu(
         f'',
-        800,
-        500,
+        1080, 
+        720,
         theme=theme
         )
     
@@ -86,7 +86,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
             limite = max(max(player1), max(player2)) * 1.05
         else:
             limite = max(player1) * 1.05
-            
+        
         ax.set_xticks(angulos[:-1])
         ax.set_xticklabels(categorias, fontsize=12, fontweight='bold', fontfamily='sans-serif', color='white')
         ax.set_ylim(0, limite)
@@ -175,7 +175,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     
     notes = notesHitManager.get_by_chart_id(chart.id)
     
-    score_match = Score(None, user.id, chart.id, notes.id, score, accuracy, raking)
+    score_match = Score(None, user.id, chart.id, notes.id, score[0], accuracy, raking)
     scoreManager.create(score_match)
     
     choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)

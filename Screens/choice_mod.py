@@ -92,11 +92,18 @@ def choice_mod(user:User):
     def set_mod(value, selected_value):
         nonlocal  mod
         mod = selected_value
+        print(mod)
     
     tipo = "Instrumental"
     def set_type(value, selected_value):
         nonlocal tipo 
         tipo = selected_value
+        return tipo
+    
+    tipo_2players = "Contra"
+    def set_tipo_2players(value, selected_value):
+        nonlocal tipo_2players
+        tipo_2players = selected_value
     
     def create_mod_selector():  
         clear_lists()
@@ -112,29 +119,78 @@ def choice_mod(user:User):
 
         selectors.append(mod_selector)
         
-        continue_button = choice.add.button("Continue", create_select_type)
+        continue_button = choice.add.button("Continue", selectors_manager)
         exit_button = choice.add.button("BACK", home_screen, user, profile_options_menu) 
         buttons.append(continue_button)       
         buttons.append(exit_button)
+    
+    def selector_2players_type():
+        clear_lists()
         
-    def create_select_type():
+        selector_2players_type = choice.add.selector(
+                'Type: ',
+                [
+                    ("Contra", "Contra"),
+                    ("Juntos", "Juntos")
+                ], onchange=set_tipo_2players
+            )
+            
+        selectors.append(selector_2players_type)
+        
+        continue_button = choice.add.button("Continue", selectors_manager, True)
+        exit_button = choice.add.button("BACK", create_mod_selector)        
+        buttons.append(continue_button)
+        buttons.append(exit_button)        
+    
+    def select_vocal_instrumental_2p(tipo_2players):
+        nonlocal tipo
+        
+        clear_lists()
+        
+        selector = choice.add.selector(
+            'Type: ',
+            [("Instrumental", "Instrumental"), ("Vocal", "Vocal")]
+            , onchange=set_type
+        )
+        selectors.append(selector)
+        
+        continue_button = choice.add.button(
+            "Continue", 
+            lambda: choice_difficulty(user, "2 Players", tipo, tipo_2players)
+        )
+        exit_button = choice.add.button("BACK", selector_2players_type)
+        buttons.append(continue_button)
+        buttons.append(exit_button)
+        
+    def select_vocal_instrumental_1p():
         clear_lists()
         
         selector_type = choice.add.selector(
             'Type: ',
             [
-                ("---", "-"),
                 ("Instrumental", "Instrumental"),
                 ("Vocal", "Vocal")
             ], onchange=set_type
         )
         
         selectors.append(selector_type)
+       
+        continue_button = choice.add.button("Continue", lambda: choice_difficulty(user, "Single Player", tipo))  
         
-        continue_button = choice.add.button("Continue", lambda: choice_difficulty(user, mod, tipo))
         exit_button = choice.add.button("BACK", create_mod_selector)        
         buttons.append(continue_button)
         buttons.append(exit_button)        
+    
+    def selectors_manager(selector2=None):
+        nonlocal mod, tipo_2players
+        
+        if mod == "Single Player":
+            select_vocal_instrumental_1p()
+        else:
+            if selector2:
+                select_vocal_instrumental_2p(tipo_2players)
+            else:
+                selector_2players_type()     
         
     choice.add.label(
         "", 

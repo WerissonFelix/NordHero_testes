@@ -35,6 +35,7 @@ class ManageGame:
             self.audio = AudioAnalyzer(self.music_path, self.mod)
               
         else:
+            print(mod)
             self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
             self.width = 1280
             self.height = 720

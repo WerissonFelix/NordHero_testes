@@ -143,25 +143,31 @@ def history_screen(user : User):
             final_scores = scoreManager.get_by_user_difficulty(user.id, value)
         
         clear_lists(labels)        
-        
+        diff_map = {1: " EASY ", 2: " NORMAL ", 3: " HARD "}
+       
         for score in final_scores:
             chart = chartManager.get_by_id(score.chart_id)
             song = songManager.get_by_id(chart.song_id)
-            
+            diff = diff_map.get(chart.difficulty_id, "?????")
             texto = (
                 f"{song.title[:20]:<20}"
                 f"{score.score:>8}"
-                f"{chart.difficulty_id:>6}"
+                f"{diff:>6}"
                 f"{score.accuracy:>8.1f}%"
             )   
             
+            color_map = {1: (100, 255, 100), 2: (255, 255, 100), 3: (255, 100, 100)}
+            color = color_map.get(chart.difficulty_id, (255, 255, 255))
             label = history_menu.add.label(
                 f"{texto}",
+                font_color=color,
                 font_size=30,
                 font_name=pygame_menu.font.FONT_MUNRO    
             )       
             
             labels.append(label)
+        exit_btn =  history_menu.add.button("EXIT", home_screen, user, profile_options_menu)
+        labels.append(exit_btn)
             
     choice_history = history_menu.add.selector(
         "History: ",
@@ -176,8 +182,9 @@ def history_screen(user : User):
     )
     
     history_menu.add.label(
-        'MÚSICA                    SCORE      DIF      ACC',
-        font_size=30,
+        'MUSIC                    SCORE      DIF      ACC',
+        font_color=(200, 200, 200),
+        font_size=35,
         font_name=pygame_menu.font.FONT_MUNRO
     )
     
@@ -186,7 +193,6 @@ def history_screen(user : User):
         font_size=28,
         font_name=pygame_menu.font.FONT_MUNRO
     )    
-    history_menu.add.label("")
     
-    history_menu.add.button("EXIT", home_screen, user, profile_options_menu)
+    history_menu.add.label("")
     history_menu.mainloop(surface)

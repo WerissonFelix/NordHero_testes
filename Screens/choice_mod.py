@@ -100,7 +100,7 @@ def choice_mod(user:User):
         tipo = selected_value
         return tipo
     
-    tipo_2players = "Contra"
+    tipo_2players = "-"
     def set_tipo_2players(value, selected_value):
         nonlocal tipo_2players
         tipo_2players = selected_value
@@ -129,7 +129,8 @@ def choice_mod(user:User):
         
         selector_2players_type = choice.add.selector(
                 'Type: ',
-                [
+                [   
+                    ("---", "-"),
                     ("Contra", "Contra"),
                     ("Juntos", "Juntos")
                 ], onchange=set_tipo_2players
@@ -137,7 +138,7 @@ def choice_mod(user:User):
             
         selectors.append(selector_2players_type)
         
-        continue_button = choice.add.button("Continue", selectors_manager, True)
+        continue_button = choice.add.button("Continue", selectors_manager)
         exit_button = choice.add.button("BACK", create_mod_selector)        
         buttons.append(continue_button)
         buttons.append(exit_button)        
@@ -181,14 +182,16 @@ def choice_mod(user:User):
         buttons.append(continue_button)
         buttons.append(exit_button)        
     
-    def selectors_manager(selector2=None):
+    def selectors_manager():
         nonlocal mod, tipo_2players
         
         if mod == "Single Player":
             select_vocal_instrumental_1p()
         else:
-            if selector2:
+            if tipo_2players == "Contra":
                 select_vocal_instrumental_2p(tipo_2players)
+            elif tipo_2players == "Juntos":
+                choice_difficulty(user, "2 Players", tipo, tipo_2players)
             else:
                 selector_2players_type()     
         

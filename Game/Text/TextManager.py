@@ -100,14 +100,16 @@ class TextManager:
                     if index == 0:
                         screen.blit(temp_surf, (10, 300))
                     else:
-                        screen.blit(temp_surf, (600, 300))
-                
-                if combo > 1:        
-                    combo_text = self.font.render(f"Combo: {combo}", True, self.color[index])
-                    screen.blit(combo_text, (10, 50))
-                    
-                    extra_text = self.font.render(f"+{extra}", True, self.color[index])
-                    screen.blit(extra_text, (10, 90))
+                        screen.blit(temp_surf, (700, 300))
 
+                if combo[index] > 1:        
+                    combo_text = self.font.render(f"Combo: {combo}", True, self.color[index])
+                    extra_text = self.font.render(f"+{extra}", True, self.color[index])
+                    if index == 0:
+                        screen.blit(combo_text, (10, 50))
+                        screen.blit(extra_text, (10, 90))
+                    else:
+                        screen.blit(combo_text, (700, 50))
+                        screen.blit(extra_text, (700, 90))   
                 self.alpha[index] = max(self.alpha[index] - 4, 0)
         return self.color[index]

@@ -1,4 +1,5 @@
 import pygame
+import random
 from Game.Config.Game_Config import GameConfig
 
 class NoteManager:
@@ -8,13 +9,15 @@ class NoteManager:
     Responsável por atualizar posições das notas, detectar acertos do jogador
     e calcular pontuação baseada na precisão do timing.
     """
-    def __init__(self,  width, height, color, speed, mod):
+    def __init__(self,  width, height, color, speed, mod, tipo_2players=None):
         self.width = width
         self.height = height
         self.color = color
         self.handled = True
         self.speed = speed
         self.mod = mod
+        self.tipo_2players = tipo_2players
+        
         self.font = pygame.font.Font(None, 36)
         self.notes_to_remove = []
         
@@ -36,7 +39,7 @@ class NoteManager:
             for _ in range(num_players)
             ]
      
-        self.combo = 0
+        self.combo = [0, 0]
         self.extra_score = 0
         self.active_long_notes = []
         
@@ -53,11 +56,15 @@ class NoteManager:
         retorna o novo score (se pontuar) e o rating da respectiva nota.
         """        
         self.rating = ["", ""]  
-        for note in notes:
+        notes_enimies = []
+        
+        for key,note in enumerate(notes):
             note_time = note[0]
             lane = note[1]
             self.index = 0 if 0 <= lane < 4 else 1
             duracao =  note[3] if len(note) > 3 else 0
+            
+            is_enemy = len(note) > 4 and note[4]
             
             limite = 600 if self.mod == "Single Player" else 720
             if note_time - spawn_offset <= current_time:
@@ -101,7 +108,8 @@ class NoteManager:
                     altura_real = altura_base
                     rect_y = self.y
                     rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
-                    pygame.draw.rect(screen, (255, 255, 255), rect)    
+                    color = (255,0,0) if is_enemy else (255, 255, 255)
+                    pygame.draw.rect(screen, color, rect)    
                     
                 if rect.colliderect(keys[lane].rect):        
             
@@ -118,7 +126,7 @@ class NoteManager:
                                 if start_hitbox.colliderect(keys[lane].rect):
                                     distance = abs(start_hitbox.centery - keys[lane].rect.centery)     
                                     is_held_down = keys_held[keys[lane].key]
-                                    scores[self.index] = self.create_rating(distance, scores[self.index], self.index, screen)
+                                    scores[self.index] = self.create_rating(distance, scores[self.index], self.index, current_time, notes_enimies)
                                     
                                 if rect_y >= keys[lane].rect.centery:
                                     self.notes_to_remove.append(note)
@@ -126,14 +134,14 @@ class NoteManager:
                             else:
                                 self.rating[self.index] = "Miss"
                                 self.notes_hit[self.index]["Miss"] += 1
-                                self.combo = 0
+                                self.combo[self.index] = 0
                                 self.notes_to_remove.append(note)
                                 self.active_long_notes.remove(note)
                     else: 
                         if just_pressed:   
                             distance = abs(rect.centery - keys[lane].rect.centery) 
                                                        
-                            scores[self.index] = self.create_rating(distance, scores[self.index], self.index, screen)
+                            scores[self.index] = self.create_rating(distance, scores[self.index], self.index, current_time, notes_enimies, notes[key+1:key+21])
                                            
                             self.notes_to_remove.append(note)
                             try:
@@ -143,9 +151,13 @@ class NoteManager:
                 elif rect_y > limite:
                     self.rating[self.index] = "Miss" 
                     self.notes_hit[self.index]["Miss"] += 1
-                    self.combo = self.extra_score = 0
+                    self.combo[self.index] = 0
+                    self.extra_score = 0
                     self.notes_to_remove.append(note)
-                    
+    
+        for new_note in notes_enimies:
+            notes.append(new_note)                    
+        notes_enimies.clear()
         for n in self.notes_to_remove:
             if n in notes:
                 notes.remove(n)
@@ -153,19 +165,27 @@ class NoteManager:
                 
         return scores, self.rating, self.combo, self.extra_score, keys_pressed, self.index
 
-    def create_rating(self, distance, score, index, screen):
+    def create_rating(self, distance, score, index, current_time, notes_enimies,nearby_notes):
         """Cria texto de avaliação ("Bad", "Good", "Perfect")"""     
         if distance <= 12:
             self.rating[index] = "Perfect" 
             score += 100
             self.notes_hit[index]["Perfect"] += 1
-            self.combo += 1
+            self.combo[index] += 1
             self.extra_score = 0
-            if  1 < self.combo <= 5 :   
+            if  1 < self.combo[index] <= 5 :   
                 self.extra_score = 5
-            elif 5 < self.combo <= 10:
+                if self.tipo_2players == "Contra":
+                    spawn_time = current_time + 1
+                    index_inimigo = 1 - index
+                    lane_inimigo = self.get_free_enemy_lane(nearby_notes, index_inimigo, spawn_time)
+                    
+                    nota_inimiga = [spawn_time, lane_inimigo, 1, 0, True]
+                    notes_enimies.append(nota_inimiga)
+                    
+            elif 5 < self.combo[index] <= 10:
                 self.extra_score = 10
-            elif 10 < self.combo <= 20:
+            elif 10 < self.combo[index] <= 20:
                 self.extra_score = 15 
             else:
                 self.extra_score = 20
@@ -173,15 +193,37 @@ class NoteManager:
         elif 13 <= distance <= 18:
             self.rating[index] = "Good"
             score += 50
-            self.combo = self.extra_score = 0
+            self.combo[index] = self.extra_score = 0
             self.notes_hit[index]["Good"] += 1
         elif distance >= 19:
             self.rating[index] = "Bad"
             score += 25 
-            self.combo = self.extra_score = 0
+            self.combo[index] = self.extra_score = 0
             self.notes_hit[index]["Bad"] += 1
         return score
+        
+    def get_free_enemy_lane(self, nearby_notes, player_index, spawn_time):
+        """
+        Retorna um lane index (0-7) que pertence ao jogador especificado.
+        player_index: 0 (esquerda) ou 1 (direita)
+        """
+        lanes = [0, 1, 2, 3] if player_index == 0 else [4, 5, 6, 7]
+
+        random.shuffle(lanes)
+
+        for lane in lanes:
+            ocupado = False
+            
+            for note in nearby_notes:
+                note_time = note[0]
+                note_lane = note[1]
+                
+                if note_lane == lane and abs(note_time - spawn_time) < 0.5:
+                    ocupado = True
+                    break
+            if not ocupado:
+                return lane
+        return random.choice(lanes)
     
     def get_notes_hit(self):
-        return self.notes_hit
-    
+        return self.notes_hit  

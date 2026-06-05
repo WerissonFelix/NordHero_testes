@@ -203,7 +203,8 @@ class ManageGame:
             self.config.get_note_height(),
             (255, 255, 255),
             adjusted_speed,
-            self.mod
+            self.mod,
+            self.tipo_2players
         )
         
         keys = [
@@ -325,7 +326,7 @@ class ManageGame:
                     )
 
                     self.screen.blit(score_text_p1, (10, 10))
-                    self.screen.blit(score_text_p2, (10, 50))
+                    self.screen.blit(score_text_p2, (700, 10))
 
                 elif self.tipo_2players == "Juntos":
                     score_text = self.font.render(
@@ -341,6 +342,7 @@ class ManageGame:
                     True,
                     (255, 255, 0)
                 )
+                
                 self.screen.blit(score_text, (10, 10))
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        

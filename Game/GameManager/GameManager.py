@@ -3,6 +3,9 @@ from Game.Lanes.LaneManager import LaneManager
 from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
+from Game.Bar.BarProgress import BarProgressManager
+from Game.Bar.BarEvents import GameEvents
+
 from Screens.Pause import pause_menu
 from Screens.Match_summary import match_summary
 import pygame, time, os
@@ -24,11 +27,11 @@ class ManageGame:
         
         self.textManage  = TextManager(mod)
         self.clock = pygame.time.Clock()
+        
         current_dir = os.path.dirname(__file__)
         bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaDoJogo.png")
     
         self.mod = mod
-            
         self.notesManage = None
         
         if mod == "Single Player":  
@@ -40,8 +43,7 @@ class ManageGame:
             print(mod)
             self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
             self.width = 1280
-            self.height = 720
-            
+            self.height = 720 
         self.screen = pygame.display.set_mode(
             (
             self.width,
@@ -221,6 +223,17 @@ class ManageGame:
                 pygame.key.name(self.config.key7),
                 pygame.key.name(self.config.key8),
             ])
+
+            if self.tipo_2players == "Contra":
+                self.bar_p1 = BarProgressManager( 
+                    10, 130, 200, 20, 20,
+                    lambda: GameEvents.penalty_loss_points(1, self.score, self.notesManage.rating)
+                )
+                
+                self.bar_p2 = BarProgressManager(
+                    700, 130, 200, 20, 20,
+                    lambda: GameEvents.penalty_loss_points(0, self.score, self.notesManage.rating)
+                )
         
         """ 
         Loop principal do jogo.
@@ -305,10 +318,6 @@ class ManageGame:
                 keys_held
             )
             
-            for k,v in enumerate(rating):
-                if v != "":
-                    self.textManage.draw_rating(rating, k)
-
             color = self.textManage.update(self.screen, combo, extra)
 
             if self.mod == "2 Players":
@@ -327,7 +336,9 @@ class ManageGame:
 
                     self.screen.blit(score_text_p1, (10, 10))
                     self.screen.blit(score_text_p2, (700, 10))
-
+                    self.bar_p1.draw(self.screen)
+                    self.bar_p2.draw(self.screen)
+                    
                 elif self.tipo_2players == "Juntos":
                     score_text = self.font.render(
                         f"Score: {sum(self.score)}",
@@ -344,6 +355,14 @@ class ManageGame:
                 )
                 
                 self.screen.blit(score_text, (10, 10))
+                
+            for k,v in enumerate(rating):
+                if v != "":
+                    self.textManage.draw_rating(rating, k)
+                    
+                if v == "Perfect" and self.tipo_2players == "Contra":
+                    self.bar_p1.add_perfect()  if k == 0 else self.bar_p2.add_perfect()  
+
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)

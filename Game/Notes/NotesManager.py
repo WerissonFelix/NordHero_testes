@@ -9,7 +9,7 @@ class NoteManager:
     Responsável por atualizar posições das notas, detectar acertos do jogador
     e calcular pontuação baseada na precisão do timing.
     """
-    def __init__(self,  width, height, color, speed, mod, tipo_2players=None):
+    def __init__(self,  width, height, color, speed, mod, tipo_2players=None, text_manager=None):
         self.width = width
         self.height = height
         self.color = color
@@ -42,6 +42,8 @@ class NoteManager:
         self.combo = [0, 0]
         self.extra_score = 0
         self.active_long_notes = []
+        
+        self.text_manager = text_manager
         
     def while_running(self, scores, current_time, notes, spawn_offset, screen, keys, keys_pressed, keys_held):  
         """
@@ -170,6 +172,18 @@ class NoteManager:
             self.rating[index] = "Trap!"
             score[index] -= 300
             score[1-index] += 300
+            if self.text_manager:
+                if index == 0:
+                    pos1, pos2 = (200, 10), (900, 10)
+                    msg1, msg2 = "-300 pontos", "+300 pontos"
+                    col1, col2 = (255,0,0), (0,255,0)
+                else:
+                    pos1, pos2 = (900, 10), (200, 10)
+                    msg1, msg2 = "-300 pontos", "+300 pontos"
+                    col1, col2 = (255,0,0), (0,255,0)
+
+                self.text_manager.add_notification(msg1, pos1, col1, duration_frames=60)
+                self.text_manager.add_notification(msg2, pos2, col2, duration_frames=60)
             return score[index]
         
         if distance <= 12:

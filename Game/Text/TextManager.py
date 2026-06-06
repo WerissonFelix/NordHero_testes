@@ -38,7 +38,32 @@ class TextManager:
         self.rainbow_index = 0
         self.rainbow_speed = 0.1
         self.rainbow_change = 0
-           
+        self.notifications = []   # cada item: {"text": str, "pos": (x,y), "color": tuple, "life": int, "alpha": int}
+
+    def add_notification(self, text, pos, color, duration_frames=30):
+        """Adiciona uma mensagem que desaparece após alguns frames."""
+        self.notifications.append({
+            "text": text,
+            "pos": pos,
+            "color": color,
+            "life": duration_frames,
+            "alpha": 255
+        })
+
+    def update_notifications(self, screen):
+        """Desenha todas as notificações ativas e reduz seu tempo de vida."""
+        to_remove = []
+        for notif in self.notifications:
+            alpha = int(255 * (notif["life"] / 30)) 
+            surf = self.font.render(notif["text"], True, notif["color"])
+            surf.set_alpha(alpha)
+            screen.blit(surf, notif["pos"])
+            notif["life"] -= 1
+            if notif["life"] <= 0:
+                to_remove.append(notif)
+        for n in to_remove:
+            self.notifications.remove(n)
+
     def draw_rating(self, rating, index):
         """
         Renderiza avaliação com cor específica e fade-out.
@@ -76,7 +101,7 @@ class TextManager:
                 self.rainbow_index = 0        
         return self.rainbow[self.rainbow_index]
     
-    def update(self, screen, combo, extra):
+    def update(self, screen, combo=None, extra=None):
         """Chama todo frame para manter o fade-out ativo."""
         for index in range(len(self.current_message)):
             if self.alpha[index] > 0 and self.current_message[index] != "":
@@ -86,22 +111,22 @@ class TextManager:
                     self.color[index] = self.rainbow[5]
                 elif self.current_message[index] == "Perfect":
                     self.color[index] = self.rainbow_effect()
-                elif self.current_message[index] == "Trap!":
+                elif self.current_message[index] in ["Trap!", "Penalty!"]:
                     self.color[index] = self.rainbow[2]
                     if index == 0:
-                        posi1, posi2 = (10, 90), (700, 90)
-                        msg1 = "-300 pontos"
-                        msg2 = "+300 pontos"
+                        posi1, posi2 = (50, 10), (750, 10)
+                        msg1 = "-300 pontos" if self.current_message[index] == "Trap!" else "-500 pontos"
+                        msg2 = "+300 pontos" if self.current_message[index] == "Trap!" else "+500 pontos"
                     else:
-                        posi1, posi2 = (700, 90), (10, 90)
-                        msg1 = "-300 pontos"
-                        msg2 = "+300 pontos"
+                        posi1, posi2 = (750, 10), (50, 10)
+                        msg1 = "-300 pontos" if self.current_message[index] == "Trap!" else "-500 pontos"
+                        msg2 = "+300 pontos" if self.current_message[index] == "Trap!" else "+500 pontos"
                     
                     surf1 = self.font.render(msg1, True, self.rainbow[1])
                     surf2 = self.font.render(msg2, True, self.rainbow[5])
                     screen.blit(surf1, posi1)
                     screen.blit(surf2, posi2)
-                    
+                    return self.color[index]
                 else:
                     self.color[index] = self.rainbow[-1]
 
@@ -126,4 +151,5 @@ class TextManager:
                         screen.blit(combo_text, (700, 50))
                         screen.blit(extra_text, (700, 90))   
                 self.alpha[index] = max(self.alpha[index] - 4, 0)
+        self.update_notifications(screen)
         return self.color[index]

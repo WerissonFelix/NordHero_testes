@@ -35,11 +35,19 @@ class BarEvents:
         self.txtManager.add_notification(msg1, posi1, col1, duration_frames=60)
         self.txtManager.add_notification(msg2, posi2, col2, duration_frames=60)
     
-    def penalty_loss_points_both(self, player_index, total_score, rating):
+    def penalty_loss_points_both(self, player_index, score, rating):
         
         loss = 1500 
         
-        total_score = max(0, total_score- loss)
+        total_score = sum(score)
+        metade = 750
+        
+        if total_score >= 1500:
+            score[0] = max(0, score[0] - metade)
+            score[1] = max(0, score[1] - metade)
+        else:
+            score[0] = 0
+            score[1] = 0
         
         rating[player_index] = "Penalty!"
         

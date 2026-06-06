@@ -225,17 +225,18 @@ class ManageGame:
                 pygame.key.name(self.config.key8),
             ])
 
+            barEvent = BarEvents(self.screen, self.mod, self.textManage) 
+            
             if self.tipo_2players == "Contra":
-                barEvent = BarEvents(self.screen, self.mod, self.textManage) 
-                self.bar_p1 = BarProgressManager( 
-                    300, 600, 200, 20, 20,
-                    lambda: barEvent.penalty_loss_points_enemy(1, self.score, self.notesManage.rating)
-                )
+                callback1 = lambda: barEvent.penalty_loss_points_enemy(1, self.score, self.notesManage.rating)
+                callback2 = lambda: barEvent.penalty_loss_points_enemy(0, self.score, self.notesManage.rating)
+            else:  
+                  
+                callback1 = lambda: barEvent.penalty_loss_points_both(0, self.score, self.notesManage.rating)    
+                callback2 = lambda: barEvent.penalty_loss_points_both(1, self.score, self.notesManage.rating)    
                 
-                self.bar_p2 = BarProgressManager(
-                    900, 600, 200, 20, 20,
-                    lambda: barEvent.penalty_loss_points_enemy(0, self.score, self.notesManage.rating)
-                )
+            self.bar_p1 = BarProgressManager(300, 600, 200, 20, 20, callback1)
+            self.bar_p2 = BarProgressManager(900, 600, 200, 20, 20, callback2)
         
         """ 
         Loop principal do jogo.
@@ -338,18 +339,17 @@ class ManageGame:
 
                     self.screen.blit(score_text_p1, (10, 10))
                     self.screen.blit(score_text_p2, (700, 10))
-                    self.bar_p1.draw(self.screen)
-                    self.bar_p2.draw(self.screen)
                     
                 elif self.tipo_2players == "Juntos":
-                    total_score = sum(self.score)
-                    
+            
                     score_text = self.font.render(
-                        f"Score: {total_score}",
+                        f"Score: {sum(self.score)}",
                         True,
                         (255, 255, 0)
                     )
                     self.screen.blit(score_text, (10, 10))
+                self.bar_p1.draw(self.screen)
+                self.bar_p2.draw(self.screen)
             else:
                 score_text = self.font.render(
                     f"Score: {self.score[0]}",
@@ -365,6 +365,9 @@ class ManageGame:
                     
                 if v == "Perfect" and self.tipo_2players == "Contra":
                     self.bar_p1.add_perfect()  if k == 0 else self.bar_p2.add_perfect()  
+                    
+                if v in ["Miss", "Bad"] and self.tipo_2players == "Juntos":
+                    self.bar_p1.add_bad_miss(k, rating) if k == 0 else self.bar_p2.add_bad_miss(k, rating)
 
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        

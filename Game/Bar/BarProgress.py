@@ -26,15 +26,29 @@ class BarProgressManager:
         
         self.progress +=1
         
-        if self.progress >= self.threshold:
-            self.progress = 0
-            
+        if self.progress >= self.threshold:     
             self.reset()
+            
             if self.on_event:
                 self.on_event()
             
             return True
         return False
+    
+    def add_bad_miss(self, index, rating):
+        """  
+        Adiciona um Miss ou Bad e verifica se atingiu o limite
+        """
+        if rating[index] in ["Bad", "Miss"]:
+            self.progress += 1
+            if self.progress >= self.threshold:
+                self.reset()
+                
+                self.on_event()
+            else:
+                pass
+        else:
+            pass
 
     def draw(self, screen):
         """

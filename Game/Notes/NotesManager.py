@@ -112,7 +112,6 @@ class NoteManager:
                     pygame.draw.rect(screen, color, rect)    
                     
                 if rect.colliderect(keys[lane].rect):        
-            
                     just_pressed = keys[lane] in keys_pressed
                     
                     is_held_down = keys_held[keys[lane].key]
@@ -141,7 +140,7 @@ class NoteManager:
                         if just_pressed:   
                             distance = abs(rect.centery - keys[lane].rect.centery) 
                                                        
-                            scores[self.index] = self.create_rating(distance, scores[self.index], self.index, current_time, notes_enimies, notes[key+1:key+21])
+                            scores[self.index] = self.create_rating(distance, scores, self.index, current_time, notes_enimies, notes[key+1:key+21], is_enemy)
                                            
                             self.notes_to_remove.append(note)
                             try:
@@ -165,11 +164,17 @@ class NoteManager:
                 
         return scores, self.rating, self.combo, self.extra_score, keys_pressed, self.index
 
-    def create_rating(self, distance, score, index, current_time, notes_enimies,nearby_notes):
+    def create_rating(self, distance, score, index, current_time, notes_enimies,nearby_notes, is_enemy=False):
         """Cria texto de avaliação ("Bad", "Good", "Perfect")"""     
+        if is_enemy:
+            self.rating[index] = "Trap!"
+            score[index] -= 300
+            score[1-index] += 300
+            return score[index]
+        
         if distance <= 12:
             self.rating[index] = "Perfect" 
-            score += 100
+            score[index] += 100
             self.notes_hit[index]["Perfect"] += 1
             self.combo[index] += 1
             self.extra_score = 0
@@ -189,18 +194,18 @@ class NoteManager:
                 self.extra_score = 15 
             else:
                 self.extra_score = 20
-            score += self.extra_score 
+            score[index] += self.extra_score 
         elif 13 <= distance <= 18:
             self.rating[index] = "Good"
-            score += 50
+            score[index] += 50
             self.combo[index] = self.extra_score = 0
             self.notes_hit[index]["Good"] += 1
         elif distance >= 19:
             self.rating[index] = "Bad"
-            score += 25 
+            score[index] += 25 
             self.combo[index] = self.extra_score = 0
             self.notes_hit[index]["Bad"] += 1
-        return score
+        return score[index]
         
     def get_free_enemy_lane(self, nearby_notes, player_index, spawn_time):
         """

@@ -127,7 +127,7 @@ class NoteManager:
                                 if start_hitbox.colliderect(keys[lane].rect):
                                     distance = abs(start_hitbox.centery - keys[lane].rect.centery)     
                                     is_held_down = keys_held[keys[lane].key]
-                                    scores[self.index] = self.create_rating(distance, scores[self.index], self.index, current_time, notes_enimies)
+                                    scores[self.index] = self.create_rating(distance, scores, self.index, current_time, notes_enimies, notes[key+1:key+21])
                                     
                                 if rect_y >= keys[lane].rect.centery:
                                     self.notes_to_remove.append(note)
@@ -166,7 +166,7 @@ class NoteManager:
                 
         return scores, self.rating, self.combo, self.extra_score, keys_pressed, self.index
 
-    def create_rating(self, distance, score, index, current_time, notes_enimies,nearby_notes, is_enemy=False):
+    def create_rating(self, distance, score, index, current_time, notes_enimies, nearby_notes, is_enemy=False):
         """Cria texto de avaliação ("Bad", "Good", "Perfect")"""     
         if is_enemy:
             self.rating[index] = "Trap!"

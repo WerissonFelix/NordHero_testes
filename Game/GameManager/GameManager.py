@@ -4,7 +4,7 @@ from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
 from Game.Bar.BarProgress import BarProgressManager
-from Game.Bar.BarEvents import GameEvents
+from Game.Bar.BarEvents import BarEvents
 
 from Screens.Pause import pause_menu
 from Screens.Match_summary import match_summary
@@ -206,7 +206,8 @@ class ManageGame:
             (255, 255, 255),
             adjusted_speed,
             self.mod,
-            self.tipo_2players
+            self.tipo_2players,
+            self.textManage
         )
         
         keys = [
@@ -225,14 +226,15 @@ class ManageGame:
             ])
 
             if self.tipo_2players == "Contra":
+                barEvent = BarEvents(self.screen, self.mod, self.textManage) 
                 self.bar_p1 = BarProgressManager( 
-                    10, 130, 200, 20, 20,
-                    lambda: GameEvents.penalty_loss_points(1, self.score, self.notesManage.rating)
+                    300, 600, 200, 20, 20,
+                    lambda: barEvent.penalty_loss_points(1, self.score, self.notesManage.rating)
                 )
                 
                 self.bar_p2 = BarProgressManager(
-                    700, 130, 200, 20, 20,
-                    lambda: GameEvents.penalty_loss_points(0, self.score, self.notesManage.rating)
+                    900, 600, 200, 20, 20,
+                    lambda: barEvent.penalty_loss_points(0, self.score, self.notesManage.rating)
                 )
         
         """ 

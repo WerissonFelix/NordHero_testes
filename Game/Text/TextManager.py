@@ -86,6 +86,22 @@ class TextManager:
                     self.color[index] = self.rainbow[5]
                 elif self.current_message[index] == "Perfect":
                     self.color[index] = self.rainbow_effect()
+                elif self.current_message[index] == "Trap!":
+                    self.color[index] = self.rainbow[2]
+                    if index == 0:
+                        posi1, posi2 = (10, 90), (700, 90)
+                        msg1 = "-300 pontos"
+                        msg2 = "+300 pontos"
+                    else:
+                        posi1, posi2 = (700, 90), (10, 90)
+                        msg1 = "-300 pontos"
+                        msg2 = "+300 pontos"
+                    
+                    surf1 = self.font.render(msg1, True, self.rainbow[1])
+                    surf2 = self.font.render(msg2, True, self.rainbow[5])
+                    screen.blit(surf1, posi1)
+                    screen.blit(surf2, posi2)
+                    
                 else:
                     self.color[index] = self.rainbow[-1]
 
@@ -97,10 +113,8 @@ class TextManager:
                 if self.mod == "Single Player":
                     screen.blit(temp_surf, (10, 300))
                 else:
-                    if index == 0:
-                        screen.blit(temp_surf, (10, 300))
-                    else:
-                        screen.blit(temp_surf, (700, 300))
+                    posi = (10, 300) if index == 0 else (700, 300)
+                    screen.blit(temp_surf, posi)
 
                 if combo[index] > 1:        
                     combo_text = self.font.render(f"Combo: {combo}", True, self.color[index])

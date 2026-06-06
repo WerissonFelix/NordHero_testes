@@ -12,7 +12,7 @@ class BarEvents:
         self.font = pygame.font.Font(None, 36)
         
     
-    def penalty_loss_points(self, opponent_index, score, rating):
+    def penalty_loss_points_enemy(self, opponent_index, score, rating):
         """
         Aplica penalidade de -500 pontos ao oponente.
         """
@@ -34,3 +34,20 @@ class BarEvents:
        
         self.txtManager.add_notification(msg1, posi1, col1, duration_frames=60)
         self.txtManager.add_notification(msg2, posi2, col2, duration_frames=60)
+    
+    def penalty_loss_points_both(self, player_index, total_score, rating):
+        
+        loss = 1500 
+        
+        total_score = max(0, total_score- loss)
+        
+        rating[player_index] = "Penalty!"
+        
+        x, y_base = 640, 120  
+
+        msg1 = f"Player {player_index+1} made a BIG mistake!"
+        msg2 = "-1500 points"
+
+        self.txtManager.add_notification(msg1, (x, y_base), (255, 0, 0), duration_frames=180)
+
+        self.txtManager.add_notification(msg2, (x, y_base + 30), (255, 0, 0), duration_frames=180)

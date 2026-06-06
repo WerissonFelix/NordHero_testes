@@ -229,12 +229,12 @@ class ManageGame:
                 barEvent = BarEvents(self.screen, self.mod, self.textManage) 
                 self.bar_p1 = BarProgressManager( 
                     300, 600, 200, 20, 20,
-                    lambda: barEvent.penalty_loss_points(1, self.score, self.notesManage.rating)
+                    lambda: barEvent.penalty_loss_points_enemy(1, self.score, self.notesManage.rating)
                 )
                 
                 self.bar_p2 = BarProgressManager(
                     900, 600, 200, 20, 20,
-                    lambda: barEvent.penalty_loss_points(0, self.score, self.notesManage.rating)
+                    lambda: barEvent.penalty_loss_points_enemy(0, self.score, self.notesManage.rating)
                 )
         
         """ 
@@ -342,12 +342,13 @@ class ManageGame:
                     self.bar_p2.draw(self.screen)
                     
                 elif self.tipo_2players == "Juntos":
+                    total_score = sum(self.score)
+                    
                     score_text = self.font.render(
-                        f"Score: {sum(self.score)}",
+                        f"Score: {total_score}",
                         True,
                         (255, 255, 0)
                     )
-
                     self.screen.blit(score_text, (10, 10))
             else:
                 score_text = self.font.render(

@@ -6,7 +6,7 @@ from models.user import User
 
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
+surface = pygame.display.set_mode((1080, 720))
 
 def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setting_menu = None, config = None):
     """
@@ -50,8 +50,8 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
     
     menu = pygame_menu.Menu(
         '',
-        800,
-        500,
+        1080,
+        720,
 
         theme=theme)
     

@@ -1,5 +1,7 @@
 DataBase/Banco.db
 __pycache__/
 __pycache__/
+.env
+
 
 

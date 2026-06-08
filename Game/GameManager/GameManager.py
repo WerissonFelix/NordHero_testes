@@ -187,6 +187,7 @@ class ManageGame:
         self.score = [0, 0]
         self.index_player = 0
         self.mixer = self.audio.load_music()
+        self.current_time = self.mixer.music.get_pos() / 1000
         
         MUSIC_END_EVENT = pygame.USEREVENT + 1
         pygame.mixer.music.set_endevent(MUSIC_END_EVENT)
@@ -230,14 +231,29 @@ class ManageGame:
             if self.tipo_2players == "Contra":
                 callback1 = lambda: barEvent.penalty_loss_points_enemy(1, self.score, self.notesManage.rating)
                 callback2 = lambda: barEvent.penalty_loss_points_enemy(0, self.score, self.notesManage.rating)
-            else:  
-                  
-                callback1 = lambda: barEvent.penalty_loss_points_both(0, self.score, self.notesManage.rating)    
-                callback2 = lambda: barEvent.penalty_loss_points_both(1, self.score, self.notesManage.rating)    
+                     
+                self.bar_p1 = BarProgressManager(300, 600, 200, 20, 20, callback1)
+                self.bar_p2 = BarProgressManager(900, 600, 200, 20, 20, callback2)
+            else:    
+                callback_pun1 = lambda: barEvent.penalty_loss_points_both(0, self.score, self.notesManage.rating)    
+                callback_pun2 = lambda: barEvent.penalty_loss_points_both(1, self.score, self.notesManage.rating)    
+                self.bar_pun_p1 = BarProgressManager(230, 620, 200, 20, 20, callback_pun1)
+                self.bar_pun_p2 = BarProgressManager(830, 620, 200, 20, 20, callback_pun2)
+ 
+                self.bar_rain_p1 = BarProgressManager(617, 260, 20, 200, 20, None)
+                self.bar_rain_p2 = BarProgressManager(643, 260, 20, 200, 20, None)
                 
-            self.bar_p1 = BarProgressManager(300, 600, 200, 20, 20, callback1)
-            self.bar_p2 = BarProgressManager(900, 600, 200, 20, 20, callback2)
-        
+                def on_both_full():
+                    self.notesManage.spawn_rainbow_notes(self.notes, 0, self.current_time)
+                    self.notesManage.spawn_rainbow_notes(self.notes, 1, self.current_time)
+                    if self.textManage:
+                        self.textManage.add_notification(
+                            "RAINBOW NOTES!", (480, 80), (255, 200, 0), duration_frames=180
+                        )
+
+                self.bar_rain_p1.set_partner(self.bar_rain_p2, on_both_full)
+                self.bar_rain_p2.set_partner(self.bar_rain_p1, on_both_full)
+           
         """ 
         Loop principal do jogo.
     
@@ -297,7 +313,7 @@ class ManageGame:
                 else:
                     key.draw_line()
                 
-            current_time = self.mixer.music.get_pos() / 1000
+            self.current_time = self.mixer.music.get_pos() / 1000
             
             
             for i, key in enumerate(keys):
@@ -315,7 +331,7 @@ class ManageGame:
         
             self.score, rating, combo, extra, self.keys_pressed, self.index_player = self.notesManage.while_running(
                 self.score,
-                current_time,self.notes,self.config.get_spawn_offset(),
+                self.current_time,self.notes,self.config.get_spawn_offset(),
                 self.screen,self.default_lane,
                 self.keys_pressed,
                 keys_held
@@ -348,8 +364,14 @@ class ManageGame:
                         (255, 255, 0)
                     )
                     self.screen.blit(score_text, (10, 10))
-                self.bar_p1.draw(self.screen)
-                self.bar_p2.draw(self.screen)
+                if self.tipo_2players == "Contra":
+                    self.bar_p1.draw(self.screen)
+                    self.bar_p2.draw(self.screen)
+                else:
+                    self.bar_pun_p1.draw(self.screen)
+                    self.bar_pun_p2.draw(self.screen)
+                    self.bar_rain_p1.draw(self.screen)
+                    self.bar_rain_p2.draw(self.screen)
             else:
                 score_text = self.font.render(
                     f"Score: {self.score[0]}",
@@ -366,9 +388,11 @@ class ManageGame:
                 if v == "Perfect" and self.tipo_2players == "Contra":
                     self.bar_p1.add_perfect()  if k == 0 else self.bar_p2.add_perfect()  
                     
-                if v in ["Miss", "Bad"] and self.tipo_2players == "Juntos":
-                    self.bar_p1.add_bad_miss(k, rating) if k == 0 else self.bar_p2.add_bad_miss(k, rating)
-
+                if self.tipo_2players == "Juntos":
+                    if v == "Perfect":
+                        self.bar_rain_p1.add_perfect() if k == 0 else self.bar_rain_p2.add_perfect()
+                    if v in ["Miss", "Bad"]:
+                        self.bar_pun_p1.add_bad_miss(k, rating) if k == 0 else self.bar_pun_p2.add_bad_miss(k, rating)
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)

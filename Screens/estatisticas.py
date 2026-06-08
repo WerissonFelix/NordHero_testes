@@ -37,6 +37,7 @@ def estatisticas_screen(user: User):
     theme.title_font_size = 20
     
     #Fonte dos Botões
+    
     theme.widget_font = pygame_menu.font.FONT_MUNRO
 
     #Cor e Estilo da Barra Superior 

@@ -67,6 +67,7 @@ class NoteManager:
             duracao =  note[3] if len(note) > 3 else 0
             
             is_enemy = len(note) > 4 and note[4]
+            is_rainbow = len(note) > 5 and note[5] == "rainbow"
             
             limite = 600 if self.mod == "Single Player" else 720
             if note_time - spawn_offset <= current_time:
@@ -110,7 +111,17 @@ class NoteManager:
                     altura_real = altura_base
                     rect_y = self.y
                     rect = pygame.Rect(self.x, rect_y, self.width, altura_real)
-                    color = (255,0,0) if is_enemy else (255, 255, 255)
+                    if is_enemy:
+                        color = (255, 0, 0)
+                    elif is_rainbow:
+                        t = pygame.time.get_ticks()
+                        r = int((pygame.math.Vector2(1, 0).rotate(t * 0.3)).x * 127 + 128)
+                        g = int((pygame.math.Vector2(1, 0).rotate(t * 0.3 + 120)).x * 127 + 128)
+                        b = int((pygame.math.Vector2(1, 0).rotate(t * 0.3 + 240)).x * 127 + 128)
+                        color = (r, g, b)
+                    else:
+                        color = (255, 255, 255)
+                        
                     pygame.draw.rect(screen, color, rect)    
                     
                 if rect.colliderect(keys[lane].rect):        
@@ -142,7 +153,7 @@ class NoteManager:
                         if just_pressed:   
                             distance = abs(rect.centery - keys[lane].rect.centery) 
                                                        
-                            scores[self.index] = self.create_rating(distance, scores, self.index, current_time, notes_enimies, notes[key+1:key+21], is_enemy)
+                            scores[self.index] = self.create_rating(distance, scores, self.index, current_time, notes_enimies, notes[key+1:key+21], is_enemy, is_rainbow)
                                            
                             self.notes_to_remove.append(note)
                             try:
@@ -166,7 +177,7 @@ class NoteManager:
                 
         return scores, self.rating, self.combo, self.extra_score, keys_pressed, self.index
 
-    def create_rating(self, distance, score, index, current_time, notes_enimies, nearby_notes, is_enemy=False):
+    def create_rating(self, distance, score, index, current_time, notes_enimies, nearby_notes, is_enemy=False, is_rainbow=False):
         """Cria texto de avaliação ("Bad", "Good", "Perfect")"""     
         if is_enemy:
             self.rating[index] = "Trap!"
@@ -219,8 +230,35 @@ class NoteManager:
             score[index] += 25 
             self.combo[index] = self.extra_score = 0
             self.notes_hit[index]["Bad"] += 1
+            
+        if is_rainbow and self.rating[index] not in ["", "Miss"]:
+            bonus = 1000
+            score[index] += bonus
+            if self.text_manager:
+                pos = (200, 50) if index == 0 else (900, 50)
+                self.text_manager.add_notification("Rainbow!", pos, (255, 200, 0), duration_frames=120)
         return score[index]
-        
+    
+    def spawn_rainbow_notes(self, notes, player_index, current_time):
+        lanes = [0, 1, 2, 3] if player_index == 0 else [4, 5, 6, 7]
+        substituidas = 0
+
+        for i, note in enumerate(notes):
+            if substituidas >= 2:
+                break
+            
+            if note[0] < current_time + 4:
+                continue
+   
+            if note[1] in lanes and not (len(note) > 5 and note[5] == "rainbow"):
+                
+                note_rainbow = list(note)
+                note_rainbow.append(0)
+                note_rainbow.append(False)
+                note_rainbow.append("rainbow")
+                notes[i] = note_rainbow
+                substituidas += 1
+                    
     def get_free_enemy_lane(self, nearby_notes, player_index, spawn_time):
         """
         Retorna um lane index (0-7) que pertence ao jogador especificado.

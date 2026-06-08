@@ -40,7 +40,7 @@ class NotesHitRepository(BaseRepository):
         """ 
         busca um registro na tabela de notas acertadas, ou seja, a quantidade de miss, good e perfect, pelo id.
         """
-        query = """"
+        query = """
         select * from notes_hit
         where id = ?
         """

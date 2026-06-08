@@ -18,21 +18,40 @@ class BarProgressManager:
         self.progress = 0
         self.on_event = event_callback
         
+        
+        self.partner_bar = None
+        self.on_both_full_callback = None
+
         self.fundo_color = (60, 60, 60)
         self.bar_color = (0, 200, 0)
         
     def add_perfect(self):
         """Adiciona um acerto Perfect e verifica se atingiu o limite."""
         
-        self.progress +=1
-        
-        if self.progress >= self.threshold:     
-            self.reset()
+        if self.progress >= self.threshold:  
             
-            if self.on_event:
-                self.on_event()
-            
-            return True
+            if self.partner_bar and self.on_both_full_callback:
+                
+                if self.partner_bar.is_full():
+                    self.reset()
+                    self.partner_bar.reset()
+                    
+                    self.bar_color = (0, 200, 0)
+                    self.partner_bar.bar_color = (0, 200, 0)
+                    
+                    self.on_both_full_callback()    
+                else:
+                    self.bar_color = (255, 215, 0)
+                    
+            else:    
+                self.reset()
+                
+                if self.on_event:
+                    self.on_event()
+                
+                return True
+        else:
+            self.progress +=1
         return False
     
     def add_bad_miss(self, index, rating):
@@ -66,9 +85,19 @@ class BarProgressManager:
         
         pygame.draw.rect(screen, self.bar_color, bar)
     
+    def set_partner(self, other_bar, on_both_full_callback):
+        """
+        Define a barra parceira e o 
+        callback para quando ambas estiverem cheias.
+        """
+        
+        self.partner_bar = other_bar
+        self.on_both_full_callback = on_both_full_callback
+
     def reset(self):
         """Reseta a barra para o início"""
         
         self.progress = 0
-         
         
+    def is_full(self):
+        return self.progress >= self.threshold

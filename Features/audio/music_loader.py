@@ -37,7 +37,7 @@ story_difficulty_map = {
     "Michael Jackson - Billie Jean Vocals Only": (2, "Vocal"),
     "Michael Jackson  Billie Jean [Instrumental Version] - HIStoryWorldTourMJ (youtube)": (2, "Instrumental"),
 
-    "Abolish the IRS": (3, "Instrumental"),
+    "abolish the IRS": (3, "Instrumental"),
     "Ana Vidovic - Asturias by Isaac Albéniz -": (3, "Instrumental"),
     "MEGALOVANIA - Toby Fox": (3, "Instrumental"),
     

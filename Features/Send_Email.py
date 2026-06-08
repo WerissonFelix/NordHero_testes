@@ -13,7 +13,7 @@ Att,
 """
 
 senha = 'ihlg vbxt neli trlb'
-anexo = './Features/emailteste.png'
+anexo = './Images/TesteDeEnvio.png'
 
 # Cria um email
 msg = EmailMessage()

@@ -1,20 +1,38 @@
 import smtplib
 from email.message import EmailMessage
 import mimetypes
-
+import random
 
 class EmailSender:
-    def __init__(self):
+    def __init__(self, destinatario: str, assunto: str, mensagem: str):
         self.remetente = 'nordherosupport@gmail.com'
-        self.destinatario = 'caua.araujo@ufrpe.br'
-        self.assunto = 'Testando envio de email'
-        self.mensagem = """
-        Esta é uma mensagem de teste.
+        self.destinatario = destinatario
+        self.assunto = assunto
+        self.mensagem = mensagem
+        self.senha = 'ihlg vbxt neli trlb'
+    def gerar_codigo(self):
+            return str(random.randint(100000, 999999))
 
-        Att,
-        """
+    def enviar_codigo(self):
+        codigo = self.gerar_codigo()
+
+        msg = EmailMessage()
+        msg["From"] = self.remetente
+        msg["To"] = self.destinatario
+        msg["Subject"] = "Código de Verificação"
+
+        msg.set_content(
+            f"Seu código de verificação é: {codigo}\n\n"
+            "Este código expira em alguns minutos."
+        )
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as email:
+            email.login(self.remetente, self.senha)
+            email.send_message(msg)
+
+        return codigo
+
     def send_email(self):
-        senha = 'ihlg vbxt neli trlb'
         anexo = './Images/TesteDeEnvio.png'
 
         # Cria um email
@@ -34,12 +52,8 @@ class EmailSender:
 
         # Realiza o envio do email
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as email:
-            email.login(self.remetente, senha)
+            email.login(self.remetente, self.senha)
             email.send_message(msg)
 
-
-print("Email enviado com sucesso!")
-
-
-Teste = EmailSender()
-Teste.send_email()
+teste = EmailSender('caua.araujo@ufrpe.br', 'Teste de Envio', 'Este é um teste de envio de email com anexo.')
+teste.enviar_codigo()

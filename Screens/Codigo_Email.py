@@ -29,14 +29,15 @@ def codigo_email(screen_name: str, codigo):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
+    resultado = None
+
     def verificar_codigo():
-        if codigo_input.get_value() == codigo:
-            return True
-        else:
-            return False
-        
+        nonlocal resultado
+        resultado = codigo_input.get_value()
+        code_menu.disable()
 
     code_menu = pygame_menu.Menu(
+        "",
         1080, 
         720,
         theme=theme
@@ -47,3 +48,5 @@ def codigo_email(screen_name: str, codigo):
     code_menu.add.button("CONFIRM", verificar_codigo)
     code_menu.add.button("EXIT", pygame_menu.events.EXIT)
     code_menu.mainloop(surface)
+
+    return resultado

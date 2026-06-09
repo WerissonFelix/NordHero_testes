@@ -50,7 +50,7 @@ def create_account_menu(initial_screen,login_screen):
     nome_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     nome_input.translate(180, 0)
 
-    email_input = creat_menu.add.text_input('Email: ', maxchar=20)
+    email_input = creat_menu.add.text_input('Email: ', maxchar=40)
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 

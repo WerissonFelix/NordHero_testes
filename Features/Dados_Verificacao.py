@@ -67,8 +67,10 @@ class DataVerifier:
             if self.screen_name == "creat_account":
                 email_sender = EmailSender(user.email, "Código de Verificação", "Este é o código de verificação para acessar sua conta no Nord Hero.")
                 codigo = email_sender.enviar_codigo()
-                codigo_correto = codigo_email(self.screen_name, codigo)
-                if codigo_correto == codigo:
+                codigo_digitado = codigo_email(self.screen_name, codigo)
+                print(codigo_digitado, type(codigo_digitado))
+                print(codigo, type(codigo))
+                if codigo_digitado.strip() == codigo:
                     return self.call_database_for_process(user)
                 else:
                     return data_error_screen("código incorreto", self.screen_name)

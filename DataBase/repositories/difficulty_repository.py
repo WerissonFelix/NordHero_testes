@@ -40,7 +40,7 @@ class DifficultyRepository(BaseRepository):
         return all_difficulties
 
 
-'''
+"""
 difficultyManeger = DifficultyRepository()
 
 
@@ -51,4 +51,4 @@ hard = Difficulty(None, "Hard")
 difficultyManeger.create_difficulty(easy)
 difficultyManeger.create_difficulty(normal)
 difficultyManeger.create_difficulty(hard)
-'''
+"""

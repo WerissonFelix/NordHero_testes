@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class NotesHit:
     id: int | None
+    user_id: int
     chart_id: int
     
     qtd_miss: int

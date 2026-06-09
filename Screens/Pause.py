@@ -4,9 +4,7 @@ import pygame_menu
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from models.user import User
 
-
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 
 def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setting_menu = None, config = None):
     """
@@ -21,7 +19,7 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
     from Screens.Match_summary import match_summary
     from Screens.settings import change_controls_menu
     from Game.GameManager.GameManager import ManageGame
-    
+        
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
@@ -43,12 +41,16 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
     
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
+  
     menu = pygame_menu.Menu(
         '',
-        1080,
-        720,
+        width,
+        height,
 
-        theme=theme)
+        theme=theme
+    )
     
     manager = ManageGame(user, music_path, mod)
     
@@ -57,10 +59,13 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
         menu.disable()
         if setting_menu:
             setting_menu.disable()
-        
-         
+    
+    def call_match():
+        menu.disable()
+        match_summary(user, total_notes, notes_hit, music_path, score)
+      
     menu.add.button("SETTINGS", change_controls_menu, config)
     menu.add.button('RESUME', resume_game)
-    menu.add.button("QUIT", match_summary, user, total_notes, notes_hit, music_path, score)
+    menu.add.button("QUIT", call_match)
 
     menu.mainloop(surface)

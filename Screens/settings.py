@@ -4,16 +4,19 @@ from Game.Config.Game_Config import GameConfig
 from Screens.Pause import pause_menu
 
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 
 def change_controls_menu(config):
-
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
+  
     initial_menu = pygame_menu.Menu(
         '',
-        800,
-        600,
-        theme=pygame_menu.themes.THEME_BLUE)
+        width,
+        height,
+
+        theme=pygame_menu.themes.THEME_BLUE
+    )
 
     modo_captura = False
 
@@ -76,7 +79,7 @@ def change_controls_menu(config):
                     change_key(event.key)
 
         if initial_menu.is_enabled():     
-            initial_menu.draw(screen)       
+            initial_menu.draw(surface)       
             initial_menu.update(events)     
         else:
             running = False

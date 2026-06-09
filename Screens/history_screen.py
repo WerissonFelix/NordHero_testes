@@ -12,7 +12,6 @@ from models.score import Score
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/TelaPadrao.png')
 
 def history_screen(user : User):
@@ -49,10 +48,13 @@ def history_screen(user : User):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
+    screen = pygame.display.get_surface()
+    width, height = screen.get_size()
+    
     history_menu = pygame_menu.Menu(
         f'',
-        1080, 
-        720,
+        width,
+        height,
         theme=theme
     )
     
@@ -195,4 +197,4 @@ def history_screen(user : User):
     )    
     
     history_menu.add.label("")
-    history_menu.mainloop(surface)
+    history_menu.mainloop(screen)

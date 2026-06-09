@@ -14,7 +14,6 @@ from models.difficulty import Difficulty
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/teladefundo.png')
 music = None
 def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2players = None):
@@ -48,14 +47,16 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
+    
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
 
     choice = pygame_menu.Menu(
-        f'Connected as: {user.name}',
-        1080, 
-        720,
+        f' Connected as: {user.name}',
+        width,
+        height,
         theme=theme
-        )
-    
+    )
     
     lbl_rank_personal = choice.add.label(
         f"Best Score: 'N/A'", 

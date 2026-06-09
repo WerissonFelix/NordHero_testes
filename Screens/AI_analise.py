@@ -8,7 +8,6 @@ from Features.AI_analytics.groq_analytics import FocusAnalyzerGroq
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/TelaPadrao.png')
 
 def AI_analise(user : User):
@@ -43,13 +42,15 @@ def AI_analise(user : User):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
+
     ai_menu = pygame_menu.Menu(
         f'Connected as: {user.name}',
-        1080, 
-        720,
+        width,
+        height,
         theme=theme
-        )
-    
+    )
     
     def analise_rendimento_por_IA():
         analyzer = FocusAnalyzerGroq()

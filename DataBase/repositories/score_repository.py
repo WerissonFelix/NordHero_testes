@@ -107,13 +107,13 @@ class ScoreRepository(BaseRepository):
         
         return Score(row[0],row[1], row[2], row[3], row[4], row[5], row[6])
     
-    def get_all_by_chart_difficulty(self, difficulty_id):
+    def get_all_by_chart_difficulty(self, difficulty_id, user_id):
         query = """
         select * from scores
         inner join song_charts ON song_charts.id = scores.chart_id
-        where song_charts.difficulty_id = ?
+        where (song_charts.difficulty_id = ? and scores.user_id = ?)
         """
-        rows = self.fetchall(query, (difficulty_id,))
+        rows = self.fetchall(query, (difficulty_id, user_id))
         
         if len(rows) == 0:
             return None

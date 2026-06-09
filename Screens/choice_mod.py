@@ -7,7 +7,6 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/teladefundo.png')
 def choice_mod(user:User):
     """
@@ -42,14 +41,16 @@ def choice_mod(user:User):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
-    choice = pygame_menu.Menu(
-        f'Connected as: {user.name}',
-        1080, 
-        720,
-        theme=theme
-        )
-    
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
 
+    choice = pygame_menu.Menu(
+        f' Connected as: {user.name}',
+        width,
+        height,
+        theme=theme
+    )
+     
     selectors = []
     buttons = []
     def clear_lists():

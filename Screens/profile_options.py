@@ -7,7 +7,6 @@ from Screens.update_screen import update_menu
 from Screens.delete_screen import delete_menu
 
 pygame.init()
-surface = pygame.display.set_mode((800, 500))
 
 def profile_options_menu(user):
     """
@@ -37,13 +36,18 @@ def profile_options_menu(user):
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
+    
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
+  
     options = pygame_menu.Menu(
         '',
-        800,
-        500,
+        width,
+        height,
 
-        theme=theme)
-
+        theme=theme
+    )
+    
     options.add.button("UPDATE DATA", update_menu , user,profile_options_menu)
     options.add.button("DELETE ACCOUNT", delete_menu, user, profile_options_menu)
     options.add.button('BACK', home_screen, user,profile_options_menu)

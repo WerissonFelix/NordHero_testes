@@ -5,7 +5,6 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 from models.user import User
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/teladefundo.png')
 
 def codigo_email(screen_name: str, codigo):
@@ -35,11 +34,14 @@ def codigo_email(screen_name: str, codigo):
         nonlocal resultado
         resultado = codigo_input.get_value()
         code_menu.disable()
+        
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
 
     code_menu = pygame_menu.Menu(
         "",
-        1080, 
-        720,
+        width, 
+        height,
         theme=theme
         )
     

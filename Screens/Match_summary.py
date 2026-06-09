@@ -13,10 +13,9 @@ from models.score import Score
 from models.user import User
 
 pygame.init()
-screen_surface = pygame.display.set_mode((1080, 720))
+
 fundo = pygame.image.load('./Images/SummarySingleplayer.png')
 music = ""
-
 def match_summary(user: User, total_notes, notes_hit, file_path, score):
     """
     Exibe o resumo de desempenho após uma partida.
@@ -49,13 +48,16 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
+    
+    screen_surface = pygame.display.get_surface()
+    width, height = screen_surface.get_size()
 
     choice = pygame_menu.Menu(
-        f'',
-        1080, 
-        720,
+        '',
+        width,
+        height,
         theme=theme
-        )
+    )
     
     def criar_grafico_radar():
         import matplotlib.pyplot as plt
@@ -171,9 +173,9 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     song = songManager.get_by_file_path(file_path)
     chart = chartManeger.get_by_song_and_difficulty(song.id, song.story_difficulty_id)
     
-    notesHitManager.create(NotesHit(None, chart.id, notes_hit[0]["Miss"], notes_hit[0]["Bad"], notes_hit[0]["Good"], notes_hit[0]["Perfect"]))
+    notesHitManager.create(NotesHit(None, user.id, chart.id, notes_hit[0]["Miss"], notes_hit[0]["Bad"], notes_hit[0]["Good"], notes_hit[0]["Perfect"]))
     
-    notes = notesHitManager.get_by_chart_id(chart.id)
+    notes = notesHitManager.get_by_user_chart_id(chart.id, user.id)
     
     score_match = Score(None, user.id, chart.id, notes.id, score[0], accuracy, raking)
     scoreManager.create(score_match)

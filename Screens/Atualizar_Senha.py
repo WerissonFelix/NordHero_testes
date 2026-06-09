@@ -5,7 +5,6 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 from models.user import User
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/teladefundo.png')
 
 def atualizar_senha(user: User):
@@ -31,13 +30,16 @@ def atualizar_senha(user: User):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
 
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
 
     attsenha_menu = pygame_menu.Menu(
         "",
-        1080, 
-        720,
+        width,
+        height,
         theme=theme
-        )
+    )
+   
     validator = DataVerifier("update_screen")
     def update_callback():
         new_user = User(user.id, user.name, user.email, senha_input.get_value())

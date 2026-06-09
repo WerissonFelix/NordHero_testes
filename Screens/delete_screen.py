@@ -8,8 +8,6 @@ from DataBase.repositories.user_repository import UserRepository
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((600, 400))
-
 def delete_menu(user, profile_options):
     """
     Exibe a tela de confirmação para exclusão de conta.
@@ -41,11 +39,14 @@ def delete_menu(user, profile_options):
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
-
+     
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
+    
     delete  = pygame_menu.Menu(
         '',
-        800,
-        500,
+        width,
+        height,
 
         theme=theme)
     

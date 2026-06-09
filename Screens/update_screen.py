@@ -6,7 +6,6 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((600, 400))
 
 def update_menu(user: User, profile_options):
     """
@@ -39,12 +38,16 @@ def update_menu(user: User, profile_options):
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
     
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
+  
     update = pygame_menu.Menu(
         '',
-        800,
-        500,
+        width,
+        height,
 
-        theme=theme)
+        theme=pygame_menu.themes.THEME_BLUE
+    ) 
 
     update.add.label(f"Name: {user.name}   Email: {user.email}", font_color=(255, 255, 0))
     
@@ -79,5 +82,3 @@ def update_menu(user: User, profile_options):
     update.add.button('BACK', profile_options, user)
 
     update.mainloop(surface)
-
-

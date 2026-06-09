@@ -1,4 +1,3 @@
-
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
@@ -16,12 +15,9 @@ import pygame
 import pygame_menu
 
 pygame.init()
-
-screen = pygame.display.set_mode((1080, 720))
 clock = pygame.time.Clock()
 
 def estatisticas_screen(user: User):   
-    
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     import numpy as np
@@ -32,26 +28,21 @@ def estatisticas_screen(user: User):
     )
     theme = pygame_menu.themes.THEME_DARK.copy()
 
-    #Fonte e Tamanho do nome "Conectado como: {user[1]}"
-    theme.title_font = pygame_menu.font.FONT_MUNRO
-    theme.title_font_size = 20
-    
-    #Fonte dos Botões
-    
     theme.widget_font = pygame_menu.font.FONT_MUNRO
 
-    #Cor e Estilo da Barra Superior 
     theme.background_color = fundo 
     theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     theme.title_offset = (10, 50)
 
-    #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
-
+    
+    screen = pygame.display.get_surface()
+    width, height = screen.get_size()
+    
     estatistica_menu = pygame_menu.Menu(
         f'',
-        1080,
-        720,
+        width,
+        height,
         theme=theme
         )
     
@@ -88,23 +79,15 @@ def estatisticas_screen(user: User):
         ], onchange=gerenciar_graficos
         
     )
-    
-    """   
-    def criar_selector_music():
-        songs = [songManager.get_by_id(chart.song_id).title for chart in charts]
-        songs = list(set(songs))
-        music_selector = history_menu.add.selector(
-         "Music: ",
-         [("---", "-")] + [(song, song) for song in songs],
-         onchange=create_history
-        )
-    """ 
-    
+      
     type_selector.translate(-20, -300)
     def criar_grafico_radar():
         nonlocal grafico_surface 
         
-        notes_hit = notesHitManager.get_all()
+        scores = scoreManager.get_all_by_user_id(user.id)
+        all_charts = [chartManager.get_by_id(score.chart_id) for score in scores]
+        
+        notes_hit = [notesHitManager.get_by_user_chart_id(chart.id, user.id) for chart in all_charts]
         
         miss = [notes.qtd_miss for notes in notes_hit] if notes_hit is not None else 0
         bad = [notes.qtd_bad for notes in notes_hit] if notes_hit is not None else 0
@@ -113,7 +96,10 @@ def estatisticas_screen(user: User):
         
         categorias = ["Miss", "Bad", "Good", "Perfect"]
         
-        player = [sum(miss), sum(bad), sum(good), sum(perfect)]
+        if len(notes_hit) > 0:
+            player = [sum(miss), sum(bad), sum(good), sum(perfect)]
+        else:
+            player = [0, 0, 0, 0]
     
         N = len(categorias)
         
@@ -126,16 +112,6 @@ def estatisticas_screen(user: User):
         fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True))
         
         ax.fill(angulos, player, alpha=0.9)
-        
-        '''  
-        if len(notes_hit) > 1:
-            player2 = [notes_hit[1]["Miss"], notes_hit[1]["Bad"], notes_hit[1]["Good"], notes_hit[1]["Perfect"]]
-            player2 += player2[:1]
-            ax.fill(angulos, player2, alpha=0.9)
-            
-            limite = max(max(player), max(player2)) * 1.05
-        else:
-        '''
         
         limite = max(player) * 1.05
             
@@ -165,9 +141,9 @@ def estatisticas_screen(user: User):
         return graph_surface
                  
     def criar_grafico_barra():
-        all_easy = scoreManager.get_all_by_chart_difficulty(1)
-        all_normal = scoreManager.get_all_by_chart_difficulty(2)
-        all_hard = scoreManager.get_all_by_chart_difficulty(3)
+        all_easy = scoreManager.get_all_by_chart_difficulty(1, user.id)
+        all_normal = scoreManager.get_all_by_chart_difficulty(2, user.id)
+        all_hard = scoreManager.get_all_by_chart_difficulty(3, user.id)
         
         easy = [score.accuracy for score in all_easy] if all_easy is not None else 0
         normal = [score.accuracy for score in all_normal] if all_normal is not None else 0

@@ -192,6 +192,7 @@ def notes_hit():
     query = """
         CREATE TABLE IF NOT EXISTS notes_hit(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
             chart_id INTEGER NOT NULL,
              
              
@@ -200,7 +201,8 @@ def notes_hit():
             qtd_good INTEGER NOT NULL,
             qtd_perfect INTEGER NOT NULL,
             
-            FOREIGN KEY(chart_id) REFERENCES song_charts(id)
+            FOREIGN KEY(chart_id) REFERENCES song_charts(id),
+            FOREIGN KEY(user_id) REFERENCES user(id)
         )
     """
 

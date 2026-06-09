@@ -5,7 +5,6 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Game.GameManager.GameManager import ManageGame
 from models.user import User
 pygame.init()
-surface = pygame.display.set_mode((1080, 720))
 fundo = pygame.image.load('./Images/TelaPadrao.png')
 
 def home_screen(user : User, profile_menu):
@@ -41,13 +40,15 @@ def home_screen(user : User, profile_menu):
 
     #Estilo de Seleção de Item
     theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
 
     home_menu = pygame_menu.Menu(
-        f'Connected as: {user.name}',
-        1080, 
-        720,
+        '',
+        width,
+        height,
         theme=theme
-        )
+    )
     
    # 1. Criamos cada informação como um texto separado, definindo a nova fonte
     lbl_nome = home_menu.add.label(

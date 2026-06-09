@@ -5,7 +5,6 @@ from pygame_menu.baseimage import BaseImage, IMAGE_MODE_FILL
 from Screens import Home, Logon, Creat_Account, Inital, update_screen, profile_options
 
 pygame.init()
-surface = pygame.display.set_mode((600, 400))
 
 def data_error_screen(erro_message,screen_error_name, user = None):
     """
@@ -37,12 +36,15 @@ def data_error_screen(erro_message,screen_error_name, user = None):
     theme.background_color = fundo_error
     theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     theme.title_offset = (260, 0)
+    
+    surface = pygame.display.get_surface()
+    width, height = surface.get_size()
 
     error_menu = pygame_menu.Menu(
-        '',
-        800,
-        500,
-        theme = theme
+        f' Connected as: {user.name}',
+        width,
+        height,
+        theme=theme
     )
     
     if isinstance(erro_message, list):

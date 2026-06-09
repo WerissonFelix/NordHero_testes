@@ -27,7 +27,7 @@ def estatisticas_screen(user: User):
     import numpy as np
     
     fundo = BaseImage(
-        image_path="./Images/Summary.png",
+        image_path="./Images/SummarySingleplayer.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

@@ -6,14 +6,14 @@ from Game.GameManager.GameManager import ManageGame
 from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
-fundo = pygame.image.load('./Images/telainicial.png')
+fundo = pygame.image.load('./Images/teladefundo.png')
 
 def codigo_email(screen_name: str, codigo):
 
     from Screens.Home import home_screen
 
     fundo = BaseImage(
-        image_path="./Images/telainicial.png",
+        image_path="./Images/teladefundo.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

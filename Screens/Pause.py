@@ -22,16 +22,11 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
     from Screens.settings import change_controls_menu
     from Game.GameManager.GameManager import ManageGame
     
-    if mod == "2 Players":
-        surface = pygame.display.set_mode((1280, 720))
-    else:
-        surface = pygame.display.set_mode((800, 500))
-        
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
     fundo_update_menu = BaseImage(
-        image_path="./Images/Pause.png",
+        image_path="./Images/TelaPause.png",
         drawing_mode=IMAGE_MODE_FILL
     )
 

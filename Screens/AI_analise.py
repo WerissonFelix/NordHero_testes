@@ -9,7 +9,7 @@ from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
-fundo = pygame.image.load('./Images/telainicial.png')
+fundo = pygame.image.load('./Images/TelaPadrao.png')
 
 def AI_analise(user : User):
     """
@@ -23,7 +23,7 @@ def AI_analise(user : User):
     from Screens.profile_options import profile_options_menu
     
     fundo = BaseImage(
-        image_path="./Images/telainicial.png",
+        image_path="./Images/TelaPadrao.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

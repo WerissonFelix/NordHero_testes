@@ -14,7 +14,7 @@ from models.user import User
 
 pygame.init()
 screen_surface = pygame.display.set_mode((1080, 720))
-fundo = pygame.image.load('./Images/Summary.png')
+fundo = pygame.image.load('./Images/SummarySingleplayer.png')
 music = ""
 
 def match_summary(user: User, total_notes, notes_hit, file_path, score):
@@ -30,7 +30,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     from Screens.choice_mod import choice_mod
             
     fundo = BaseImage(
-        image_path="./Images/Summary.png",
+        image_path="./Images/SummarySingleplayer.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

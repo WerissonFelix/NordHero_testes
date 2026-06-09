@@ -15,7 +15,7 @@ from models.user import User
 
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
-fundo = pygame.image.load('./Images/telainicial.png')
+fundo = pygame.image.load('./Images/teladefundo.png')
 music = None
 def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2players = None):
     """
@@ -29,7 +29,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
     from Screens.profile_options import profile_options_menu
     
     fundo = BaseImage(
-        image_path="./Images/telainicial.png",
+        image_path="./Images/teladefundo.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

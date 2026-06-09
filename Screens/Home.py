@@ -6,7 +6,7 @@ from Game.GameManager.GameManager import ManageGame
 from models.user import User
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
-fundo = pygame.image.load('./Images/telainicial.png')
+fundo = pygame.image.load('./Images/TelaPadrao.png')
 
 def home_screen(user : User, profile_menu):
     """
@@ -22,7 +22,7 @@ def home_screen(user : User, profile_menu):
     from Screens.AI_analise import AI_analise
     
     fundo = BaseImage(
-        image_path="./Images/telainicial.png",
+        image_path="./Images/TelaPadrao.png",
         drawing_mode=IMAGE_MODE_FILL
     )
     theme = pygame_menu.themes.THEME_DARK.copy()

@@ -29,7 +29,7 @@ class ManageGame:
         self.clock = pygame.time.Clock()
         
         current_dir = os.path.dirname(__file__)
-        bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaDoJogo.png")
+        bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaPadrao.png")
     
         self.mod = mod
         self.notesManage = None

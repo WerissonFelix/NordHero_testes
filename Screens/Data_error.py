@@ -41,7 +41,7 @@ def data_error_screen(erro_message,screen_error_name, user = None):
     width, height = surface.get_size()
 
     error_menu = pygame_menu.Menu(
-        f' Connected as: {user.name}',
+        f'',
         width,
         height,
         theme=theme

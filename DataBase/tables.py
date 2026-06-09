@@ -21,6 +21,7 @@ def table_user():
         CREATE TABLE IF NOT EXISTS user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name varchar(255) NOT NULL,
+            telefone varchar(255) NOT NULL,
             email varchar(255) NOT NULL UNIQUE,
             password varchar(255) NOT NULL
         )

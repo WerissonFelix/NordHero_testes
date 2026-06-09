@@ -19,6 +19,7 @@ from Features.PasswordValidate import PasswordValidate
 from Features.NameValidator import NameValidator
 from Features.TelefoneValidator import telefoneValidator
 from Features.SendEmail import EmailSender
+from Features.SendSms import SmsSender
 
 
 class DataVerifier:
@@ -51,16 +52,17 @@ class DataVerifier:
 
             self.name_verified = NameValidator(user.name)
             name_result, name_valid = self.name_verified.validate()
+            self.telefone_verified = telefoneValidator(user.telefone)
+            telefone_result, telefone_valid = self.telefone_verified.validar_telefone()
+
         elif self.screen_name == "logon":
             email_result, email_valid = self.email_verified.validate_for_login_screen()
             name_valid = True
+            telefone_valid = True
 
         self.password_verified = PasswordValidate(user.password)
         password_result, password_valid = self.password_verified.validate()
-
-        self.telefone_verified = telefoneValidator(user.telefone)
-        telefone_result, telefone_valid = self.telefone_verified.validar_telefone()
-
+        
         if email_valid == False:
             print(email_result, email_valid)
             return data_error_screen(email_result, self.screen_name)
@@ -73,13 +75,26 @@ class DataVerifier:
             return data_error_screen(name_result, self.screen_name)
 
         elif telefone_valid == False:
-            return data_error_screen(name_result, self.screen_name)
+            return data_error_screen(telefone_result, self.screen_name)
 
         else:
             if self.screen_name == "creat_account":
-                email_sender = EmailSender(user.email, "Código de Verificação",
-                                           "Este é o código de verificação para acessar sua conta no Nord Hero.")
-                codigo = email_sender.enviar_codigo()
+                from Screens.choice_verification import choice_verification_screen
+                metodo = choice_verification_screen()
+
+                if metodo == "email":
+                    email_sender = EmailSender(
+                        user.email,
+                        "Código de Verificação",
+                        "Este é o código de verificação para acessar sua conta no Nord Hero."
+                    )
+                    codigo = email_sender.enviar_codigo()
+                elif metodo == "sms":
+                    sms_sender = SmsSender(user.telefone)
+                    codigo = sms_sender.enviar_codigo()
+                else:
+                    return data_error_screen("Nenhum método de verificação selecionado.", self.screen_name)
+
                 codigo_digitado = codigo_email(self.screen_name, codigo)
                 print(codigo_digitado, type(codigo_digitado))
                 print(codigo, type(codigo))

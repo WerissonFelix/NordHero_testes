@@ -7,4 +7,5 @@ numpy
 dnspython
 phonenumbers,
 twilio,
-groq
+groq,
+python-dotenv

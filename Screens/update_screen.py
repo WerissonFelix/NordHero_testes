@@ -17,6 +17,7 @@ def update_menu(user: User, profile_options):
     from Features.Dados_Verificacao import DataVerifier
     from Features.SendEmail import EmailSender
     from Screens.Atualizar_Senha import atualizar_senha
+
     theme = pygame_menu.themes.THEME_DARK.copy()
     theme.title_font = pygame_menu.font.FONT_BEBAS
     
@@ -46,7 +47,7 @@ def update_menu(user: User, profile_options):
         width,
         height,
 
-        theme=pygame_menu.themes.THEME_BLUE
+        theme=theme
     ) 
 
     update.add.label(f"Name: {user.name}   Email: {user.email}", font_color=(255, 255, 0))

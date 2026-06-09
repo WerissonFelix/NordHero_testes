@@ -58,7 +58,7 @@ def login_screen(initial_screen):
     
     def login_callback():
         nonlocal email_input
-        user = User(None, None, email_input.get_value(), senha_input.get_value())
+        user = User(None, None, None, email_input.get_value(), senha_input.get_value())
         validator.verify_data_for_create_login(user)
         
     login_menu.add.button("LOGIN", login_callback)

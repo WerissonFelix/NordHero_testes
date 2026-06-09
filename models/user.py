@@ -9,7 +9,7 @@ class User:
     id: int | None
     
     name: str | None
-    telefone: str
+    telefone: str | None
     email: str
     password: str
     

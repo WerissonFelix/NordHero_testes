@@ -23,7 +23,7 @@ story_difficulty_map = {
     "Cafuné - tek it (instrumental)": (1, "Instrumental"),
     "Debussy - Clair de Lune - Rousseau (youtube)": (1, "Instrumental"),
     "Die With A Smile (Instrumental) - Lady Gaga": (1, "Instrumental"),
-    "Imagine Dragons   Believer Official Instrumental - Anything And Everything (youtube)": (1, "Instrumental"),
+    "Imagine Dragons Believer Official Instrumental - Anything And Everything (youtube)": (1, "Instrumental"),
     "Like Him (Instrumental) - Tyler the Creator - pb (abandoned) (youtube)": (1, "Instrumental"),
     "Ludovico Einaudi - Una Mattina (The Intouchables) - Rousseau (youtube)": (1, "Instrumental"),
     

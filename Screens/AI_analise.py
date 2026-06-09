@@ -50,29 +50,6 @@ def AI_analise(user : User):
         theme=theme
         )
     
-   # 1. Criamos cada informação como um texto separado, definindo a nova fonte
-    lbl_nome = ai_menu.add.label(
-        f"Name: {user.name}", 
-        font_size=20, 
-        font_name=pygame_menu.font.FONT_MUNRO
-    )
-    lbl_email = ai_menu.add.label(
-        f"email: {user.email}", 
-        font_size=20, 
-        font_name=pygame_menu.font.FONT_MUNRO
-    )
-   
-    lbl_nome.set_float(True)
-    lbl_nome.set_alignment(ALIGN_RIGHT)
-    lbl_nome.translate(-20, -160)
-
-    lbl_email.set_float(True)
-    lbl_email.set_alignment(ALIGN_RIGHT)
-    lbl_email.translate(-20, -135)
-
-    lbl_nome.set_float(True)
-    lbl_nome.set_alignment(ALIGN_RIGHT)
-    lbl_nome.translate(-20, -160)
     
     def analise_rendimento_por_IA():
         analyzer = FocusAnalyzerGroq()

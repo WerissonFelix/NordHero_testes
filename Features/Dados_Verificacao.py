@@ -12,6 +12,7 @@ from DataBase.updates import update_user
 
 #models imports
 from models.user import User
+
 # Outhers Features imports
 from Features.EmailValidator import EmailValidator
 from Features.PasswordValidate import PasswordValidate
@@ -88,7 +89,8 @@ class DataVerifier:
         
         self.email_verified = EmailValidator(default_user.email, self.user_repository)
         self.name_verified = NameValidator(default_user.name)
-        
+        self.password_verified = PasswordValidate(default_user.password)
+
         if user.email != default_user.email:
             email_result, email_valid = self.email_verified.validate_for_update_screen()
         else:
@@ -97,7 +99,12 @@ class DataVerifier:
         if user.name != default_user.name:
             name_result, name_valid = self.name_verified.validate()
         else:
-            name_result = user[1]
+            name_result, name_valid = default_user.name, True
+
+        if user.password != default_user.password:
+            password_result, password_valid = self.password_verified.validate()
+        else:
+            password_result, password_valid = user.password, True
 
         if email_valid == False:    
             return data_error_screen(email_result, self.screen_name, user)
@@ -105,6 +112,9 @@ class DataVerifier:
         elif name_valid == False:
             return data_error_screen(name_result, self.screen_name, user)
         
+        elif password_valid == False:
+            return data_error_screen(password_result, self.screen_name, user)
+ 
         else:
             return self.call_database_for_process(default_user)
         

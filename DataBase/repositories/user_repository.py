@@ -57,11 +57,11 @@ class UserRepository(BaseRepository):
     def update(self, user: User):
         query = """
         update user
-        set name = ?, email = ?
+        set name = ?, email = ?, password = ?
         where id = ?
         """
         
-        self.execute(query, (user.name, user.email, user.id))
+        self.execute(query, (user.name, user.email, user.password, user.id))
 
     def delete(self, user_id):
         query = """

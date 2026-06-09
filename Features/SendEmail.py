@@ -55,5 +55,3 @@ class EmailSender:
             email.login(self.remetente, self.senha)
             email.send_message(msg)
 
-teste = EmailSender('caua.araujo@ufrpe.br', 'Teste de Envio', 'Este é um teste de envio de email com anexo.')
-teste.enviar_codigo()

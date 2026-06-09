@@ -1,8 +1,8 @@
 # Imports from App's Screens
-
 from Screens.Home import home_screen
 from Screens.Data_error import data_error_screen
 from Screens.profile_options import profile_options_menu
+from Screens.Codigo_Email import codigo_email
 
 # Data Base imports
 from DataBase.repositories.user_repository import UserRepository
@@ -16,7 +16,7 @@ from models.user import User
 from Features.EmailValidator import EmailValidator
 from Features.PasswordValidate import PasswordValidate
 from Features.NameValidator import NameValidator
-
+from Features.SendEmail import EmailSender
 
 class DataVerifier:
     """
@@ -64,7 +64,16 @@ class DataVerifier:
             return data_error_screen(name_result, self.screen_name)
         
         else:
-            return self.call_database_for_process(user)
+            if self.screen_name == "creat_account":
+                email_sender = EmailSender(user.email, "Código de Verificação", "Este é o código de verificação para acessar sua conta no Nord Hero.")
+                codigo = email_sender.enviar_codigo()
+                codigo_correto = codigo_email(self.screen_name, codigo)
+                if codigo_correto == codigo:
+                    return self.call_database_for_process(user)
+                else:
+                    return data_error_screen("código incorreto", self.screen_name)
+            else:
+                return self.call_database_for_process(user)
 
     def verify_just_for_update(self, default_user: User):
         """
@@ -103,6 +112,7 @@ class DataVerifier:
         """
         if self.screen_name == "creat_account":
             self.user_repository.create(default_user)
+            
             user = self.user_repository.get_by_email(default_user.email)
 
         elif self.screen_name == "logon":

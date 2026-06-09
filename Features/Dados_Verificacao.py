@@ -10,49 +10,57 @@ from DataBase.inserts import insert_user
 from DataBase.selects import select_user
 from DataBase.updates import update_user
 
-#models imports
+# models imports
 from models.user import User
 
 # Outhers Features imports
 from Features.EmailValidator import EmailValidator
 from Features.PasswordValidate import PasswordValidate
 from Features.NameValidator import NameValidator
+from Features.TelefoneValidator import telefoneValidator
 from Features.SendEmail import EmailSender
+
 
 class DataVerifier:
     """
     Verifica e processa dados de formulários (login, cadastro, atualização).
-    
+
     Coordena a validação de email, senha e nome usando validadores específicos
     e executa operações no banco de dados (inserir, selecionar, atualizar)
     conforme o tipo de screen.
     """
+
     def __init__(self, screen_name: str):
         self.screen_name = screen_name
         self.user_repository = UserRepository()
         self.email_verified = None
         self.password_verified = None
         self.name_verified = None
+        self.telefone_verified = None
+
     def verify_data_for_create_login(self, user: User):
         """
-        
+
         Valida dados para criação de conta ou login.
-        
+
         """
         self.email_verified = EmailValidator(user.email, self.user_repository)
 
         if self.screen_name == "creat_account":
             email_result, email_valid = self.email_verified.validate_for_create_screen()
-            
+
             self.name_verified = NameValidator(user.name)
-            name_result, name_valid = self.name_verified.validate()    
+            name_result, name_valid = self.name_verified.validate()
         elif self.screen_name == "logon":
             email_result, email_valid = self.email_verified.validate_for_login_screen()
             name_valid = True
-            
+
         self.password_verified = PasswordValidate(user.password)
         password_result, password_valid = self.password_verified.validate()
-        
+
+        self.telefone_verified = telefoneValidator(user.telefone)
+        telefone_result, telefone_valid = self.telefone_verified.validar_telefone()
+
         if email_valid == False:
             print(email_result, email_valid)
             return data_error_screen(email_result, self.screen_name)
@@ -60,13 +68,17 @@ class DataVerifier:
         elif password_valid == False:
             print(password_result, password_valid)
             return data_error_screen(password_result, self.screen_name)
-        
+
         elif name_valid == False:
             return data_error_screen(name_result, self.screen_name)
-        
+
+        elif telefone_valid == False:
+            return data_error_screen(name_result, self.screen_name)
+
         else:
             if self.screen_name == "creat_account":
-                email_sender = EmailSender(user.email, "Código de Verificação", "Este é o código de verificação para acessar sua conta no Nord Hero.")
+                email_sender = EmailSender(user.email, "Código de Verificação",
+                                           "Este é o código de verificação para acessar sua conta no Nord Hero.")
                 codigo = email_sender.enviar_codigo()
                 codigo_digitado = codigo_email(self.screen_name, codigo)
                 print(codigo_digitado, type(codigo_digitado))
@@ -81,21 +93,23 @@ class DataVerifier:
     def verify_just_for_update(self, default_user: User):
         """
         Valida dados para atualização de perfil.
-        
+
         Compara valores novos com dados atuais do banco.
         Só valida campos que foram alterados.
         """
         user = self.user_repository.get_by_id(default_user.id)
-        
-        self.email_verified = EmailValidator(default_user.email, self.user_repository)
+
+        self.email_verified = EmailValidator(
+            default_user.email, self.user_repository)
         self.name_verified = NameValidator(default_user.name)
         self.password_verified = PasswordValidate(default_user.password)
+        self.telefone_verified = telefoneValidator(default_user.telefone)
 
         if user.email != default_user.email:
             email_result, email_valid = self.email_verified.validate_for_update_screen()
         else:
-            email_result, email_valid =  user.email, True
-            
+            email_result, email_valid = user.email, True
+
         if user.name != default_user.name:
             name_result, name_valid = self.name_verified.validate()
         else:
@@ -106,31 +120,38 @@ class DataVerifier:
         else:
             password_result, password_valid = user.password, True
 
-        if email_valid == False:    
+        if user.telefone != default_user.telefone:
+            telefone_result, telefone_valid = self.telefone_verified.validar_telefone()
+        else:
+            telefone_result, telefone_valid = user.telefone, True
+
+        if email_valid == False:
             return data_error_screen(email_result, self.screen_name, user)
-        
+
         elif name_valid == False:
             return data_error_screen(name_result, self.screen_name, user)
-        
+
         elif password_valid == False:
             return data_error_screen(password_result, self.screen_name, user)
- 
+
+        elif telefone_valid == False:
+            return data_error_screen(telefone_result, self.screen_name, user)
         else:
             return self.call_database_for_process(default_user)
-        
+
     def call_database_for_process(self, default_user: User):
         """
         Executa a operação apropriada no banco de dados.
         """
         if self.screen_name == "creat_account":
             self.user_repository.create(default_user)
-            
+
             user = self.user_repository.get_by_email(default_user.email)
 
         elif self.screen_name == "logon":
-            
+
             user = self.user_repository.get_by_email(default_user.email)
-        
+
             if (user.email == default_user.email and user.password == default_user.password) == False:
                 return data_error_screen("incorrect email or password", self.screen_name)
         else:

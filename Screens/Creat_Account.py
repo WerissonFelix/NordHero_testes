@@ -8,7 +8,7 @@ from Features.Dados_Verificacao import DataVerifier
 from models.user import User
 
 pygame.init()
-surface = pygame.display.set_mode((600, 400))
+surface = pygame.display.set_mode((1080, 720))
 
 def create_account_menu(initial_screen,login_screen):
     """
@@ -40,8 +40,8 @@ def create_account_menu(initial_screen,login_screen):
 
     creat_menu = pygame_menu.Menu(
         '',
-        800,
-        500,
+        1080,
+        720,
         theme=theme)
 
     validator = DataVerifier("creat_account")
@@ -54,12 +54,16 @@ def create_account_menu(initial_screen,login_screen):
     email_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     email_input.translate(180, 0)
 
+    telefone_input = creat_menu.add.text_input('Telefone: ', maxchar=40)
+    telefone_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
+    telefone_input.translate(180, 0)
+
     senha_input = creat_menu.add.text_input('Password: ', password=True, maxchar=20)
     senha_input.set_alignment(pygame_menu.locals.ALIGN_LEFT)
     senha_input.translate(180, 0)
 
     def create_callback():
-        user = User(None, nome_input.get_value(), email_input.get_value(), senha_input.get_value())
+        user = User(None, nome_input.get_value(), telefone_input.get_value(), email_input.get_value(), senha_input.get_value())
         validator.verify_data_for_create_login(user)
         
     

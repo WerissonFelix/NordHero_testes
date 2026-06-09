@@ -5,3 +5,6 @@ password-validator
 librosa
 numpy
 dnspython
+phonenumbers,
+twilio,
+groq

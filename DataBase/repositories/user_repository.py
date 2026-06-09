@@ -5,10 +5,10 @@ class UserRepository(BaseRepository):
     
     def create(self, user: User):
         query =  """
-        insert into user (name,email,password) 
-        values(?, ?, ?)
+        insert into user (name, telefone, email,password) 
+        values(?, ?, ?, ?)
         """
-        self.execute(query, (user.name, user.email, user.password))
+        self.execute(query, (user.name, user.telefone, user.email, user.password))
         
     def get_by_id(self, user_id):
         query = """
@@ -21,7 +21,7 @@ class UserRepository(BaseRepository):
         if row is None: 
             return None
         
-        return User(row[0], row[1], row[2], row[3])
+        return User(row[0], row[1], row[2], row[3], row[4])
     
            
     def get_by_email(self, email):
@@ -35,7 +35,7 @@ class UserRepository(BaseRepository):
         if row is None:
             return None
         
-        return User(row[0], row[1], row[2], row[3])
+        return User(row[0], row[1], row[2], row[3], row[4])
     
     
     def get_all(self):
@@ -49,7 +49,7 @@ class UserRepository(BaseRepository):
         
         for row in all_users:
             rows.append(User(
-                row[0], row[1], row[2], row[3]
+                row[0], row[1], row[2], row[3], row[4]
             ))
                
         return rows
@@ -57,11 +57,11 @@ class UserRepository(BaseRepository):
     def update(self, user: User):
         query = """
         update user
-        set name = ?, email = ?, password = ?
+        set name = ?, telefone = ?, email = ?, password = ?
         where id = ?
         """
         
-        self.execute(query, (user.name, user.email, user.password, user.id))
+        self.execute(query, (user.name, user.telefone, user.email, user.password, user.id))
 
     def delete(self, user_id):
         query = """

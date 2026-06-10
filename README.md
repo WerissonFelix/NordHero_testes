@@ -15,7 +15,7 @@ https://pt.overleaf.com/read/tgztjgfnrstz#18f55a
 
 **Planilha:**
 ```
-https://docs.google.com/spreadsheets/d/1T2XSy7NpLsRkdkxux9JnRgOK-wjYF0P2s0cBXR7m5Qc/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemhbG4/edit?usp=sharing
 ```
 
 **Drive:**

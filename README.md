@@ -18,13 +18,6 @@ https://pt.overleaf.com/read/tgztjgfnrstz#18f55a
 https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemhbG4/edit?usp=sharing
 ```
 
-**Drive:**
-```
-https://drive.google.com/drive/folders/1rl5iMOgW-th0i1TBMqgVqCrCdI3Dv5LT?usp=sharing
-```
-
----
-
 ## 🚀 Release 1.0
 
 | Funcionalidade | Descrição |

@@ -37,14 +37,11 @@ https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemh
 
 | Funcionalidade | Descrição |
 |---|---|
-| Configuração de Controles | Permite ao usuário personalizar as teclas do jogo. |
+| Análise gráfica  | Diferentes tipos de gráficos baseados nos dados do usuário. |
+| Histórico de músicas jogadas| Mostra um históricos de músicas jogadas. |
+| Análise por IA | IA GROQ faz uma análise dos dados do usuário. |
+| Recuperação de senha | Recuperação de senha via código SMS ou EMAIL. |
 | Classificação por Tipo | Separa músicas entre instrumental e vocal. |
-| Modo 2 Players | Extenção do single player para suportar duas pessoas. |
-| Modo 2 Players - Versus | Jogadores jogam contra. |
-| Modo 2 Players - Coop | Jogadores jogam juntos. |
-| Notas Longas | Notas com mais de 1 segundo de duração e que suas ondas sonoras são prolongadas. |
-| Notas Inimigas | Notas que roubam 300 pontos do oponente, caso ele as acerte |
-| Notas Rainbow | Notas que que têm 1000 pontos extras, caso os jogadores as acerte |
 | Ranking Global | Cria ranking entre jogadores para cada música. |
 | Verificação por Email | Envio de código de verificação ao criar conta ou atualizar senha. |
 | Verificação por SMS/WhatsApp | Inovação: o usuário escolhe se deseja receber o código por **Email** ou **WhatsApp** ao criar conta, via integração com a API da Twilio. |
@@ -55,7 +52,14 @@ https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemh
 
 | Funcionalidade | Descrição |
 |---|---|
-| A definir | Funcionalidades futuras ainda não especificadas. |
+| Configuração de Controles | Permite ao usuário personalizar as teclas do jogo. |
+| Modo 2 Players | Extenção do single player para suportar duas pessoas. |
+| Modo 2 Players - Versus | Jogadores jogam contra. |
+| Modo 2 Players - Coop | Jogadores jogam juntos. |
+| Notas Longas | Notas com mais de 1 segundo de duração e que suas ondas sonoras são prolongadas. |
+| Notas Inimigas | Notas que roubam 300 pontos do oponente, caso ele as acerte |
+| Notas Rainbow | Notas que que têm 1000 pontos extras, caso os jogadores as acerte |
+
 
 ## 🕹️ Como o Jogo Funciona
 

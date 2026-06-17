@@ -130,7 +130,7 @@ class ManageGame:
         """
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.mod, None, self.config)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.tipo_2players, None, self.config)
         
         self.default_lane = [
     
@@ -400,4 +400,4 @@ class ManageGame:
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)
-        match_summary(self.user, total_notes, notes_hit, self.music_path, self.score)
+        match_summary(self.user, total_notes, notes_hit, self.music_path, self.score, self.tipo_2players)

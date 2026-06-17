@@ -210,10 +210,15 @@ def choice_mod(user:User):
         buttons.append(exit_button)
     
     def final_destination():
-        nonlocal mod, tipo_2players 
+        nonlocal mod, tipo_2players, tipo
         
         if modo_jogo == "History":
-            choice_difficulty(user, mod, tipo)
+            if mod == "Single Player":
+                choice_difficulty(user, mod, tipo)
+            else:
+                print(f"modd {mod} tipoo {tipo} tipo2 {tipo_2players}")
+                choice_difficulty(user, mod, tipo, tipo_2players)
+           
         else:
             choice_personalizado(user, tipo, mod)
              

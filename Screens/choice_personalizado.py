@@ -77,18 +77,17 @@ def choice_personalizado(user: User, tipo: str, mod: str = "Single Player", tipo
             empty_label = menu.add.label("Nenhuma música encontrada para este tipo.", font_size=25)
             song_list_widgets.append(empty_label)
         else:
-            col_title = int(width * 0.45)
-            col_selector = int(width * 0.30)
-            col_button = int(width * 0.20)
             row_height = 60
 
             for song in songs:
+                # Frame com largura suficiente para acomodar todos os widgets da linha
                 row = menu.add.frame_h(
-                    width=col_title + col_selector + col_button,
+                    width=int(width * 0.6),
                     height=row_height,
-                    align=pygame_menu.locals.ALIGN_LEFT
+                    align=pygame_menu.locals.ALIGN_CENTER,
+                    padding=0
                 )
-                
+                row._relax = True
                 song_list_widgets.append(row)
 
                 label = menu.add.label(
@@ -102,19 +101,15 @@ def choice_personalizado(user: User, tipo: str, mod: str = "Single Player", tipo
                     [("Easy", 0), ("Normal", 1), ("Hard", 2)],
                     onchange=set_modo_jogo
                 )
-                
-                row.pack(selector, align=pygame_menu.locals.ALIGN_CENTER)
+                row.pack(selector, align=pygame_menu.locals.ALIGN_LEFT)
                 song_list_widgets.append(selector)
 
                 def play_callback(song=song, selector=selector):
                     start_game_with_song(user, song, mod, modo_jogo, tipo_2players)
 
                 play_btn = menu.add.button("Play", play_callback)
-                row.pack(play_btn, align=pygame_menu.locals.ALIGN_RIGHT)
+                row.pack(play_btn, align=pygame_menu.locals.ALIGN_LEFT)
                 song_list_widgets.append(play_btn)
-
-            margin = menu.add.vertical_margin(20)
-            song_list_widgets.append(margin)
 
     create_select_difficulty()
     menu.add.button("VOLTAR", home_screen, user, profile_options_menu)

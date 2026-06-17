@@ -72,13 +72,13 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
 
         if mod == "2 Players":
             if tipo_2players == "Contra":
-                gameManager = ManageGame(user, selected_music[0], mod, selected_music[0], tipo_2players)    
+                gameManager = ManageGame(user, selected_music[0], mod,1, selected_music[0], tipo_2players)    
             else:    
                 multi_song = multiSongManeger.get_by_id(music_selector.get_value()[0][1][1])
                 instrumental_song = songManeger.get_by_id(multi_song.instrumental_song)
                 vocal_song = songManeger.get_by_id(multi_song.vocal_song)
                 
-                gameManager = ManageGame(user, instrumental_song.file_path, mod, vocal_song.file_path, tipo_2players)
+                gameManager = ManageGame(user, instrumental_song.file_path, mod, 1, vocal_song.file_path, tipo_2players)
         else:
             print(mod)
             gameManager = ManageGame(user, selected_music[0], mod)

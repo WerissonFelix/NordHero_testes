@@ -5,7 +5,8 @@ password-validator
 librosa
 numpy
 dnspython
-phonenumbers,
-twilio,
-groq,
+phonenumbers
+twilio
+groq
 python-dotenv
+matplotlib

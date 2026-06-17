@@ -122,14 +122,14 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
             songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)    
             music_selector = choice.add.selector(
                 'MUSIC :',
-                [(song.title, (song.file_path, song.id)) for song in songs],
+                [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs],
                 onchange=change_rank           
             )  
         else:
             songs = multiSongManeger.get_by_difficulty(difficulty.id)
             music_selector = choice.add.selector(
                 'MUSIC :',
-                [(song.title, (song.file_path, song.id)) for song in songs ],
+                [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs ],
             )
         
     else:
@@ -137,7 +137,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
         songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)    
         music_selector = choice.add.selector(
             'MUSIC :',
-            [(song.title, (song.file_path, song.id)) for song in songs],
+            [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs],
             onchange=change_rank           
         )
     

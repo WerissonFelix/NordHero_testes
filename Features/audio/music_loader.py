@@ -2,9 +2,11 @@ from pathlib import Path
 
 from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.multiplayer_songs_repository import MultiplayerSongsRepository
+from DataBase.repositories.difficulty_repository import DifficultyRepository
 
 from models.multiplayer_song import MultiplayerSong
 from models.song import Song
+from models.difficulty import Difficulty
 
 from Features.audio.charts_creater import create_all_charts
 from pygame import mixer
@@ -17,9 +19,7 @@ music_path = Path("music")
 
 file_path = cwd / game_path / music_path
 
-
 story_difficulty_map = {
-    
     "Cafuné - tek it (instrumental)": (1, "Instrumental"),
     "Debussy - Clair de Lune - Rousseau (youtube)": (1, "Instrumental"),
     "Die With A Smile (Instrumental) - Lady Gaga": (1, "Instrumental"),
@@ -52,6 +52,16 @@ mixer.init()
 def load_and_register_music():
     songManager = SongRepository()
     multiplayerManager = MultiplayerSongsRepository()
+    difficultyManeger = DifficultyRepository()
+
+    easy = Difficulty(None, "Easy")
+    normal = Difficulty(None, "Normal")
+    hard = Difficulty(None, "Hard")
+
+    difficultyManeger.create_difficulty(easy)
+    difficultyManeger.create_difficulty(normal)
+    difficultyManeger.create_difficulty(hard)
+        
     
     for entry in file_path.iterdir():
         if entry.suffix == ".mp3":

@@ -29,8 +29,6 @@ class ManageGame:
         self.clock = pygame.time.Clock()
         
         current_dir = os.path.dirname(__file__)
-        bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaPadrao.png")
-    
         self.mod = mod
         self.notesManage = None
         
@@ -38,12 +36,18 @@ class ManageGame:
             self.width = self.config.get_screen_width()
             self.height = self.config.get_screen_height()
             self.audio = AudioAnalyzer(self.music_path, self.mod)
-              
+            bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaSinglePlayer.png")
+            
         else:
             print(mod)
             self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
             self.width = 1280
-            self.height = 720 
+            self.height = 720
+            
+            if tipo_2players == "Contra":
+                bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaVersus.png")
+            else:
+                bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaCoop.png") 
         self.screen = pygame.display.set_mode(
             (
             self.width,

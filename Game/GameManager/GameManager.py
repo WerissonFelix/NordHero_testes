@@ -17,13 +17,14 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user, music_path, mod, second_music_path=None, tipo_2players= None):
+    def __init__(self, user, music_path, mod, multiplicador=1,second_music_path=None, tipo_2players= None):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
         self.music_path = music_path
         self.second_music_path = second_music_path
         self.tipo_2players = tipo_2players
+        self.multiplicador = multiplicador
         
         self.textManage  = TextManager(mod)
         self.clock = pygame.time.Clock()
@@ -205,6 +206,11 @@ class ManageGame:
         
         adjusted_speed = self.config.get_base_speed() / speed_multiplier
         
+        if self.multiplicador == 0:     
+            adjusted_speed *= 0.8
+        elif self.multiplicador == 2:    
+            adjusted_speed *= 1.5
+            
         self.notesManage = NoteManager(
             self.config.get_note_width(), 
             self.config.get_note_height(),

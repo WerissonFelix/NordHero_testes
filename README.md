@@ -56,6 +56,7 @@ https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemh
 | Modo 2 Players | Extenção do single player para suportar duas pessoas. |
 | Modo 2 Players - Versus | Jogadores jogam contra. |
 | Modo 2 Players - Coop | Jogadores jogam juntos. |
+| Modo Personalizado | Jogador joga qualquer música a qualquer dificuldade. |
 | Notas Longas | Notas com mais de 1 segundo de duração e que suas ondas sonoras são prolongadas. |
 | Notas Inimigas | Notas que roubam 300 pontos do oponente, caso ele as acerte |
 | Notas Rainbow | Notas que que têm 1000 pontos extras, caso os jogadores as acerte |
@@ -167,6 +168,55 @@ NordHero/
 | `twilio` | Envio de mensagens via WhatsApp | API amplamente utilizada, com suporte a WhatsApp Business e sandbox para testes |
 | `python-dotenv` | Carregamento de variáveis de ambiente | Mantém credenciais sensíveis fora do código-fonte, seguindo boas práticas de segurança |
 | `smtplib` | Envio de email (stdlib) | Biblioteca padrão do Python para envio de emails via SMTP, sem dependência adicional |
+
+---
+# 📸 Capturas de Tela
+
+## Home
+
+![Home](Images/exemplo_home.jpeg)
+
+*Home do jogo*
+
+---
+
+## Modo Single Player
+
+![Single Player mod ](Images/exemplo_single.jpeg)
+
+*Modo Single Player durante a gameplay*
+
+---
+
+## Modo 2 Players - Versus
+
+![Modo Versus - 2 Players](Images/exemplo_contra.jpeg)
+
+*Modo 2 Players - Versus durante a gameplay*
+
+---
+
+## Modo 2 Players - Coop
+
+![Modo Coop - 2 Players](Images/exemplo_juntos.jpeg)
+
+*Modo 2 Players - Coop durante a gameplay*
+
+---
+
+## Análise gráfica do jogador
+
+![Gráfico dos dados do jogador](Images/exemplo_dados.jpeg)
+
+*Análise gráfica dos dados do jogador, por gráfico de linha*
+
+---
+
+## Histórico de partidas jogadas
+
+![Histórico de partidas](Images/exemplo_historico.jpeg)
+
+*Histórico de todas as partidas jogadas pelo jogador por dificuldade*
 
 ---
 

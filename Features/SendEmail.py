@@ -9,7 +9,7 @@ class EmailSender:
         self.destinatario = destinatario
         self.assunto = assunto
         self.mensagem = mensagem
-        self.senha = 'tmqk cgnb iiqg akri'
+        self.senha = 'gthh kpvb pgcy gipe'
     def gerar_codigo(self):
             return str(random.randint(100000, 999999))
 

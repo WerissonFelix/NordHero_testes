@@ -15,7 +15,7 @@ https://pt.overleaf.com/read/tgztjgfnrstz#18f55a
 
 **Planilha:**
 ```
-https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemhbG4/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1PuA8FkBo1-DdPHj0zMKqmVhUgBLWZ7JGCNyriw1iFRE/edit?usp=sharing
 ```
 
 **Relatório - Werisson Félix :**

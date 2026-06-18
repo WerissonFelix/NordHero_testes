@@ -142,7 +142,7 @@ class TextManager:
                     screen.blit(temp_surf, posi)
 
                 if combo[index] > 1:        
-                    combo_text = self.font.render(f"Combo: {combo}", True, self.color[index])
+                    combo_text = self.font.render(f"Combo: {combo[index]}", True, self.color[index])
                     extra_text = self.font.render(f"+{extra}", True, self.color[index])
                     if index == 0:
                         screen.blit(combo_text, (10, 50))

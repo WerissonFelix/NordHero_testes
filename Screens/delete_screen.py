@@ -8,7 +8,7 @@ from DataBase.repositories.user_repository import UserRepository
 from models.user import User
 
 pygame.init()
-def delete_menu(user, profile_options):
+def delete_menu(user: User, profile_options):
     """
     Exibe a tela de confirmação para exclusão de conta.
     
@@ -50,7 +50,7 @@ def delete_menu(user, profile_options):
 
         theme=theme)
     
-    userr = User(user[0],user[1], user[2], user[3])
+    userr = User(user.id, user.name, user.telefone, user.email, user.password)
     userRepository = UserRepository()
     
     delete.add.label(f"DO YOU WANT TO DELETE YOUR ACCOUNT?", font_color=(255, 255, 0))

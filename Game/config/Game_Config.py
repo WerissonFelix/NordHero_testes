@@ -61,7 +61,27 @@ class GameConfig:
     
     def get_note_height(self):
         return self.NOTE_HEIGHT
-    
+
+    def get_player_keys(self, mod):
+        if mod == "Single Player":
+            return {
+                "key1": self.key1,
+                "key2": self.key2,
+                "key3": self.key3,
+                "key4": self.key4
+            }
+
+        return {
+            "key1": self.key1,
+            "key2": self.key2,
+            "key3": self.key3,
+            "key4": self.key4,
+            "key5": self.key5,
+            "key6": self.key6,
+            "key7": self.key7,
+            "key8": self.key8
+        }
+        
     """
     
     Cada def que tiver um set_ no seu nome, atualizará o default da respectiva variável
@@ -78,3 +98,7 @@ class GameConfig:
         if value <= 0:
             raise ValueError("screen_height deve ser positivo")
         self.screen_heigh = value
+        
+    def set_player_keys(self, keys):
+        for key, value in keys.items():
+            setattr(self, key, value)

@@ -6,7 +6,7 @@ from models.user import User
 
 pygame.init()
 
-def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setting_menu = None, config = None):
+def pause_menu(user: User, music_path, total_notes, notes_hit, score, tipo_2players, setting_menu = None, config = None, mod= None):
     """
     Exibe o menu de pausa durante o jogo.
     
@@ -52,8 +52,6 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
         theme=theme
     )
     
-    manager = ManageGame(user, music_path, mod)
-    
     def resume_game():
         nonlocal setting_menu
         menu.disable()
@@ -62,9 +60,9 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, mod, setti
     
     def call_match():
         menu.disable()
-        match_summary(user, total_notes, notes_hit, music_path, score)
+        match_summary(user, total_notes, notes_hit, music_path, score, tipo_2players)
       
-    menu.add.button("SETTINGS", change_controls_menu, config)
+    menu.add.button("SETTINGS", change_controls_menu, config, mod)
     menu.add.button('RESUME', resume_game)
     menu.add.button("QUIT", call_match)
 

@@ -97,7 +97,7 @@ def history_screen(user : User):
         songs = list(set(songs))
         music_selector = history_menu.add.selector(
          "Music: ",
-         [("---", "-")] + [(song, song) for song in songs],
+         [("---", "-")] + [(song[:30] + " ... ", song) for song in songs],
          onchange=create_history
         )
         selectors.append(music_selector)

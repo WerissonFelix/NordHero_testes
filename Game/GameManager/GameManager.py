@@ -17,20 +17,21 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user, music_path, mod, second_music_path=None, tipo_2players= None):
+    def __init__(self, user, music_path, mod, multiplicador=1,second_music_path=None, tipo_2players= None, full_music_path = None):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
         self.music_path = music_path
         self.second_music_path = second_music_path
+        self.full_music_path = full_music_path
+        
         self.tipo_2players = tipo_2players
+        self.multiplicador = multiplicador
         
         self.textManage  = TextManager(mod)
         self.clock = pygame.time.Clock()
         
         current_dir = os.path.dirname(__file__)
-        bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaPadrao.png")
-    
         self.mod = mod
         self.notesManage = None
         
@@ -38,12 +39,20 @@ class ManageGame:
             self.width = self.config.get_screen_width()
             self.height = self.config.get_screen_height()
             self.audio = AudioAnalyzer(self.music_path, self.mod)
-              
+            bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaSinglePlayer.png")
+            
         else:
             print(mod)
-            self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
+           
             self.width = 1280
-            self.height = 720 
+            self.height = 720
+            
+            if tipo_2players == "Contra":
+                self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
+                bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaVersus.png")
+            else:
+                self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path, self.full_music_path)
+                bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaCoop.png") 
         self.screen = pygame.display.set_mode(
             (
             self.width,
@@ -126,7 +135,7 @@ class ManageGame:
         """
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.mod, None, self.config)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.tipo_2players, None, self.config, self.mod)
         
         self.default_lane = [
     
@@ -201,6 +210,11 @@ class ManageGame:
         
         adjusted_speed = self.config.get_base_speed() / speed_multiplier
         
+        if self.multiplicador == 0:     
+            adjusted_speed *= 0.8
+        elif self.multiplicador == 2:    
+            adjusted_speed *= 1.5
+            
         self.notesManage = NoteManager(
             self.config.get_note_width(), 
             self.config.get_note_height(),
@@ -396,4 +410,4 @@ class ManageGame:
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)
-        match_summary(self.user, total_notes, notes_hit, self.music_path, self.score)
+        match_summary(self.user, total_notes, notes_hit, self.music_path, self.score, self.tipo_2players)

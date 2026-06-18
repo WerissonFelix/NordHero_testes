@@ -42,7 +42,7 @@ def atualizar_senha(user: User):
    
     validator = DataVerifier("update_screen")
     def update_callback():
-        new_user = User(user.id, user.name, user.email, senha_input.get_value())
+        new_user = User(user.id, user.name, user.telefone, user.email, senha_input.get_value())
         validator.verify_just_for_update(new_user)
 
     senha_input = attsenha_menu.add.text_input('New Password: ', maxchar=20, password=True)

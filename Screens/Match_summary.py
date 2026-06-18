@@ -16,7 +16,7 @@ pygame.init()
 
 fundo = pygame.image.load('./Images/SummarySingleplayer.png')
 music = ""
-def match_summary(user: User, total_notes, notes_hit, file_path, score):
+def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2players):
     """
     Exibe o resumo de desempenho após uma partida.
     
@@ -27,11 +27,24 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.choice_mod import choice_mod
-            
-    fundo = BaseImage(
-        image_path="./Images/SummarySingleplayer.png",
-        drawing_mode=IMAGE_MODE_FILL
-    )
+    
+    if tipo_2players == None:     
+        fundo = BaseImage(
+            image_path="./Images/SummarySingleplayer.png",
+            drawing_mode=IMAGE_MODE_FILL
+        )
+        
+    elif tipo_2players == "Contra":
+        fundo = BaseImage(
+            image_path="./Images/SummaryVersus.png",
+            drawing_mode=IMAGE_MODE_FILL
+        )
+    else: 
+        fundo = BaseImage(
+            image_path="./Images/SummaryCoop.png",
+            drawing_mode=IMAGE_MODE_FILL
+        )
+    
     theme = pygame_menu.themes.THEME_DARK.copy()
 
     #Fonte e Tamanho do nome "Conectado como: {user[1]}"

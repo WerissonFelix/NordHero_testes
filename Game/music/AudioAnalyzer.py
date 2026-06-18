@@ -14,9 +14,10 @@ class AudioAnalyzer:
     """
 
 
-    def __init__(self, music_path, mod, second_music_path=None):
+    def __init__(self, music_path, mod, second_music_path=None, full_music_path=None):
         self.music_path = music_path
         self.second_music_path = second_music_path
+        self.full_music_path = full_music_path
         self.notes = []
         self.qtd_notes = 0
         self.time =  120 # Fallback
@@ -169,7 +170,11 @@ class AudioAnalyzer:
             mixer_
         """
         mixer.init()
-        mixer.music.load(self.music_path)
+        if self.full_music_path:
+            mixer.music.load(self.full_music_path)
+        else:
+            mixer.music.load(self.music_path)
+            
         mixer.music.play()
         
         return mixer

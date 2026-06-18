@@ -1,11 +1,13 @@
 pygame
 pygame_menu
 validate_email
+email_validator
 password-validator
 librosa
 numpy
 dnspython
-phonenumbers,
-twilio,
-groq,
+phonenumbers
+twilio
+groq
 python-dotenv
+matplotlib

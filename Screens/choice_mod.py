@@ -19,6 +19,7 @@ def choice_mod(user:User):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.choice_difficulty import choice_difficulty
+    from Screens.choice_personalizado import choice_personalizado
     
     fundo = BaseImage(
         image_path="./Images/teladefundo.png",
@@ -82,6 +83,12 @@ def choice_mod(user:User):
         nonlocal tipo_2players
         tipo_2players = selected_value
     
+    modo_jogo = "History"
+
+    def set_modo_jogo(value, selected_value):
+        nonlocal modo_jogo
+        modo_jogo = selected_value
+        
     def create_mod_selector():  
         clear_lists()
               
@@ -132,10 +139,7 @@ def choice_mod(user:User):
         )
         selectors.append(selector)
         
-        continue_button = choice.add.button(
-            "Continue", 
-            lambda: choice_difficulty(user, "2 Players", tipo, tipo_2players)
-        )
+        continue_button = choice.add.button("Continue", select_history_or_custom)
         exit_button = choice.add.button("BACK", selector_2players_type)
         buttons.append(continue_button)
         buttons.append(exit_button)
@@ -153,7 +157,7 @@ def choice_mod(user:User):
         
         selectors.append(selector_type)
        
-        continue_button = choice.add.button("Continue", lambda: choice_difficulty(user, "Single Player", tipo))  
+        continue_button = choice.add.button("Continue", select_history_or_custom)  
         
         exit_button = choice.add.button("BACK", create_mod_selector)        
         buttons.append(continue_button)
@@ -168,7 +172,7 @@ def choice_mod(user:User):
             if tipo_2players == "Contra":
                 select_vocal_instrumental_2p(tipo_2players)
             elif tipo_2players == "Juntos":
-                choice_difficulty(user, "2 Players", tipo, tipo_2players)
+                choice_difficulty(user, mod, tipo, tipo_2players)
             else:
                 selector_2players_type()     
         
@@ -178,6 +182,46 @@ def choice_mod(user:User):
         font_name=pygame_menu.font.FONT_MUNRO
     )
 
+    def select_history_or_custom():
+        clear_lists()
+
+        selector = choice.add.selector(
+            "Mode: ",
+            [
+                ("History", "History"),
+                ("Personalizado", "Personalizado")
+            ],
+            onchange=set_modo_jogo
+        )
+
+        selectors.append(selector)
+
+        continue_button = choice.add.button(
+            "Continue",
+            final_destination
+        )
+
+        exit_button = choice.add.button(
+            "BACK",
+            create_mod_selector  
+        )
+
+        buttons.append(continue_button)
+        buttons.append(exit_button)
+    
+    def final_destination():
+        nonlocal mod, tipo_2players, tipo
+        
+        if modo_jogo == "History":
+            if mod == "Single Player":
+                choice_difficulty(user, mod, tipo)
+            else:
+                print(f"modd {mod} tipoo {tipo} tipo2 {tipo_2players}")
+                choice_difficulty(user, mod, tipo, tipo_2players)
+           
+        else:
+            choice_personalizado(user, tipo, mod)
+             
     if len(selectors) == 0 and len(buttons) == 0:
         create_mod_selector()
         

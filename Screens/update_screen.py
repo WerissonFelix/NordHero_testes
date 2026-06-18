@@ -66,7 +66,7 @@ def update_menu(user: User, profile_options):
     from Screens.Codigo_Email import codigo_email 
 
     def update_callback():
-        new_user = User(user.id, nome_input.get_value(), email_input.get_value(), user.password)
+        new_user = User(user.id, nome_input.get_value(), user.telefone, email_input.get_value(), user.password)
         validator.verify_just_for_update(new_user)
 
     def call_code():

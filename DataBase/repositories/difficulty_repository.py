@@ -41,14 +41,4 @@ class DifficultyRepository(BaseRepository):
 
 
 '''
-difficultyManeger = DifficultyRepository()
-
-
-easy = Difficulty(None, "Easy")
-normal = Difficulty(None, "Normal")
-hard = Difficulty(None, "Hard")
-
-difficultyManeger.create_difficulty(easy)
-difficultyManeger.create_difficulty(normal)
-difficultyManeger.create_difficulty(hard)
 '''

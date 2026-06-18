@@ -46,6 +46,17 @@ story_difficulty_map = {
         "I Thought I Saw Your Face Today - She & Him (Instrumental)", 
         "I Thought I Saw Your Face Today (Acapella_Vocals Only)"
     ),
+    
+     "Z Imagine Dragons - Believer (FULL)": (
+        2, "Full",
+        "Imagine Dragons Believer Official Instrumental - Anything And Everything (youtube)", 
+        "Imagine Dragons - BELIEVER Vocal"
+    ),
+      "Z Michael Jackson - Billie Jean (FULL)": (
+        2, "Full",
+        "Michael Jackson  Billie Jean [Instrumental Version] - HIStoryWorldTourMJ (youtube)", 
+        "Michael Jackson - Billie Jean Vocals Only"
+    ),
 }
 
 mixer.init()

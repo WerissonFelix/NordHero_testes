@@ -17,12 +17,14 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user, music_path, mod, multiplicador=1,second_music_path=None, tipo_2players= None):
+    def __init__(self, user, music_path, mod, multiplicador=1,second_music_path=None, tipo_2players= None, full_music_path = None):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
         self.music_path = music_path
         self.second_music_path = second_music_path
+        self.full_music_path = full_music_path
+        
         self.tipo_2players = tipo_2players
         self.multiplicador = multiplicador
         
@@ -41,13 +43,15 @@ class ManageGame:
             
         else:
             print(mod)
-            self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
+           
             self.width = 1280
             self.height = 720
             
             if tipo_2players == "Contra":
+                self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path)
                 bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaVersus.png")
             else:
+                self.audio = AudioAnalyzer(self.music_path, self.mod, self.second_music_path, self.full_music_path)
                 bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaCoop.png") 
         self.screen = pygame.display.set_mode(
             (

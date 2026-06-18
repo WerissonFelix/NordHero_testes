@@ -67,9 +67,12 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
     selected_music = [None] 
     
     def start_game(music_selector):
-        if selected_music[0] is None:
+        value = music_selector.get_value()[0][1]
+        if value is not None:
             selected_music[0] = music_selector.get_value()[0][1][0]
-
+        else:
+            return 
+        
         if mod == "2 Players":
             if tipo_2players == "Contra":
                 gameManager = ManageGame(user, selected_music[0], mod,1, selected_music[0], tipo_2players)    
@@ -78,7 +81,7 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
                 instrumental_song = songManeger.get_by_id(multi_song.instrumental_song)
                 vocal_song = songManeger.get_by_id(multi_song.vocal_song)
                 
-                gameManager = ManageGame(user, instrumental_song.file_path, mod, 1, vocal_song.file_path, tipo_2players)
+                gameManager = ManageGame(user, instrumental_song.file_path, mod, 1, vocal_song.file_path, tipo_2players, multi_song.file_path)
         else:
             print(mod)
             gameManager = ManageGame(user, selected_music[0], mod)
@@ -119,14 +122,22 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
     
     if mod == "2 Players":
         if tipo_2players == "Contra":
-            songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)    
-            music_selector = choice.add.selector(
-                'MUSIC :',
-                [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs],
-                onchange=change_rank           
-            )  
+            songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)
+            
+            if len(songs) > 0:
+                music_selector = choice.add.selector(
+                    'MUSIC :',
+                    [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs],
+                    onchange=change_rank           
+                )  
+            else:
+                music_selector = choice.add.selector(
+                   'MUSIC :',
+                    [("Sem musics para este categoria", None)]          
+                )
+                
         else:
-            songs = multiSongManeger.get_by_difficulty(difficulty.id)
+            songs = multiSongManeger.get_all()
             music_selector = choice.add.selector(
                 'MUSIC :',
                 [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs ],
@@ -134,12 +145,18 @@ def choice_music(user: User, difficulty: Difficulty, mod:str, tipo:str, tipo_2pl
         
     else:
         print(mod)
-        songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)    
-        music_selector = choice.add.selector(
-            'MUSIC :',
-            [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs],
-            onchange=change_rank           
-        )
+        songs = songManeger.get_by_type_and_difficulty(tipo, difficulty.id)  
+        if len(songs) > 0:
+            music_selector = choice.add.selector(
+                'MUSIC :',
+                [(song.title[:30] + " ... ", (song.file_path, song.id)) for song in songs],
+                onchange=change_rank           
+            )
+        else:
+            music_selector = choice.add.selector(
+                'MUSIC :',
+                [("Sem musics para este categoria", None)]               
+            )
     
     choice.add.button("START GAME", start_game, music_selector)
     choice.add.button("BACK", home_screen, user, profile_options_menu)

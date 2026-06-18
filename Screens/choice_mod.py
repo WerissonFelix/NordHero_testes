@@ -172,7 +172,7 @@ def choice_mod(user:User):
             if tipo_2players == "Contra":
                 select_vocal_instrumental_2p(tipo_2players)
             elif tipo_2players == "Juntos":
-                select_vocal_instrumental_2p(tipo_2players)
+                choice_difficulty(user, mod, tipo, tipo_2players)
             else:
                 selector_2players_type()     
         

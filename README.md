@@ -18,6 +18,11 @@ https://pt.overleaf.com/read/tgztjgfnrstz#18f55a
 https://docs.google.com/spreadsheets/d/1CZiTiCEDNldX2EJehQt2GNif_Ltk8DC4W7OLNemhbG4/edit?usp=sharing
 ```
 
+**Relatório - Werisson Félix :**
+```
+https://docs.google.com/document/d/1cBUmR1xqzsNNhViKkeBFmtzru_dgz0y9HW63MK-AoWE/edit?usp=sharing
+```
+
 ## 🚀 Release 1.0
 
 | Funcionalidade | Descrição |

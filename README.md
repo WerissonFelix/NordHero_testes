@@ -23,6 +23,11 @@ https://docs.google.com/spreadsheets/d/1PuA8FkBo1-DdPHj0zMKqmVhUgBLWZ7JGCNyriw1i
 https://docs.google.com/document/d/1cBUmR1xqzsNNhViKkeBFmtzru_dgz0y9HW63MK-AoWE/edit?usp=sharing
 ```
 
+**Relatório - Cauã Vitor:**
+```
+https://docs.google.com/document/d/12qeTbFghmfrlWR82uoOs615Dma3GZ1w7/edit
+```
+
 ## 🚀 Release 1.0
 
 | Funcionalidade | Descrição |

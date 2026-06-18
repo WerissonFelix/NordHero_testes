@@ -1,88 +1,128 @@
 import pygame
 import pygame_menu
-from Game.Config.Game_Config import GameConfig
-from Screens.Pause import pause_menu
 
 pygame.init()
 clock = pygame.time.Clock()
 
-def change_controls_menu(config):
+
+def change_controls_menu(config, mod):
     surface = pygame.display.get_surface()
     width, height = surface.get_size()
-  
+
+    theme = pygame_menu.themes.THEME_DARK.copy()
+    theme.title_font_size = 50
+    theme.widget_font_size = 28
+
     initial_menu = pygame_menu.Menu(
-        '',
+        'CONTROLES',
         width,
         height,
-
-        theme=pygame_menu.themes.THEME_BLUE
+        theme=theme
     )
 
     modo_captura = False
-
-    key_changed = "key1"
-
+    key_changed = None
     running = True
-    
-    keys = {
-        "key1": config.key1,
-        "key2": config.key2,
-        "key3": config.key3,
-        "key4": config.key4
-    }
-    
-    def uptade_key(Key):
+
+    keys = config.get_player_keys(mod)
+
+    labels = {}
+
+    status_label = initial_menu.add.label(
+        "Selecione uma tecla para alterar"
+    )
+
+    initial_menu.add.vertical_margin(20)
+
+    def update_key(key_name):
         nonlocal modo_captura, key_changed
-        modo_captura = True    
-        key_changed = Key
+
+        modo_captura = True
+        key_changed = key_name
+
+        status_label.set_title(
+            f"Pressione uma tecla para {key_name.upper()}"
+        )
+
+    def refresh_labels():
+        for key_name, label in labels.items():
+            label.set_title(
+                f"{key_name.upper()} -> {pygame.key.name(keys[key_name]).upper()}"
+            )
 
     def change_key(new_key):
-        nonlocal modo_captura, key_changed, keys
+        nonlocal modo_captura, key_changed
+
         modo_captura = False
-        print(new_key)
         keys[key_changed] = new_key
-        af = pygame.key.name(new_key)
-        initial_menu.add.label(f"new key: {af}")
 
-    def chance_config_key():
-        nonlocal keys, initial_menu,running 
-        config.key1 = keys["key1"]
-        config.key2 = keys["key2"]
-        config.key3 = keys["key3"]
-        config.key4 = keys["key4"]
-             
+        refresh_labels()
+
+        status_label.set_title(
+            f"{key_changed.upper()} alterada para "
+            f"{pygame.key.name(new_key).upper()}"
+        )
+
+    def save_config():
+        nonlocal running
+
+        config.set_player_keys(keys)
+
+        print(keys)
+
         running = False
-        
-        print(config.key1,config.key2, config.key3, config.key4)
-        
-        initial_menu.disable()     
-        
-        #pause_menu(user, music_path, total_notes, notes_hit, initial_menu)
-        
-    for k, v in keys.items():
-        initial_menu.add.label(f"key {k}: {pygame.key.name(v)}")
-        initial_menu.add.button('Alterar', uptade_key, k)  
-        
-    initial_menu.add.button('Confirmar', chance_config_key) 
-    initial_menu.add.button('BACK', initial_menu.disable) 
 
-    initial_menu.enable()
-    
+    def back():
+        nonlocal running
+
+        running = False
+
+    # Controles
+    for key_name, key_value in keys.items():
+
+        label = initial_menu.add.label(
+            f"{key_name.upper()} -> "
+            f"{pygame.key.name(key_value).upper()}"
+        )
+
+        labels[key_name] = label
+
+        initial_menu.add.button(
+            f"Alterar {key_name.upper()}",
+            update_key,
+            key_name
+        )
+
+        initial_menu.add.vertical_margin(10)
+
+    initial_menu.add.vertical_margin(20)
+
+    initial_menu.add.button(
+        "Confirmar",
+        save_config
+    )
+
+    initial_menu.add.button(
+        "Voltar",
+        back
+    )
+
     while running:
+
         events = pygame.event.get()
+
         for event in events:
+
             if event.type == pygame.QUIT:
                 running = False
 
-            if modo_captura:            
-                if event.type == pygame.KEYDOWN:   
-                    change_key(event.key)
+            if modo_captura and event.type == pygame.KEYDOWN:
+                change_key(event.key)
 
-        if initial_menu.is_enabled():     
-            initial_menu.draw(surface)       
-            initial_menu.update(events)     
-        else:
-            running = False
-             
+        surface.fill((25, 25, 35))
+
+        initial_menu.update(events)
+        initial_menu.draw(surface)
+
         pygame.display.flip()
-        clock.tick(60)  
+        clock.tick(60)

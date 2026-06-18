@@ -131,7 +131,7 @@ class ManageGame:
         """
         self.mixer.music.pause()
         
-        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.tipo_2players, None, self.config)
+        pause_menu(self.user, self.music_path, total_notes, notes_hit, score, self.tipo_2players, None, self.config, self.mod)
         
         self.default_lane = [
     

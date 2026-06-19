@@ -4,6 +4,7 @@ from Game.Notes.NotesManager import NoteManager
 from Game.music.AudioAnalyzer import AudioAnalyzer
 from Game.Text.TextManager import TextManager
 from Game.Bar.BarProgress import BarProgressManager
+from Game.Bar.SongProgressBar import SongProgressBar
 from Game.Bar.BarEvents import BarEvents
 
 from Screens.Pause import pause_menu
@@ -24,26 +25,20 @@ class ManageGame:
         self.music_path = music_path
         self.second_music_path = second_music_path
         self.full_music_path = full_music_path
-        
         self.tipo_2players = tipo_2players
         self.multiplicador = multiplicador
-        
         self.textManage  = TextManager(mod)
         self.clock = pygame.time.Clock()
-        
         current_dir = os.path.dirname(__file__)
         self.mod = mod
-        self.notesManage = None
-        
+        self.notesManage = None        
         if mod == "Single Player":  
             self.width = self.config.get_screen_width()
             self.height = self.config.get_screen_height()
             self.audio = AudioAnalyzer(self.music_path, self.mod)
-            bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaSinglePlayer.png")
-            
+            bg_path = os.path.join(current_dir, "..", "..", "Images", "TelaSinglePlayer.png")  
         else:
             print(mod)
-           
             self.width = 1280
             self.height = 720
             
@@ -59,21 +54,22 @@ class ManageGame:
             self.height
             )
         )
+        self.font = pygame.font.Font(None, 36)
+        duration_music = self.audio.get_duration()
+        bar_w = 300
+        bar_x = (self.width - bar_w) // 2 if mod == "Single Player" else ((self.width - bar_w) // 2) - 50
         
+        self.song_progress_bar = SongProgressBar(x=bar_x, y=10, width=bar_w, height=14, duration_ms = duration_music, font= self.font)
         self.background = pygame.image.load(bg_path)
 
         self.background = pygame.transform.scale(
             self.background,
             (self.width, self.height)
         )
-        
-        self.font = pygame.font.Font(None, 36)
         self.running = False
-        
         self.notes = []
         self.base_bpm = 120
         self.bpm = 0
-        
         self.default_lane = [
             
             LaneManager(180,500, (255,0,0), (220,0,0), self.config.key1, self.width, self.height),
@@ -82,7 +78,6 @@ class ManageGame:
             LaneManager(480,500, (255,255,0), (220,220,0), self.config.key4, self.width, self.height),    
            
         ]
-        
         if self.mod == "2 Players":
             self.default_lane.append(LaneManager(780, 500, (255,0,0), (220,0,0), self.config.key5, self.width, self.height))
             self.default_lane.append(LaneManager(880, 500, (0,255,0), (0,220,0), self.config.key6, self.width, self.height))
@@ -92,7 +87,6 @@ class ManageGame:
         self.mixer = None    
         self.count = 4
         self.start_time = time.time()
-        
         self.count_to_load = -1
         self.is_paused = False
         
@@ -197,7 +191,7 @@ class ManageGame:
         self.index_player = 0
         self.mixer = self.audio.load_music()
         self.current_time = self.mixer.music.get_pos() / 1000
-        
+
         MUSIC_END_EVENT = pygame.USEREVENT + 1
         pygame.mixer.music.set_endevent(MUSIC_END_EVENT)
         
@@ -278,8 +272,8 @@ class ManageGame:
         self.keys_pressed = [] 
         while self.running:
                      
-            dt = self.clock.tick(60) / 1000
-        
+            self.current_time = self.clock.tick(60) / 1000
+            self.song_progress_bar.update(self.mixer.music.get_pos())
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -368,7 +362,7 @@ class ManageGame:
                     )
 
                     self.screen.blit(score_text_p1, (10, 10))
-                    self.screen.blit(score_text_p2, (700, 10))
+                    self.screen.blit(score_text_p2, (750, 10))
                     
                 elif self.tipo_2players == "Juntos":
             
@@ -407,6 +401,7 @@ class ManageGame:
                         self.bar_rain_p1.add_perfect() if k == 0 else self.bar_rain_p2.add_perfect()
                     if v in ["Miss", "Bad"]:
                         self.bar_pun_p1.add_bad_miss(k, rating) if k == 0 else self.bar_pun_p2.add_bad_miss(k, rating)
+            self.song_progress_bar.draw(self.screen)                        
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)

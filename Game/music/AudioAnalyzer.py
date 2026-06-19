@@ -1,6 +1,7 @@
 import librosa
 import numpy as np
 from pygame import mixer
+import pygame
 
 class AudioAnalyzer:
     """ 
@@ -178,6 +179,10 @@ class AudioAnalyzer:
         mixer.music.play()
         
         return mixer
+    
+    def get_duration(self):
+        sound = mixer.Sound(self.music_path)
+        return int(sound.get_length() * 1000)
     
     def get_qtd_notes(self):
         return self.qtd_notes

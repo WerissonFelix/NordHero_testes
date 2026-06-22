@@ -21,7 +21,7 @@ class AchievementRepository(BaseRepository):
         
         rows = self.fetchall(query, (user_id,))
         
-        return [UserAchievement(*row) for row in rows] if len(rows) > 0 else None
+        return [UserAchievement(*row) for row in rows]
 
     def get_unlocked_keys_by_user(self, user_id: int) -> set[str]:
         query = """
@@ -33,7 +33,7 @@ class AchievementRepository(BaseRepository):
             
         rows = self.fetchall(query, (user_id,))
         
-        return {row[0] for row in rows} if len(rows) > 0 else None
+        return {row[0] for row in rows}
 
     def unlock(self, user_id: int, achievement_key: str) -> bool:
         achievement = self.get_by_key(achievement_key)

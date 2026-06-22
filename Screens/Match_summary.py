@@ -7,6 +7,7 @@ from DataBase.repositories.score_repository import ScoreRepository
 from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.song_chart_repository import SongChartsRepository
 from DataBase.repositories.notes_hit_repository import NotesHitRepository
+from Features.achievements_engine import AchievementsEngine
 
 from models.notes_hit import NotesHit
 from models.score import Score
@@ -16,6 +17,7 @@ pygame.init()
 
 fundo = pygame.image.load('./Images/SummarySingleplayer.png')
 music = ""
+
 def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2players):
     """
     Exibe o resumo de desempenho após uma partida.
@@ -193,6 +195,21 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
     score_match = Score(None, user.id, chart.id, notes.id, score[0], accuracy, raking)
     scoreManager.create(score_match)
     
+    engine = AchievementsEngine()
+    new_achievements = engine.check_all(user.id)
+
+    if new_achievements:
+        choice.add.label("", font_size=14, font_name=pygame_menu.font.FONT_MUNRO)
+        choice.add.label(
+            "🏆  CONQUISTA DESBLOQUEADA!",
+            font_size=18, font_name=pygame_menu.font.FONT_MUNRO, font_color=(255, 215, 0)
+        )
+        for ach in new_achievements:
+            choice.add.label(
+                f"{ach.icon}  {ach.name} — {ach.description}",
+                font_size=15, font_name=pygame_menu.font.FONT_MUNRO, font_color=(220, 220, 100)
+            )
+            
     choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
     

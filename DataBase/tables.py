@@ -264,14 +264,16 @@ def seed_achievements():
             (key, name, desc, icon)
         )
     connection.commit()
-     
-table_user()
-table_songs()
-table_difficulties()
-table_song_charts()
-table_socores()
-table_multiplayer_songs()
-notes_hit()
-table_achievements()
-table_user_achievements()
-seed_achievements()
+    
+    
+def create_all():
+    table_user()
+    table_songs()
+    table_difficulties()
+    table_song_charts()
+    table_socores()
+    table_multiplayer_songs()
+    notes_hit()
+    table_achievements()
+    table_user_achievements()
+    seed_achievements()

@@ -28,6 +28,17 @@ class LifeBarManager:
         self._pulse_tick = 0.0
         self._pulse_speed = 3.0
 
+    def add_life(self):
+        """  
+        Adiciona um coração, caso o jogador tenha perdido algum.
+        Adiciona se e somente se, ele já tinha perdido algum coração
+        """
+        
+        if 0 < self.current_lives < 3:
+            self.current_lives += 1
+        else:
+            pass
+        
     def lose_life(self):
         """
         Remove uma vida.
@@ -59,6 +70,8 @@ class LifeBarManager:
     def handle_rating(self, rating: str):
         if rating == "Miss":
             return self.lose_life()
+        elif rating == "Perfect":
+            return self.add_life()
         return self.is_alive()
 
     def update(self, dt: float):

@@ -6,6 +6,7 @@ from Game.Text.TextManager import TextManager
 from Game.Bar.BarProgress import BarProgressManager
 from Game.Bar.SongProgressBar import SongProgressBar
 from Game.Bar.BarEvents import BarEvents
+from Game.Bar.lifeBarManager import LifeBarManager
 
 from Screens.Pause import pause_menu
 from Screens.Match_summary import match_summary
@@ -261,7 +262,8 @@ class ManageGame:
 
                 self.bar_rain_p1.set_partner(self.bar_rain_p2, on_both_full)
                 self.bar_rain_p2.set_partner(self.bar_rain_p1, on_both_full)
-           
+        else:
+            self.life_bar = LifeBarManager(x=20, y=20, max_lives=3, heart_size=36, gap=12, on_game_over=self.end_match) 
         """ 
         Loop principal do jogo.
     
@@ -386,7 +388,7 @@ class ManageGame:
                     True,
                     (255, 255, 0)
                 )
-                
+                self.life_bar.draw(self.screen)
                 self.screen.blit(score_text, (10, 10))
                 
             for k,v in enumerate(rating):
@@ -401,7 +403,10 @@ class ManageGame:
                         self.bar_rain_p1.add_perfect() if k == 0 else self.bar_rain_p2.add_perfect()
                     if v in ["Miss", "Bad"]:
                         self.bar_pun_p1.add_bad_miss(k, rating) if k == 0 else self.bar_pun_p2.add_bad_miss(k, rating)
-            self.song_progress_bar.draw(self.screen)                        
+                
+                self.life_bar.handle_rating(v)
+            self.song_progress_bar.draw(self.screen) 
+            self.life_bar.update(self.current_time)                       
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)

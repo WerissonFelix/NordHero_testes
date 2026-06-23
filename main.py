@@ -6,7 +6,7 @@ from Screens.Creat_Account import create_account_menu
 from Features.audio.music_loader import load_and_register_music
 from DataBase.tables import create_all
  
-load_and_register_music() 
+load_and_register_music()
 create_all()
 
 pygame.init()

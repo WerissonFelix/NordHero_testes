@@ -264,7 +264,62 @@ def seed_achievements():
             (key, name, desc, icon)
         )
     connection.commit()
-    
+
+
+XP_BY_RANK = {
+    "S":   500,
+    "A":   300,
+    "B":   150,
+    "D":    50,
+    "N/A":  10,
+}
+
+XP_PER_LEVEL = 1000
+
+def xp_for_level(level: int) -> int:
+    return (level - 1) * XP_PER_LEVEL
+
+def level_from_xp(total_xp: int) -> int:
+    return (total_xp // XP_PER_LEVEL) + 1
+
+def xp_progress_in_level(total_xp: int) -> tuple[int, int]:
+    return (total_xp % XP_PER_LEVEL, XP_PER_LEVEL)
+
+def calculate_xp_earned(rank: str, accuracy: float) -> int:
+    base = XP_BY_RANK.get(rank, 10)
+    bonus = int(round(accuracy))
+    return base + bonus
+
+def table_user_xp():
+    query = """
+        CREATE TABLE IF NOT EXISTS user_xp (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL UNIQUE,
+            total_xp INTEGER NOT NULL DEFAULT 0,
+            level INTEGER NOT NULL DEFAULT 1,
+            FOREIGN KEY(user_id) REFERENCES user(id)
+        )
+    """
+    cursor.execute(query)
+    connection.commit()
+
+def table_story_progress():
+    query = """
+        CREATE TABLE IF NOT EXISTS story_progress (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            difficulty_id INTEGER NOT NULL,
+            song_id INTEGER NOT NULL,
+            phase_number INTEGER NOT NULL,
+            completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(difficulty_id) REFERENCES difficulties(id),
+            FOREIGN KEY(song_id) REFERENCES songs(id),
+            UNIQUE(user_id, difficulty_id, song_id)
+        )
+    """
+    cursor.execute(query)
+    connection.commit()
     
 def create_all():
     table_user()
@@ -277,3 +332,5 @@ def create_all():
     table_achievements()
     table_user_achievements()
     seed_achievements()
+    table_user_xp()
+    table_story_progress()

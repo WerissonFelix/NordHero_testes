@@ -8,6 +8,7 @@ from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.song_chart_repository import SongChartsRepository
 from DataBase.repositories.notes_hit_repository import NotesHitRepository
 from Features.achievements_engine import AchievementsEngine
+from DataBase.repositories.xp_repository import XpRepository
 
 from models.notes_hit import NotesHit
 from models.score import Score
@@ -201,15 +202,39 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
     if new_achievements:
         choice.add.label("", font_size=14, font_name=pygame_menu.font.FONT_MUNRO)
         choice.add.label(
-            "🏆  CONQUISTA DESBLOQUEADA!",
-            font_size=18, font_name=pygame_menu.font.FONT_MUNRO, font_color=(255, 215, 0)
+            "CONQUISTA DESBLOQUEADA!",
+            font_size=18,
+            font_name=pygame_menu.font.FONT_MUNRO,
+            font_color=(255, 215, 0)
         )
         for ach in new_achievements:
             choice.add.label(
                 f"{ach.icon}  {ach.name} — {ach.description}",
-                font_size=15, font_name=pygame_menu.font.FONT_MUNRO, font_color=(220, 220, 100)
+                font_size=15, 
+                font_name=pygame_menu.font.FONT_MUNRO,
+                font_color=(220, 220, 100)
             )
             
+    xp_repo   = XpRepository()
+    xp_result = xp_repo.add_xp(user.id, raking, accuracy)
+
+    choice.add.label("", font_size=14, font_name=pygame_menu.font.FONT_MUNRO)
+    xp_msg = f"+ {xp_result['xp_earned']} XP  →  Nível {xp_result['level']}  ({xp_result['xp_in_level']}/{xp_result['xp_to_next_level']} XP)"
+    choice.add.label(
+        xp_msg,
+        font_size=17,
+        font_name=pygame_menu.font.FONT_MUNRO,
+        font_color=(100, 220, 255)
+    )
+
+    if xp_result["leveled_up"]:
+        choice.add.label(
+            f"SUBIU DE NÍVEL! Agora você é Nível {xp_result['level']}!",
+            font_size=18,
+            font_name=pygame_menu.font.FONT_MUNRO,
+            font_color=(255, 215, 0)
+        )      
+        
     choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
     

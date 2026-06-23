@@ -334,3 +334,4 @@ def create_all():
     seed_achievements()
     table_user_xp()
     table_story_progress()
+

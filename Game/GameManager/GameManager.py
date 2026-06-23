@@ -8,10 +8,12 @@ from Game.Bar.SongProgressBar import SongProgressBar
 from Game.Bar.BarEvents import BarEvents
 from Game.Bar.lifeBarManager import LifeBarManager
 
+from DataBase.repositories.xp_repository import XpRepository
+from DataBase.repositories.song_repository import SongRepository
+
 from Screens.Pause import pause_menu
 from Screens.Match_summary import match_summary
 import pygame, time, os
-
 class ManageGame:
     """
     Controlador principal do jogo de ritmo.
@@ -19,7 +21,7 @@ class ManageGame:
     Gerencia o fluxo completo da partida: carregamento, contagem regressiva,
     execução do jogo com detecção de notas, pausa e tela de resultado final.
     """
-    def __init__(self, user, music_path, mod, multiplicador=1,second_music_path=None, tipo_2players= None, full_music_path = None):
+    def __init__(self, user, music_path, mod, multiplicador=1,second_music_path=None, tipo_2players= None, full_music_path = None, phase_number = None ):
         pygame.font.init()
         self.user = user
         self.config = GameConfig()
@@ -32,6 +34,7 @@ class ManageGame:
         self.clock = pygame.time.Clock()
         current_dir = os.path.dirname(__file__)
         self.mod = mod
+        self.phase_number = phase_number
         self.notesManage = None        
         if mod == "Single Player":  
             self.width = self.config.get_screen_width()
@@ -187,7 +190,6 @@ class ManageGame:
         Loop principal do jogo de ritmo.
         
         """
-        
         self.score = [0, 0]
         self.index_player = 0
         self.mixer = self.audio.load_music()
@@ -263,7 +265,7 @@ class ManageGame:
                 self.bar_rain_p1.set_partner(self.bar_rain_p2, on_both_full)
                 self.bar_rain_p2.set_partner(self.bar_rain_p1, on_both_full)
         else:
-            self.life_bar = LifeBarManager(x=20, y=20, max_lives=3, heart_size=36, gap=12, on_game_over=self.end_match) 
+            self.life_bar = LifeBarManager(x=300, y=550, max_lives=3, heart_size=36, gap=12, on_game_over=self.end_match) 
         """ 
         Loop principal do jogo.
     
@@ -312,6 +314,10 @@ class ManageGame:
                                 pass
                             key.update_line()
                 elif event.type == MUSIC_END_EVENT:
+                    xpRepository = XpRepository()
+                    songRepository = SongRepository()
+                    song = songRepository.get_by_file_path(self.music_path)
+                    xpRepository.complete_phase(self.user.id,song.story_difficulty_id, song.id, self.phase_number)
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
             self.screen.blit(self.background, (0, 0))
@@ -324,7 +330,6 @@ class ManageGame:
                     key.draw_line()
                 
             self.current_time = self.mixer.music.get_pos() / 1000
-            
             
             for i, key in enumerate(keys):
                 text = self.font.render(key, True, (255, 255, 255))

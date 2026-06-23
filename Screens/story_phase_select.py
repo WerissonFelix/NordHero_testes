@@ -6,18 +6,13 @@ from models.user import User
 
 pygame.init()
 
-COLORS = {
-    1: (0, 200, 80),    
-    2: (220, 200, 0),   
-    3: (180, 30, 30),  
-}
+COLORS = {1:(0, 200, 80), 2:(220, 200, 0), 3:(180, 30, 30),}
 
 CARD_W, CARD_H = 130, 130
-CARD_RADIUS    = 18
-CARD_BORDER    = 4
-CARDS_PER_ROW  = 6
-CARD_GAP       = 20
-
+CARD_RADIUS = 18
+CARD_BORDER = 4
+CARDS_PER_ROW = 6
+CARD_GAP = 20
 
 def _draw_phase_cards(surface, phases, color, selected_idx, offset_y):
     total_w = CARDS_PER_ROW * CARD_W + (CARDS_PER_ROW - 1) * CARD_GAP
@@ -223,6 +218,6 @@ def _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, xp_repo):
     if mod == "2 Players" and tipo_2players == "Contra":
         gameManager = ManageGame(user, song.file_path, mod, song.file_path, tipo_2players)
     else:
-        gameManager = ManageGame(user, song.file_path, mod)
+        gameManager = ManageGame(user, song.file_path, mod, phase_number=phase["number"])
     gameManager.load_to_run()
     xp_repo.complete_phase(user.id, difficulty.id, song.id, phase["number"])

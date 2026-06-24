@@ -44,24 +44,98 @@ def achievements_screen(user: User):
         font_name=pygame_menu.font.FONT_MUNRO, font_color=(255, 215, 0)
     )
     
-    menu.add.label("", font_size=10, font_name=pygame_menu.font.FONT_MUNRO)
+    def on_selector_change(selected, value):
+        if value == "desbloqueadas":
+            draw_desbloqueadas()
+        elif value == "bloqueadas":
+            draw_bloqueadas()
+            
+    menu.add.selector(
+        "Mostrar: ",
+        [
+            ("Desbloqueadas", "desbloqueadas"),
+            ("Bloqueadas", "bloqueadas")
+        ],
+        onchange=on_selector_change
+    )
+          
+    all_labels = []
+    
+    def clear_labels(list):
+        if len(list) > 0:
+            for label in all_labels:
+                menu.remove_widget(label)
+            all_labels.clear()
+        else:
+            pass
 
     desbloqueadas = [a for a in all_achievements if a.key in unlocked_keys]
     bloqueadas = [a for a in all_achievements if a.key not in unlocked_keys]
 
-    if desbloqueadas:
-        menu.add.label("── Desbloqueadas ──", font_size=16, font_name=pygame_menu.font.FONT_MUNRO, font_color=(180, 255, 180))
-        for ach in desbloqueadas:
-            menu.add.label(f"{ach.icon}  {ach.name}", font_size=16, font_name=pygame_menu.font.FONT_MUNRO, font_color=(220, 255, 220))
-            menu.add.label(f"   {ach.description}", font_size=13, font_name=pygame_menu.font.FONT_MUNRO, font_color=(160, 200, 160))
-
-    if bloqueadas:
-        menu.add.label("", font_size=10, font_name=pygame_menu.font.FONT_MUNRO)
-        menu.add.label("── Bloqueadas ──", font_size=16, font_name=pygame_menu.font.FONT_MUNRO, font_color=(160, 160, 160))
-        for ach in bloqueadas:
-            menu.add.label(f"🔒  {ach.name}", font_size=16, font_name=pygame_menu.font.FONT_MUNRO, font_color=(130, 130, 130))
-            menu.add.label(f"   {ach.description}", font_size=13, font_name=pygame_menu.font.FONT_MUNRO, font_color=(100, 100, 100))
-
-    menu.add.label("", font_size=10, font_name=pygame_menu.font.FONT_MUNRO)
+    def draw_desbloqueadas():
+        nonlocal all_labels
+        clear_labels(all_labels)
+        if desbloqueadas:
+            lbl_title =  menu.add.label(
+                "Desbloqueadas",
+                font_size=16,
+                font_name=pygame_menu.font.FONT_MUNRO,
+                font_color=(180, 255, 180)
+            )
+            
+            for achievement in desbloqueadas:
+                lbl_name = menu.add.label(
+                    f"{achievement.icon}  {achievement.name}",
+                    font_size=16,
+                    font_name=pygame_menu.font.FONT_MUNRO,
+                    font_color=(220, 255, 220)
+                )
+                
+                lbl_description = menu.add.label(
+                    f"   {achievement.description}",
+                    font_size=13,
+                    font_name=pygame_menu.font.FONT_MUNRO,
+                    font_color=(160, 200, 160)
+                )
+                all_labels.append(lbl_name)
+                all_labels.append(lbl_description)
+            all_labels.append(lbl_title)
+    
+    def draw_bloqueadas():
+        nonlocal all_labels
+        clear_labels(all_labels)
+        
+        if bloqueadas:    
+            lbl_title = menu.add.label(
+                "Bloqueadas",
+                font_size=16,
+                font_name=pygame_menu.font.FONT_MUNRO,
+                font_color=(160, 160, 160)
+            )
+            
+            for achievement in bloqueadas:
+                lbl_name = menu.add.label(
+                    f"🔒  {achievement.name}",
+                    font_size=16,
+                    font_name=pygame_menu.font.FONT_MUNRO,
+                    font_color=(130, 130, 130)
+                )
+                
+                lbl_description = menu.add.label(
+                    f"{achievement.description}",
+                    font_size=13,
+                    font_name=pygame_menu.font.FONT_MUNRO,
+                    font_color=(100, 100, 100)
+                )
+                
+                all_labels.append(lbl_name)
+                all_labels.append(lbl_description)
+            all_labels.append(lbl_title)
+    menu.add.label(
+        "",
+        font_size=10,
+        font_name=pygame_menu.font.FONT_MUNRO
+    )
+    
     menu.add.button("VOLTAR", home_screen, user, profile_options_menu)
     menu.mainloop(surface)

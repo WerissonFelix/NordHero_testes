@@ -33,6 +33,8 @@ class ManageGame:
         self.textManage  = TextManager(mod)
         self.clock = pygame.time.Clock()
         current_dir = os.path.dirname(__file__)
+        songRepository = SongRepository()
+        self.song = songRepository.get_by_file_path(self.music_path)
         self.mod = mod
         self.phase_number = phase_number
         self.notesManage = None        
@@ -265,7 +267,17 @@ class ManageGame:
                 self.bar_rain_p1.set_partner(self.bar_rain_p2, on_both_full)
                 self.bar_rain_p2.set_partner(self.bar_rain_p1, on_both_full)
         else:
-            self.life_bar = LifeBarManager(x=300, y=550, max_lives=3, heart_size=36, gap=12, on_game_over=self.end_match) 
+            if self.song.story_difficulty_id == 1:
+                self.current_hearts = 7
+                heart_x = 240
+            elif self.song.story_difficulty_id == 2:
+                self.current_hearts = 5
+                heart_x = 280
+            else:
+                self.current_hearts = 3
+                heart_x = 315
+
+            self.life_bar = LifeBarManager(x=heart_x, y=550, max_lives=self.current_hearts, heart_size=36,gap=12,on_game_over=self.end_match)
         """ 
         Loop principal do jogo.
     
@@ -315,9 +327,7 @@ class ManageGame:
                             key.update_line()
                 elif event.type == MUSIC_END_EVENT:
                     xpRepository = XpRepository()
-                    songRepository = SongRepository()
-                    song = songRepository.get_by_file_path(self.music_path)
-                    xpRepository.complete_phase(self.user.id,song.story_difficulty_id, song.id, self.phase_number)
+                    xpRepository.complete_phase(self.user.id,self.song.story_difficulty_id, self.song.id, self.phase_number)
                     self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
                         
             self.screen.blit(self.background, (0, 0))

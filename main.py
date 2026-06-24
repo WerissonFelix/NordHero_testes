@@ -9,6 +9,7 @@ from DataBase.tables import create_all
 
 create_all()
 load_and_register_music()
+
 pygame.init()
 surface = pygame.display.set_mode((1080, 720))
 pygame.display.set_caption("NORD HERO")

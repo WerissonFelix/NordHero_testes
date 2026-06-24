@@ -216,8 +216,8 @@ def _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, xp_repo):
     from Game.GameManager.GameManager import ManageGame
     song = phase["song"]
     if mod == "2 Players" and tipo_2players == "Contra":
-        gameManager = ManageGame(user, song.file_path, mod, song.file_path, tipo_2players)
+        gameManager = ManageGame(user, song.file_path, mod, 1, song.file_path, tipo_2players)
     else:
-        gameManager = ManageGame(user, song.file_path, mod, phase_number=phase["number"])
+        gameManager = ManageGame(user, song.file_path, mod, 1,phase_number=phase["number"])
     gameManager.load_to_run()
     xp_repo.complete_phase(user.id, difficulty.id, song.id, phase["number"])

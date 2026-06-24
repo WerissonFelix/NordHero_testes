@@ -419,9 +419,13 @@ class ManageGame:
                     if v in ["Miss", "Bad"]:
                         self.bar_pun_p1.add_bad_miss(k, rating) if k == 0 else self.bar_pun_p2.add_bad_miss(k, rating)
                 
-                self.life_bar.handle_rating(v)
+                if self.mod == "Single Player":
+                    self.life_bar.handle_rating(v)
             self.song_progress_bar.draw(self.screen) 
-            self.life_bar.update(self.current_time)                       
+            
+            if self.mod == "Single Player":
+                self.life_bar.update(self.current_time)                       
+                
             pygame.display.update()
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)

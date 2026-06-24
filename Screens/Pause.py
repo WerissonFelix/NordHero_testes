@@ -60,7 +60,7 @@ def pause_menu(user: User, music_path, total_notes, notes_hit, score, tipo_2play
     
     def call_match():
         menu.disable()
-        match_summary(user, total_notes, notes_hit, music_path, score, tipo_2players)
+        match_summary(user, total_notes, notes_hit, music_path, score, tipo_2players, "DESISTIU!")
       
     menu.add.button("SETTINGS", change_controls_menu, config, mod)
     menu.add.button('RESUME', resume_game)

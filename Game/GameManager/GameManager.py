@@ -277,7 +277,7 @@ class ManageGame:
                 self.current_hearts = 3
                 heart_x = 315
 
-            self.life_bar = LifeBarManager(x=heart_x, y=550, max_lives=self.current_hearts, heart_size=36,gap=12,on_game_over=self.end_match)
+            self.life_bar = LifeBarManager(x=heart_x, y=550, max_lives=self.current_hearts, heart_size=36,gap=12,on_game_over=self.game_over)
         """ 
         Loop principal do jogo.
     
@@ -328,7 +328,7 @@ class ManageGame:
                 elif event.type == MUSIC_END_EVENT:
                     xpRepository = XpRepository()
                     xpRepository.complete_phase(self.user.id,self.song.story_difficulty_id, self.song.id, self.phase_number)
-                    self.end_match(self.audio.get_qtd_notes(),self.notesManage.get_notes_hit())
+                    self.end_match(self.audio.get_qtd_notes(), self.notesManage.get_notes_hit())
                         
             self.screen.blit(self.background, (0, 0))
            
@@ -427,6 +427,12 @@ class ManageGame:
                 self.life_bar.update(self.current_time)                       
                 
             pygame.display.update()
+            
+    def game_over(self):        
+        self.mixer.music.pause()
+        time.sleep(2)
+        match_summary(self.user, self.audio.get_qtd_notes(), self.notesManage.get_notes_hit(), self.music_path, self.score, self.tipo_2players, "GAME OVER!")
+        
     def end_match(self, total_notes, notes_hit):        
         time.sleep(2)
         match_summary(self.user, total_notes, notes_hit, self.music_path, self.score, self.tipo_2players)

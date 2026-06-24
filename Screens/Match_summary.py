@@ -19,7 +19,7 @@ pygame.init()
 fundo = pygame.image.load('./Images/SummarySingleplayer.png')
 music = ""
 
-def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2players):
+def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2players, title="PARTIDA FINALIZADA"):
     """
     Exibe o resumo de desempenho após uma partida.
     
@@ -162,7 +162,11 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
         mensagem_notes_hit = f"Hit notes: {total_player1}"
         mensagem_accuracy = f"Raking: {raking},  {accuracy}% accuracy"
     
-   # 1. Criamos cada informação como um texto separado, definindo a nova fonte
+    lbl_title = choice.add.label( 
+        title,
+        font_size = 40,
+        font_name=pygame_menu.font.FONT_MUNRO                             
+    )
     lbl_total_notes = choice.add.label(
         f"{mensagem_total_notes}", 
         font_size=20, 

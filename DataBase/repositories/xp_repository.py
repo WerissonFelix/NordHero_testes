@@ -2,23 +2,30 @@ from DataBase.repositories.base_repository import BaseRepository
 from models.userXp import UserXp
 from models.xpResult import XpResult
 class XpRepository(BaseRepository):
-    def get_user_xp(self, user_id: int) -> dict:
-        query = "SELECT * FROM user_xp WHERE user_id = ?" 
-        row = self.fetchone(query, (user_id,))
+    def get_user_xp(self, user_id: int, difficulty_id) -> dict:
+        query = """ 
+        SELECT * FROM user_xp
+        WHERE (user_id = ? and difficulty_id = ?)"""
+        row = self.fetchone(query, (user_id, difficulty_id))
         
         if row is None:
-            query = "INSERT OR IGNORE INTO user_xp (user_id, total_xp, level) VALUES (?, 0, 1)"
-            self.execute(query, (user_id,))
+            query = "INSERT OR IGNORE INTO user_xp (user_id, total_xp, level, difficulty_id) VALUES (?, 0, 1, ?)"
+            self.execute(query, (user_id, difficulty_id))
             
             xp_id, total_xp, level = None, 0, 1
         else:
-            xp_id, userID, total_xp, level = row
+            xp_id, userID, total_xp, level, difficultyID = row
 
         xp_in_level, xp_to_next = xp_progress_in_level(total_xp)
-        return UserXp(id=xp_id, user_id=user_id, total_xp=total_xp, level=level, xp_in_level=xp_in_level, xp_to_next_level=xp_to_next,)
+        return UserXp(
+            id=xp_id, user_id=user_id, 
+            total_xp=total_xp, level=level,
+            xp_in_level=xp_in_level, xp_to_next_level=xp_to_next,
+            difficulty_id = difficulty_id
+        )
 
-    def add_xp(self, user_id: int, rank: str, accuracy: float) -> XpResult:
-        current = self.get_user_xp(user_id)
+    def add_xp(self, user_id: int, rank: str, accuracy: float, difficulty_id) -> XpResult:
+        current = self.get_user_xp(user_id, difficulty_id)
         old_level = current.level
 
         xp_earned = calculate_xp_earned(rank, accuracy)
@@ -26,13 +33,13 @@ class XpRepository(BaseRepository):
         new_level = level_from_xp(new_total)
 
         query = """
-            INSERT INTO user_xp (user_id, total_xp, level)
-            VALUES (?, ?, ?)
-            ON CONFLICT(user_id) DO UPDATE SET total_xp = ?, level = ?
+            INSERT INTO user_xp (user_id, total_xp, level, difficulty_id)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(user_id) DO UPDATE SET total_xp = ?, level = ?, difficulty_id = ?
             """
-        self.execute(query, (user_id, new_total, new_level, new_total, new_level))
+        self.execute(query, (user_id, new_total, new_level, difficulty_id, new_total, new_level, difficulty_id))
 
-        return XpResult(xp_earned = xp_earned, leveled_up = new_level > old_level, xp_data = self.get_user_xp(user_id))
+        return XpResult(xp_earned = xp_earned, leveled_up = new_level > old_level, xp_data = self.get_user_xp(user_id, difficulty_id))
     
 XP_BY_RANK = {
     "S":   500,

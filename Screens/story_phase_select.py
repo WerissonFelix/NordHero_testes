@@ -53,7 +53,7 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
     songs = songManager.get_by_type_and_difficulty(tipo, difficulty.id)
     completed = storyManager.get_completed_phases(user.id, difficulty.id, tipo)
     max_unlocked = storyManager.get_max_unlocked_phase(user.id, difficulty.id, tipo)
-    xp_data = xpManager.get_user_xp(user.id)
+    xp_data = xpManager.get_user_xp(user.id, difficulty.id)
 
     phases = []
     for i, song in enumerate(songs, start=1):
@@ -115,7 +115,7 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
                         _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, storyManager)
                         completed = storyManager.get_completed_phases(user.id, difficulty.id, tipo)
                         max_unlocked = storyManager.get_max_unlocked_phase(user.id, difficulty.id, tipo)
-                        xp_data  = xpManager.get_user_xp(user.id)
+                        xp_data = xpManager.get_user_xp(user.id, difficulty.id)
                         for j, phase in enumerate(phases):
                             phase.unlocked = (j + 1) <= max_unlocked
                             phase.done = (j + 1) in completed
@@ -139,7 +139,7 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
                             _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, storyManager)
                             completed = storyManager.get_completed_phases(user.id, difficulty.id, tipo)
                             max_unlocked = storyManager.get_max_unlocked_phase(user.id, difficulty.id, tipo)
-                            xp_data = xpManager.get_user_xp(user.id)
+                            xp_data = xpManager.get_user_xp(user.id, difficulty.id)
                             for j, phase in enumerate(phases):
                                 phase.unlocked = (j + 1) <= max_unlocked
                                 phase.done = (j + 1) in completed

@@ -8,3 +8,4 @@ class UserXp:
     level: int
     xp_in_level: int
     xp_to_next_level: int
+    difficulty_id: int

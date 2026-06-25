@@ -8,7 +8,6 @@ from Game.Bar.SongProgressBar import SongProgressBar
 from Game.Bar.BarEvents import BarEvents
 from Game.Bar.lifeBarManager import LifeBarManager
 
-from DataBase.repositories.xp_repository import XpRepository
 from DataBase.repositories.story_repository import StoryRepository
 from DataBase.repositories.song_repository import SongRepository
 

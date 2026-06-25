@@ -272,7 +272,9 @@ def table_user_xp():
             user_id INTEGER NOT NULL UNIQUE,
             total_xp INTEGER NOT NULL DEFAULT 0,
             level INTEGER NOT NULL DEFAULT 1,
-            FOREIGN KEY(user_id) REFERENCES user(id)
+            difficulty_id INTEGER NOT NULL,
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
         )
     """
     cursor.execute(query)
@@ -298,9 +300,9 @@ def table_story_progress():
     connection.commit()
     
 def create_all():
+    table_difficulties()
     table_user()
     table_songs()
-    table_difficulties()
     table_song_charts()
     table_socores()
     table_multiplayer_songs()

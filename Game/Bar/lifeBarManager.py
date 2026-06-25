@@ -34,7 +34,7 @@ class LifeBarManager:
         Adiciona se e somente se, ele já tinha perdido algum coração
         """
         
-        if 0 < self.current_lives < 3:
+        if 0 < self.current_lives < self.max_lives:
             self.current_lives += 1
         else:
             pass

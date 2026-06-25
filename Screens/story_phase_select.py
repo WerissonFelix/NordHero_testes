@@ -2,6 +2,7 @@ import pygame
 from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.xp_repository import XpRepository
 from models.difficulty import Difficulty
+from models.phase import Phase
 from models.user import User
 
 pygame.init()
@@ -14,7 +15,7 @@ CARD_BORDER = 4
 CARDS_PER_ROW = 6
 CARD_GAP = 20
 
-def _draw_phase_cards(surface, phases, color, selected_idx, offset_y):
+def _draw_phase_cards(surface, phases, color, selected_index, offset_y):
     total_w = CARDS_PER_ROW * CARD_W + (CARDS_PER_ROW - 1) * CARD_GAP
     start_x = (surface.get_width() - total_w) // 2
     lock_font = pygame.font.SysFont("segoeui", 48)
@@ -27,14 +28,14 @@ def _draw_phase_cards(surface, phases, color, selected_idx, offset_y):
         y = offset_y + row * (CARD_H + CARD_GAP)
         rect = pygame.Rect(x, y, CARD_W, CARD_H)
 
-        bg_color = (20, 20, 20) if phase["unlocked"] else (10, 10, 10)
+        bg_color = (20, 20, 20) if phase.unlocked else (10, 10, 10)
         pygame.draw.rect(surface, bg_color, rect, border_radius=CARD_RADIUS)
 
-        border_w = CARD_BORDER + 2 if i == selected_idx else CARD_BORDER
+        border_w = CARD_BORDER + 2 if i == selected_index else CARD_BORDER
         pygame.draw.rect(surface, color, rect, width=border_w, border_radius=CARD_RADIUS)
 
-        if phase["unlocked"]:
-            num_text = num_font.render(f"{phase['number']:02d}", True, (255, 255, 255))
+        if phase.unlocked:
+            num_text = num_font.render(f"{phase.number:02d}", True, (255, 255, 255))
             surface.blit(num_text, num_text.get_rect(center=rect.center))
         else:
             lock_text = lock_font.render("🔒", True, (120, 120, 120))
@@ -53,12 +54,7 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
 
     phases = []
     for i, song in enumerate(songs, start=1):
-        phases.append({
-            "number":   i,
-            "unlocked": i <= max_unlocked,
-            "song":     song,
-            "done":     i in completed,
-        })
+        phases.append(Phase(number = i, unlocked= i <= max_unlocked, song= song, done = i in completed ))
 
     color = COLORS.get(difficulty.id, (255, 255, 255))
     surface = pygame.display.get_surface()
@@ -98,28 +94,28 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     new_idx = selected_idx - 1
-                    while new_idx >= 0 and not phases[new_idx]["unlocked"]:
+                    while new_idx >= 0 and not phases[new_idx].unlocked:
                         new_idx -= 1
                     if new_idx >= 0:
                         selected_idx = new_idx
 
                 elif event.key == pygame.K_RIGHT:
                     new_idx = selected_idx + 1
-                    while new_idx < len(phases) and not phases[new_idx]["unlocked"]:
+                    while new_idx < len(phases) and not phases[new_idx].unlocked:
                         new_idx += 1
                     if new_idx < len(phases):
                         selected_idx = new_idx
 
                 elif event.key in (pygame.K_RETURN, pygame.K_SPACE):
                     phase = phases[selected_idx]
-                    if phase["unlocked"]:
+                    if phase.unlocked:
                         _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, xp_repo)
                         completed = xp_repo.get_completed_phases(user.id, difficulty.id)
                         max_unlocked = xp_repo.get_max_unlocked_phase(user.id, difficulty.id)
                         xp_data  = xp_repo.get_user_xp(user.id)
-                        for j, p in enumerate(phases):
-                            p["unlocked"] = (j + 1) <= max_unlocked
-                            p["done"]     = (j + 1) in completed
+                        for j, phase in enumerate(phases):
+                            phase.unlocked = (j + 1) <= max_unlocked
+                            phase.done = (j + 1) in completed
 
                 elif event.key == pygame.K_ESCAPE:
                     choice_difficulty(user, mod, tipo, tipo_2players)
@@ -135,15 +131,15 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
                     x = start_x + col * (CARD_W + CARD_GAP)
                     y = CARDS_TOP + row * (CARD_H + CARD_GAP)
                     if pygame.Rect(x, y, CARD_W, CARD_H).collidepoint(mx, my):
-                        if phase["unlocked"]:
+                        if phase.unlocked:
                             selected_idx = i
                             _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, xp_repo)
                             completed = xp_repo.get_completed_phases(user.id, difficulty.id)
                             max_unlocked = xp_repo.get_max_unlocked_phase(user.id, difficulty.id)
                             xp_data = xp_repo.get_user_xp(user.id)
-                            for j, p in enumerate(phases):
-                                p["unlocked"] = (j + 1) <= max_unlocked
-                                p["done"] = (j + 1) in completed
+                            for j, phase in enumerate(phases):
+                                phase.unlocked = (j + 1) <= max_unlocked
+                                phase.done = (j + 1) in completed
 
                 if btn_rect("VOLTAR", width // 2 - 80, height - 80).collidepoint(mx, my):
                     choice_difficulty(user, mod, tipo, tipo_2players)
@@ -161,13 +157,13 @@ def story_phase_select(user: User, difficulty: Difficulty, mod: str, tipo: str, 
 
         _draw_phase_cards(surface, phases, color, selected_idx, CARDS_TOP)
 
-        sel = phases[selected_idx]
-        if sel["unlocked"] and sel["song"]:
-            song_name = sel["song"].title[:55] + ("…" if len(sel["song"].title) > 55 else "")
+        phase = phases[selected_idx]
+        if phase.unlocked and phase.song:
+            song_name = phase.song.title[:55] + ("…" if len(phase.song.title) > 55 else "")
             song_surf = font_song.render(song_name, True, (200, 200, 200))
             surface.blit(song_surf, (width // 2 - song_surf.get_width() // 2, CARDS_TOP + CARD_H + 30))
-            done_text  = "✓ Completa" if sel["done"] else "— Não jogada ainda"
-            done_color = (100, 255, 100) if sel["done"] else (180, 180, 180)
+            done_text  = "✓ Completa" if phase.done else "— Não jogada ainda"
+            done_color = (100, 255, 100) if phase.done else (180, 180, 180)
             done_surf  = font_label.render(done_text, True, done_color)
             surface.blit(done_surf, (width // 2 - done_surf.get_width() // 2, CARDS_TOP + CARD_H + 55))
 
@@ -188,18 +184,18 @@ def _draw_xp_card(surface, user, xp_data, color, font_level, font_xp):
 
     name_surf = font_level.render(user.name[:18], True, (255, 255, 255))
     surface.blit(name_surf, (95, 18))
-    lvl_surf = font_level.render(f"Nível {xp_data['level']}", True, color)
+    lvl_surf = font_level.render(f"Nível {xp_data.level}", True, color)
     surface.blit(lvl_surf, (200, 18))
 
     bar_x, bar_y, bar_w, bar_h = 95, 42, 155, 12
     pygame.draw.rect(surface, (50, 50, 50), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
-    progress = xp_data["xp_in_level"] / xp_data["xp_to_next_level"]
+    progress = xp_data.xp_in_level / xp_data.xp_to_next_level
     fill_w = int(bar_w * progress)
     if fill_w > 0:
         pygame.draw.rect(surface, color, (bar_x, bar_y, fill_w, bar_h), border_radius=6)
 
     xp_surf = font_xp.render(
-        f"{xp_data['xp_in_level']} / {xp_data['xp_to_next_level']} XP",
+        f"{xp_data.xp_in_level} / {xp_data.xp_to_next_level} XP",
         True, (180, 180, 180)
     )
     surface.blit(xp_surf, (95, 58))
@@ -214,10 +210,10 @@ def _draw_btn(surface, label, cx, cy, color, font):
 
 def _start_phase(user, phase, difficulty, mod, tipo, tipo_2players, xp_repo):
     from Game.GameManager.GameManager import ManageGame
-    song = phase["song"]
+    song = phase.song
     if mod == "2 Players" and tipo_2players == "Contra":
         gameManager = ManageGame(user, song.file_path, mod, 1, song.file_path, tipo_2players)
     else:
-        gameManager = ManageGame(user, song.file_path, mod, 1,phase_number=phase["number"])
+        gameManager = ManageGame(user, song.file_path, mod, 1,phase_number=phase.number)
     gameManager.load_to_run()
-    xp_repo.complete_phase(user.id, difficulty.id, song.id, phase["number"])
+    xp_repo.complete_phase(user.id, difficulty.id, song.id, phase.number)

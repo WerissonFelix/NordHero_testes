@@ -265,31 +265,6 @@ def seed_achievements():
         )
     connection.commit()
 
-
-XP_BY_RANK = {
-    "S":   500,
-    "A":   300,
-    "B":   150,
-    "D":    50,
-    "N/A":  10,
-}
-
-XP_PER_LEVEL = 1000
-
-def xp_for_level(level: int) -> int:
-    return (level - 1) * XP_PER_LEVEL
-
-def level_from_xp(total_xp: int) -> int:
-    return (total_xp // XP_PER_LEVEL) + 1
-
-def xp_progress_in_level(total_xp: int) -> tuple[int, int]:
-    return (total_xp % XP_PER_LEVEL, XP_PER_LEVEL)
-
-def calculate_xp_earned(rank: str, accuracy: float) -> int:
-    base = XP_BY_RANK.get(rank, 10)
-    bonus = int(round(accuracy))
-    return base + bonus
-
 def table_user_xp():
     query = """
         CREATE TABLE IF NOT EXISTS user_xp (

@@ -223,7 +223,7 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
     xp_result = xp_repo.add_xp(user.id, raking, accuracy)
 
     choice.add.label("", font_size=14, font_name=pygame_menu.font.FONT_MUNRO)
-    xp_msg = f"+ {xp_result['xp_earned']} XP  →  Nível {xp_result['level']}  ({xp_result['xp_in_level']}/{xp_result['xp_to_next_level']} XP)"
+    xp_msg = f"+ {xp_result.xp_earned} XP  →  Nível {xp_result.xp_data.level}  ({xp_result.xp_data.xp_in_level} / {xp_result.xp_data.xp_to_next_level} XP)"
     choice.add.label(
         xp_msg,
         font_size=17,
@@ -231,9 +231,9 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
         font_color=(100, 220, 255)
     )
 
-    if xp_result["leveled_up"]:
+    if xp_result.leveled_up:
         choice.add.label(
-            f"SUBIU DE NÍVEL! Agora você é Nível {xp_result['level']}!",
+            f"SUBIU DE NÍVEL! Agora você é Nível {xp_result.xp_data.level}!",
             font_size=18,
             font_name=pygame_menu.font.FONT_MUNRO,
             font_color=(255, 215, 0)

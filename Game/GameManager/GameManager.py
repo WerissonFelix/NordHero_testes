@@ -9,6 +9,7 @@ from Game.Bar.BarEvents import BarEvents
 from Game.Bar.lifeBarManager import LifeBarManager
 
 from DataBase.repositories.xp_repository import XpRepository
+from DataBase.repositories.story_repository import StoryRepository
 from DataBase.repositories.song_repository import SongRepository
 
 from Screens.Pause import pause_menu
@@ -96,12 +97,13 @@ class ManageGame:
         self.count_to_load = -1
         self.is_paused = False
         
-    def load_to_run(self):    
+    def load_to_run(self, tipo: str):    
         """
         Carrega todas as notes antes do jogo começar, está
         separado do método run() porque este carregamento é pesado 
         e demora alguns segundos para calcular todas as notas
         """  
+        self.tipo = tipo
         text = "Loading"
         time.sleep(2)
         while self.count_to_load < 4:
@@ -196,7 +198,6 @@ class ManageGame:
         self.index_player = 0
         self.mixer = self.audio.load_music()
         self.current_time = self.mixer.music.get_pos() / 1000
-
         MUSIC_END_EVENT = pygame.USEREVENT + 1
         pygame.mixer.music.set_endevent(MUSIC_END_EVENT)
         
@@ -326,8 +327,8 @@ class ManageGame:
                                 pass
                             key.update_line()
                 elif event.type == MUSIC_END_EVENT:
-                    xpRepository = XpRepository()
-                    xpRepository.complete_phase(self.user.id,self.song.story_difficulty_id, self.song.id, self.phase_number)
+                    storyManager = StoryRepository()
+                    storyManager.complete_phase(self.user.id, self.song.story_difficulty_id, self.song.id, self.phase_number, self.tipo)
                     self.end_match(self.audio.get_qtd_notes(), self.notesManage.get_notes_hit())
                         
             self.screen.blit(self.background, (0, 0))

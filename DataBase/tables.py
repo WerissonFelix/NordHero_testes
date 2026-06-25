@@ -286,6 +286,7 @@ def table_story_progress():
             difficulty_id INTEGER NOT NULL,
             song_id INTEGER NOT NULL,
             phase_number INTEGER NOT NULL,
+            type_story varchar(255) NOT NULL,
             completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES user(id),
             FOREIGN KEY(difficulty_id) REFERENCES difficulties(id),
@@ -309,4 +310,3 @@ def create_all():
     seed_achievements()
     table_user_xp()
     table_story_progress()
-

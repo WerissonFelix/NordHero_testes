@@ -7,4 +7,5 @@ class StoryProgress:
     difficulty_id: int
     song_id: int
     phase_number: int
+    type_story: str
     completed_at: str

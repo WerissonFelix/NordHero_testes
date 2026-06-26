@@ -71,6 +71,16 @@ https://docs.google.com/document/d/12qeTbFghmfrlWR82uoOs615Dma3GZ1w7/edit
 | Notas Inimigas | Notas que roubam 300 pontos do oponente, caso ele as acerte |
 | Notas Rainbow | Notas que que têm 1000 pontos extras, caso os jogadores as acerte |
 
+## 🚀 Release 4.0
+
+| Funcionalidade | Descrição |
+|---|---|
+| Barra de progressão | Mostra o tempo total da música e o tempo atual de progressão durante a gameplay. |
+| Sistema de vida (Life) | Corações para o modo single player, a quantidade varia conforme a dificuldade escolhida. |
+| Achievements | Conquistas para o jogador desbloquear/liberar. |
+| Sistema de XP| Jogador ganha xp e level após partidas jogadas, na respectiva dificuldade. |
+| Sistema de progressão no modo história |  Sistema de progressão de fases para as respectivas dificuldades. |
+
 
 ## 🕹️ Como o Jogo Funciona
 

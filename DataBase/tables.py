@@ -209,11 +209,106 @@ def notes_hit():
 
     cursor.execute(query)
     connection.commit()
+
+def table_achievements():
+    query = """
+        CREATE TABLE IF NOT EXISTS achievements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            key VARCHAR(100) NOT NULL UNIQUE,
+            name VARCHAR(255) NOT NULL,
+            description TEXT NOT NULL,
+            icon VARCHAR(10) NOT NULL
+        )
+    """
     
-table_user()
-table_songs()
-table_difficulties()
-table_song_charts()
-table_socores()
-table_multiplayer_songs()
-notes_hit()
+    cursor.execute(query)
+    connection.commit()
+  
+def table_user_achievements():
+    query = """
+        CREATE TABLE IF NOT EXISTS user_achievements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            achievement_id INTEGER NOT NULL,
+            unlocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(achievement_id) REFERENCES achievements(id),
+            UNIQUE(user_id, achievement_id)
+        )
+    """
+    cursor.execute(query)
+    connection.commit()
+
+ACHIEVEMENTS_CATALOG = [
+    ("first_note",    "Primeira Nota",       "Complete sua primeira partida.",                         "🎵"),
+    ("5_songs",       "Aquecendo",           "Jogue 5 partidas no total.",                             "🔥"),
+    ("20_songs",      "Dedicação",           "Jogue 20 partidas no total.",                            "🎮"),
+    ("50_songs",      "Veterano",            "Jogue 50 partidas no total.",                            "🏅"),
+    ("first_s",       "Nota Máxima",         "Obtenha rank S em qualquer música.",                     "⭐"),
+    ("first_a",       "Quase Perfeito",      "Obtenha rank A ou melhor em qualquer música.",           "🌟"),
+    ("3_s_ranks",     "Imbatível",           "Obtenha rank S em 3 músicas diferentes.",                "🏆"),
+    ("perfect_game",  "Perfeição",           "Termine uma música sem nenhum Miss.",                    "💎"),
+    ("100_perfects",  "Precisão Cirúrgica",  "Acumule 100 notas Perfect no total.",                    "🎯"),
+    ("500_perfects",  "Mãos de Ouro",        "Acumule 500 notas Perfect no total.",                    "🥇"),
+    ("100_notes",     "Em Ritmo",            "Acumule 100 notas acertadas (Good+Perfect) no total.",   "🎶"),
+    ("first_hard",    "Corajoso",            "Complete uma música na dificuldade Hard.",                "💀"),
+    ("beat_hard",     "Dominou o Hard",      "Obtenha rank B ou melhor em uma música Hard.",           "⚔️"),
+    ("play_all",      "Colecionador",        "Jogue pelo menos uma vez cada música disponível.",        "📀"),
+    ("2players",      "Parceria",            "Complete uma partida no modo 2 Players.",                 "🤝"),
+]
+
+def seed_achievements():
+    for key, name, desc, icon in ACHIEVEMENTS_CATALOG:
+        cursor.execute(
+            "INSERT OR IGNORE INTO achievements (key, name, description, icon) VALUES (?, ?, ?, ?)",
+            (key, name, desc, icon)
+        )
+    connection.commit()
+
+def table_user_xp():
+    query = """
+        CREATE TABLE IF NOT EXISTS user_xp (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL UNIQUE,
+            total_xp INTEGER NOT NULL DEFAULT 0,
+            level INTEGER NOT NULL DEFAULT 1,
+            difficulty_id INTEGER NOT NULL,
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
+        )
+    """
+    cursor.execute(query)
+    connection.commit()
+
+def table_story_progress():
+    query = """
+        CREATE TABLE IF NOT EXISTS story_progress (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            difficulty_id INTEGER NOT NULL,
+            song_id INTEGER NOT NULL,
+            phase_number INTEGER NOT NULL,
+            type_story varchar(255) NOT NULL,
+            completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(difficulty_id) REFERENCES difficulties(id),
+            FOREIGN KEY(song_id) REFERENCES songs(id),
+            UNIQUE(user_id, difficulty_id, song_id)
+        )
+    """
+    cursor.execute(query)
+    connection.commit()
+    
+def create_all():
+    table_difficulties()
+    table_user()
+    table_songs()
+    table_song_charts()
+    table_socores()
+    table_multiplayer_songs()
+    notes_hit()
+    table_achievements()
+    table_user_achievements()
+    seed_achievements()
+    table_user_xp()
+    table_story_progress()

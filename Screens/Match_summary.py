@@ -7,6 +7,8 @@ from DataBase.repositories.score_repository import ScoreRepository
 from DataBase.repositories.song_repository import SongRepository
 from DataBase.repositories.song_chart_repository import SongChartsRepository
 from DataBase.repositories.notes_hit_repository import NotesHitRepository
+from Features.achievements_engine import AchievementsEngine
+from DataBase.repositories.xp_repository import XpRepository
 
 from models.notes_hit import NotesHit
 from models.score import Score
@@ -16,7 +18,8 @@ pygame.init()
 
 fundo = pygame.image.load('./Images/SummarySingleplayer.png')
 music = ""
-def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2players):
+
+def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2players, title="PARTIDA FINALIZADA"):
     """
     Exibe o resumo de desempenho após uma partida.
     
@@ -159,7 +162,11 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
         mensagem_notes_hit = f"Hit notes: {total_player1}"
         mensagem_accuracy = f"Raking: {raking},  {accuracy}% accuracy"
     
-   # 1. Criamos cada informação como um texto separado, definindo a nova fonte
+    lbl_title = choice.add.label( 
+        title,
+        font_size = 40,
+        font_name=pygame_menu.font.FONT_MUNRO                             
+    )
     lbl_total_notes = choice.add.label(
         f"{mensagem_total_notes}", 
         font_size=20, 
@@ -193,6 +200,45 @@ def match_summary(user: User, total_notes, notes_hit, file_path, score, tipo_2pl
     score_match = Score(None, user.id, chart.id, notes.id, score[0], accuracy, raking)
     scoreManager.create(score_match)
     
+    engine = AchievementsEngine()
+    new_achievements = engine.check_all(user.id)
+
+    if new_achievements:
+        choice.add.label("", font_size=14, font_name=pygame_menu.font.FONT_MUNRO)
+        choice.add.label(
+            "CONQUISTA DESBLOQUEADA!",
+            font_size=18,
+            font_name=pygame_menu.font.FONT_MUNRO,
+            font_color=(255, 215, 0)
+        )
+        for ach in new_achievements:
+            choice.add.label(
+                f"{ach.icon}  {ach.name} — {ach.description}",
+                font_size=15, 
+                font_name=pygame_menu.font.FONT_MUNRO,
+                font_color=(220, 220, 100)
+            )
+            
+    xpManager = XpRepository()
+    xp_result = xpManager.add_xp(user.id, raking, accuracy, song.story_difficulty_id)
+
+    choice.add.label("", font_size=14, font_name=pygame_menu.font.FONT_MUNRO)
+    xpMessage = f"+ {xp_result.xp_earned} XP  →  Nível {xp_result.xp_data.level}  ({xp_result.xp_data.xp_in_level} / {xp_result.xp_data.xp_to_next_level} XP)"
+    choice.add.label(
+        xpMessage,
+        font_size=17,
+        font_name=pygame_menu.font.FONT_MUNRO,
+        font_color=(100, 220, 255)
+    )
+
+    if xp_result.leveled_up:
+        choice.add.label(
+            f"SUBIU DE NÍVEL! Agora você é Nível {xp_result.xp_data.level}!",
+            font_size=18,
+            font_name=pygame_menu.font.FONT_MUNRO,
+            font_color=(255, 215, 0)
+        )      
+        
     choice.add.button("CHOOCE ANOTHER SONG", choice_mod, user)
     choice.add.button("RETURN TO HOME", home_screen, user, profile_options_menu)
     

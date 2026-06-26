@@ -20,6 +20,7 @@ def choice_difficulty(user:User, mod:str, tipo:str, tipo_2players=None):
     from Screens.Home import home_screen
     from Screens.profile_options import profile_options_menu
     from Screens.choice_music import choice_music
+    from Screens.story_phase_select import story_phase_select 
     
     fundo = BaseImage(
         image_path="./Images/teladefundo.png",
@@ -80,9 +81,9 @@ def choice_difficulty(user:User, mod:str, tipo:str, tipo_2players=None):
 
     if tipo_2players:
         print(f"tipo_2player: {tipo_2players} mod: {mod}")
-        choice.add.button("Continue", lambda: choice_music(user, difficulty, mod, tipo, tipo_2players))
+        choice.add.button("Continue", lambda: story_phase_select(user, difficulty, mod, tipo, tipo_2players))
     else:
         print(f"tipo: {tipo_2players} mod: {mod}")
-        choice.add.button("Continue", lambda: choice_music(user, difficulty, mod, tipo))
+        choice.add.button("Continue", lambda: story_phase_select(user, difficulty, mod, tipo))
     choice.add.button("BACK", home_screen, user, profile_options_menu)        
     choice.mainloop(surface)

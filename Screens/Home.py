@@ -19,6 +19,7 @@ def home_screen(user : User, profile_menu):
     from Screens.history_screen import history_screen
     from Screens.estatisticas import estatisticas_screen
     from Screens.AI_analise import AI_analise
+    from Screens.achievements import achievements_screen
     
     fundo = BaseImage(
         image_path="./Images/TelaPadrao.png",
@@ -79,5 +80,6 @@ def home_screen(user : User, profile_menu):
     home_menu.add.button("SETTINGS", profile_menu, user)
     home_menu.add.button("STATICTICS", estatisticas_screen, user)
     home_menu.add.button("AI ANALYTICS", AI_analise, user)
+    home_menu.add.button("ACHIEVEMENTS", achievements_screen, user)
     home_menu.add.button("EXIT", pygame_menu.events.EXIT)
     home_menu.mainloop(surface)

@@ -207,9 +207,9 @@ NordHero/
 
 *Story mod no modo normal*
 
-## Modo Single Player
+## Modo Single Player (Atualizações)
 
-![Single Player mod ](Images/exemplo_single.jpeg)
+![Single Player mod ](Images/exemplo_new_single.png)
 
 *Modo Single Player durante a gameplay*
 

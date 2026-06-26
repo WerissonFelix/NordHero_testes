@@ -11,10 +11,10 @@ pygame.init()
 
 COLORS = {1:(0, 200, 80), 2:(220, 200, 0), 3:(180, 30, 30),}
 
-CARD_W, CARD_H = 130, 130
+CARD_W, CARD_H = 100, 100
 CARD_RADIUS = 18
 CARD_BORDER = 4
-CARDS_PER_ROW = 6
+CARDS_PER_ROW = 4
 CARD_GAP = 20
 
 def _draw_phase_cards(surface, phases, color, selected_index, offset_y):

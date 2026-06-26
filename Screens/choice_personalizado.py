@@ -105,7 +105,7 @@ def choice_personalizado(user: User, tipo: str, mod: str = "Single Player", tipo
                 song_list_widgets.append(selector)
 
                 def play_callback(song=song, selector=selector):
-                    start_game_with_song(user, song, mod, modo_jogo, tipo_2players)
+                    start_game_with_song(user, song, mod, modo_jogo, tipo_2players, tipo)
 
                 play_btn = menu.add.button("Play", play_callback)
                 row.pack(play_btn, align=pygame_menu.locals.ALIGN_LEFT)
@@ -115,7 +115,7 @@ def choice_personalizado(user: User, tipo: str, mod: str = "Single Player", tipo
     menu.add.button("VOLTAR", home_screen, user, profile_options_menu)
     menu.mainloop(surface)
 
-def start_game_with_song(user: User, song, mod: str, difficulty, tipo_2players):
+def start_game_with_song(user: User, song, mod: str, difficulty, tipo_2players, tipo):
     """
     Função auxiliar para iniciar o jogo com a música e dificuldade escolhidas.
     """
@@ -127,4 +127,4 @@ def start_game_with_song(user: User, song, mod: str, difficulty, tipo_2players):
     else:
         if tipo_2players == "Contra":
             game_manager = ManageGame(user, song.file_path, mod, difficulty, song.file_path, tipo_2players)
-    game_manager.load_to_run()
+    game_manager.load_to_run(tipo)

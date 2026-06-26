@@ -33,12 +33,12 @@ class SongProgressBar:
     def draw(self, screen):
         progress = self.current_ms / self.duration_ms if self.duration_ms > 0 else 0
 
-        bg_rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        pygame.draw.rect(screen, self.bg_color, bg_rect, border_radius=self.height // 2)
+        background_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(screen, self.bg_color, background_rect, border_radius=self.height // 2)
 
-        fill_w = int(progress * self.width)
-        if fill_w > 0:
-            fill_rect = pygame.Rect(self.x, self.y, fill_w, self.height)
+        fill_width = int(progress * self.width)
+        if fill_width > 0:
+            fill_rect = pygame.Rect(self.x, self.y, fill_width, self.height)
             pygame.draw.rect(screen, self.bar_color, fill_rect, border_radius=self.height // 2)
 
         if self.show_time:

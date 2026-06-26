@@ -200,6 +200,13 @@ NordHero/
 
 ---
 
+
+## Modo Story - Dificuldade normal
+
+![Story mod ](Images/exemplo_story.png)
+
+*Story mod no modo normal*
+
 ## Modo Single Player
 
 ![Single Player mod ](Images/exemplo_single.jpeg)
